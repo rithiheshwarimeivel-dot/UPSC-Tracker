@@ -1,0 +1,95 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Prelims Current Affairs</title>
+</head>
+
+<body>
+
+<h1>Prelims Current Affairs</h1>
+
+<hr>
+
+<h2>
+    Prelims Current Affairs -
+    <span th:text="${attemptYear}"></span>
+</h2>
+
+<p>
+    Current Affairs Coverage:
+    January
+    <span th:text="${attemptYear - 1}"></span>
+    -
+    May
+    <span th:text="${attemptYear}"></span>
+</p>
+
+<hr>
+
+<h2>Monthly Current Affairs</h2>
+
+<table border="1">
+
+    <tr>
+        <th>Month</th>
+        <th>Year</th>
+        <th>Progress</th>
+        <th>Action</th>
+    </tr>
+
+    <tr th:each="section, stat : ${sections}">
+
+        <!-- MONTH -->
+
+        <td th:text="${section.name}">
+        </td>
+
+
+        <!-- YEAR -->
+
+        <td th:text="${section.year}">
+        </td>
+
+
+        <!-- COMPLETED COUNT -->
+
+        <td>
+
+            <span th:text="${completedCounts[stat.index]}">
+            </span>
+
+            / 14 Completed
+
+        </td>
+
+
+        <!-- OPEN MONTH -->
+
+        <td>
+
+            <a
+                    th:href="@{/current-affairs/prelims/month/{id}(id=${section.id})}">
+
+                <button type="button">
+                    Open
+                </button>
+
+            </a>
+
+        </td>
+
+    </tr>
+
+</table>
+
+<br>
+
+<a th:href="@{/current-affairs}">
+    Back to Current Affairs
+</a>
+
+</body>
+
+</html>

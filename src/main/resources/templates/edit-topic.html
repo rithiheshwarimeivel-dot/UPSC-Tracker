@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <title>Edit Topic</title>
+</head>
+
+<body>
+
+<h1>Edit UPSC Topic</h1>
+
+<form th:action="@{/update-topic}" method="post">
+
+  <input type="hidden" name="id" th:value="${topic.id}">
+
+  <label>Subject:</label>
+  <select name="subject.id">
+    <option th:each="subject : ${subjects}"
+            th:value="${subject.id}"
+            th:text="${subject.name}"
+            th:selected="${topic.subject != null && topic.subject.id == subject.id}">
+    </option>
+  </select>
+
+  <br><br>
+
+  <label>Topic Name:</label>
+  <input type="text" name="topicName" th:value="${topic.topicName}">
+
+  <br><br>
+
+  <label>Completed:</label>
+  <input type="checkbox" name="completed" th:checked="${topic.completed}">
+
+  <br><br>
+
+  <button type="submit">Save</button>
+
+</form>
+
+</body>
+</html>

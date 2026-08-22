@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <title>Edit Subject</title>
+</head>
+
+<body>
+
+<h2>Edit Subject</h2>
+
+<form th:action="@{/update-subject}" method="post">
+
+  <input type="hidden" name="id" th:value="${subject.id}">
+
+  <label>Subject Name:</label>
+  <input type="text" name="name" th:value="${subject.name}">
+
+  <br><br>
+
+  <label>Exam Type:</label>
+
+  <select name="examType">
+
+    <option value="PRELIMS"
+            th:selected="${subject.examType != null and subject.examType.name() == 'PRELIMS'}">
+      PRELIMS
+    </option>
+
+    <option value="MAINS"
+            th:selected="${subject.examType != null and subject.examType.name() == 'MAINS'}">
+      MAINS
+    </option>
+
+  </select>
+
+  <br><br>
+
+  <button type="submit">Update</button>
+
+</form>
+
+<br>
+
+<a href="/subjects">Back to Subjects</a>
+
+</body>
+
+</html>

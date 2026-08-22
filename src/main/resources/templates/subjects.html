@@ -1,0 +1,149 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>UPSC Subjects</title>
+</head>
+
+<body>
+
+<h1>UPSC Subjects</h1>
+
+<!-- ================================================== -->
+<!-- PRELIMS                                            -->
+<!-- ================================================== -->
+
+<h2>PRELIMS</h2>
+
+<a href="/add-subject">Add Subject</a>
+
+<br><br>
+
+<table border="1">
+
+    <tr>
+        <th>ID</th>
+        <th>Subject Name</th>
+        <th>Action</th>
+    </tr>
+
+    <tr th:each="subject : ${prelimsSubjects}">
+
+        <td th:text="${subject.id}"></td>
+
+        <td th:text="${subject.name}"></td>
+
+        <td>
+
+            <!-- EDIT -->
+
+            <form th:action="@{/edit-subject/{id}(id=${subject.id})}"
+                  method="get">
+
+                <button type="submit">Edit</button>
+
+            </form>
+
+
+            <!-- CURRENT AFFAIRS -->
+
+            <form th:if="${subject.id == 8}"
+                  th:action="@{/current-affairs}"
+                  method="get">
+
+                <button type="submit">Current Affairs</button>
+
+            </form>
+
+
+            <!-- NORMAL PRELIMS SUBJECTS -->
+
+            <form th:unless="${subject.id == 8}"
+                  th:action="@{/sections/{id}(id=${subject.id})}"
+                  method="get">
+
+                <button type="submit">Sections</button>
+
+            </form>
+
+
+            <!-- DELETE -->
+
+            <form th:action="@{/delete-subject/{id}(id=${subject.id})}"
+                  method="post">
+
+                <button type="submit">Delete</button>
+
+            </form>
+
+        </td>
+
+    </tr>
+
+</table>
+
+
+<br><br>
+
+
+<!-- ================================================== -->
+<!-- MAINS                                              -->
+<!-- ================================================== -->
+
+<h2>MAINS</h2>
+
+<table border="1">
+
+    <tr>
+        <th>ID</th>
+        <th>Subject Name</th>
+        <th>Action</th>
+    </tr>
+
+    <tr th:each="subject : ${mainsSubjects}">
+
+        <td th:text="${subject.id}"></td>
+
+        <td th:text="${subject.name}"></td>
+
+        <td>
+
+            <!-- EDIT -->
+
+            <form th:action="@{/edit-subject/{id}(id=${subject.id})}"
+                  method="get">
+
+                <button type="submit">Edit</button>
+
+            </form>
+
+
+            <!-- SECTIONS -->
+
+            <form th:action="@{/sections/{id}(id=${subject.id})}"
+                  method="get">
+
+                <button type="submit">Sections</button>
+
+            </form>
+
+
+            <!-- DELETE -->
+
+            <form th:action="@{/delete-subject/{id}(id=${subject.id})}"
+                  method="post">
+
+                <button type="submit">Delete</button>
+
+            </form>
+
+        </td>
+
+    </tr>
+
+</table>
+
+</body>
+
+</html>

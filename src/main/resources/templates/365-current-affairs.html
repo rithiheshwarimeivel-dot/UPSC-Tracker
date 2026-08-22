@@ -1,0 +1,72 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>365 Days Current Affairs</title>
+</head>
+
+<body>
+
+<h1>365 Days Current Affairs</h1>
+
+<hr>
+
+<h2>
+    365 Days Revision -
+    <span th:text="${attemptYear}"></span>
+</h2>
+
+<hr>
+
+<h2>Yearly Magazine Revision</h2>
+
+<table border="1">
+
+    <tr>
+        <th>Revision</th>
+    </tr>
+
+    <tr>
+
+        <td>
+
+            <form
+                    th:action="@{/current-affairs/toggle/{id}(id=${topic.id})}"
+                    method="post">
+
+                <input
+                        type="hidden"
+                        name="type"
+                        value="365">
+
+                <button type="submit">
+
+                    <span th:if="${!topic.completed}">
+                        365 Days Revision - Not Completed
+                    </span>
+
+                    <span th:if="${topic.completed}">
+                        365 Days Revision - ✓ Completed
+                    </span>
+
+                </button>
+
+            </form>
+
+        </td>
+
+    </tr>
+
+</table>
+
+<br>
+
+<a th:href="@{/current-affairs}">
+    Back to Current Affairs
+</a>
+
+</body>
+
+</html>
+

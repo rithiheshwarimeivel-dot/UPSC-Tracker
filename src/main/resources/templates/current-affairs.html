@@ -1,0 +1,107 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Current Affairs</title>
+</head>
+
+<body>
+
+<h1>Current Affairs</h1>
+
+<hr>
+
+<!-- ================================================== -->
+<!-- SELECT UPSC ATTEMPT YEAR -->
+<!-- ================================================== -->
+
+<h2>Select UPSC Attempt Year</h2>
+
+<form action="/current-affairs" method="post">
+
+    <label for="attemptYear">
+        Attempt Year:
+    </label>
+
+    <input
+            type="number"
+            id="attemptYear"
+            name="attemptYear"
+            min="2027"
+            max="2100"
+            placeholder="Example: 2027"
+            required>
+
+    <button type="submit">
+        Continue
+    </button>
+
+</form>
+
+<br>
+
+<!-- ================================================== -->
+<!-- SHOW CURRENT AFFAIRS OPTIONS -->
+<!-- ================================================== -->
+
+<div th:if="${attemptYear != null}">
+
+    <h2>
+        Current Affairs -
+        <span th:text="${attemptYear}"></span>
+    </h2>
+
+    <hr>
+
+    <!-- ================================================== -->
+    <!-- PRELIMS -->
+    <!-- ================================================== -->
+
+    <h3>Prelims Current Affairs</h3>
+
+    <a th:href="@{/current-affairs/prelims(attemptYear=${attemptYear})}">
+        <button type="button">
+            Open Prelims
+        </button>
+    </a>
+
+    <br><br>
+
+    <!-- ================================================== -->
+    <!-- MAINS -->
+    <!-- ================================================== -->
+
+    <h3>Mains Current Affairs</h3>
+
+    <a th:href="@{/current-affairs/mains(attemptYear=${attemptYear})}">
+        <button type="button">
+            Open Mains
+        </button>
+    </a>
+
+    <br><br>
+
+    <!-- ================================================== -->
+    <!-- 365 DAYS -->
+    <!-- ================================================== -->
+
+    <h3>365 Days Revision</h3>
+
+    <a th:href="@{/current-affairs/365(attemptYear=${attemptYear})}">
+        <button type="button">
+            Open 365 Days
+        </button>
+    </a>
+
+</div>
+
+<br><br>
+
+<a href="/subjects">
+    Back to Subjects
+</a>
+
+</body>
+
+</html>

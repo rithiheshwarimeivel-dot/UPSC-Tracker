@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Add Subtopic</title>
+</head>
+
+<body>
+
+<h2>Add Subtopic</h2>
+
+<form th:action="@{/save-subtopic}" method="post">
+
+    <label>Topic:</label>
+
+    <select name="topic.id" id="topicSelect">
+
+        <option value="">Select Topic</option>
+
+        <option th:each="topic : ${topics}"
+                th:value="${topic.id}"
+                th:text="${topic.topicName}">
+        </option>
+
+    </select>
+
+    <br><br>
+
+    <label>Subtopic:</label>
+
+    <select name="name" id="subtopicSelect">
+
+        <option value="">Select Subtopic</option>
+
+    </select>
+
+    <br><br>
+
+    <label>Completed:</label>
+
+    <input type="checkbox" name="completed">
+
+    <br><br>
+
+    <button type="submit">Save Subtopic</button>
+
+</form>
+
+<script>
+
+    document.getElementById("topicSelect").addEventListener("change", function () {
+
+        const topicId = this.value;
+
+        const subtopicSelect = document.getElementById("subtopicSelect");
+
+        subtopicSelect.innerHTML =
+            '<option value="">Select Subtopic</option>';
+
+        if (topicId === "") {
+            return;
+        }
+
+        fetch("/subtopics/by-topic/" + topicId)
+            .then(response => response.json())
+            .then(subtopics => {
+
+                subtopics.forEach(subtopic => {
+
+                    const option = document.createElement("option");
+
+                    option.value = subtopic.name;
+                    option.textContent = subtopic.name;
+
+                    subtopicSelect.appendChild(option);
+                });
+
+            })
+            .catch(error => {
+                console.error("Error loading subtopics:", error);
+            });
+
+    });
+
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <title>Edit Subtopic</title>
+</head>
+
+<body>
+
+<h2>Edit Subtopic</h2>
+
+<form th:action="@{/update-subtopic}" method="post">
+
+  <input type="hidden" name="id" th:value="${subtopic.id}">
+
+  <label>Topic:</label>
+
+  <select name="topic.id">
+
+    <option th:each="topic : ${topics}"
+            th:value="${topic.id}"
+            th:text="${topic.topicName}"
+            th:selected="${subtopic.topic != null and subtopic.topic.id == topic.id}">
+    </option>
+
+  </select>
+
+  <br><br>
+
+  <label>Subtopic Name:</label>
+
+  <input type="text"
+         name="name"
+         th:value="${subtopic.name}">
+
+  <br><br>
+
+  <label>Completed:</label>
+
+  <input type="checkbox"
+         name="completed"
+         th:checked="${subtopic.completed}">
+
+  <br><br>
+
+  <button type="submit">Update</button>
+
+</form>
+
+</body>
+
+</html>

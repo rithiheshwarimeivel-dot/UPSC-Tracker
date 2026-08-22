@@ -1,0 +1,56 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Sections</title>
+</head>
+
+<body>
+
+<h1 th:text="${subject.name} + ' - Sections'"></h1>
+
+<a th:href="@{/add-section/{id}(id=${subject.id})}">
+    Add Section
+</a>
+
+<br><br>
+
+<table border="1">
+
+    <tr>
+        <th>ID</th>
+        <th>Section Name</th>
+        <th>Action</th>
+    </tr>
+
+    <tr th:each="section : ${sections}">
+
+        <td th:text="${section.id}"></td>
+
+        <td>
+            <a th:href="@{/topics/{sectionId}(sectionId=${section.id})}"
+               th:text="${section.name}">
+            </a>
+        </td>
+
+        <td>
+            <form th:action="@{/delete-section/{id}(id=${section.id})}"
+                  method="post">
+
+                <button type="submit">Delete</button>
+
+            </form>
+        </td>
+
+    </tr>
+
+</table>
+
+<br>
+
+<a href="/subjects">Back to Subjects</a>
+
+</body>
+
+</html>

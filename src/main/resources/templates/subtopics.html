@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>UPSC Subtopics</title>
+</head>
+
+<body>
+
+<h2>UPSC Subtopics</h2>
+
+<a href="/add-subtopic">Add Subtopic</a>
+
+<br><br>
+
+<table border="1">
+
+    <tr>
+        <th>ID</th>
+        <th>Topic</th>
+        <th>Subtopic Name</th>
+        <th>Completed</th>
+        <th>Action</th>
+    </tr>
+
+    <tr th:each="subtopic : ${subtopics}">
+
+        <td th:text="${subtopic.id}"></td>
+
+        <td th:text="${subtopic.topic != null ? subtopic.topic.topicName : 'No Topic'}"></td>
+
+        <td th:text="${subtopic.name}"></td>
+
+        <td th:text="${subtopic.completed}"></td>
+
+        <td>
+
+            <form th:action="@{/edit-subtopic/{id}(id=${subtopic.id})}" method="get">
+                <button type="submit">Edit</button>
+            </form>
+
+            <br>
+
+            <form th:action="@{/delete-subtopic/{id}(id=${subtopic.id})}" method="post">
+                <button type="submit">Delete</button>
+            </form>
+
+        </td>
+
+    </tr>
+
+</table>
+
+</body>
+
+</html>

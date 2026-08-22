@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>UPSC Topics</title>
+</head>
+
+<body>
+
+<h1>UPSC Topics Tracker</h1>
+
+<form th:action="@{/add-topic}" method="post">
+
+    <label>Subject:</label>
+
+    <select name="subject.id" id="subjectSelect">
+        <option value="">-- Select Subject --</option>
+
+        <option th:each="subject : ${subjects}"
+                th:value="${subject.id}"
+                th:text="${subject.name}">
+        </option>
+    </select>
+
+    <br><br>
+
+    <label>Section:</label>
+
+    <select name="section.id" id="sectionSelect">
+        <option value="">-- Select Section --</option>
+
+        <option th:each="section : ${sections}"
+                th:value="${section.id}"
+                th:data-subject-id="${section.subject.id}"
+                th:text="${section.name}">
+        </option>
+    </select>
+
+    <br><br>
+
+    <label>Topic Name:</label>
+
+    <input type="text"
+           name="topicName"
+           placeholder="Enter Topic Name">
+
+    <br><br>
+
+    <label>Completed:</label>
+
+    <input type="checkbox"
+           name="completed">
+
+    <br><br>
+
+    <button type="submit">Add Topic</button>
+
+</form>
+
+<br><br>
+
+<table border="1">
+
+    <tr>
+        <th>Subject</th>
+        <th>Section</th>
+        <th>Topic Name</th>
+        <th>Completed</th>
+        <th>Action</th>
+    </tr>
+
+    <tr th:each="topic : ${topics}">
+
+        <td th:text="${topic.subject != null ? topic.subject.name : 'No Subject'}">
+        </td>
+
+        <td th:text="${topic.section != null ? topic.section.name : 'No Section'}">
+        </td>
+
+        <td th:text="${topic.topicName}">
+        </td>
+
+        <td th:text="${topic.completed}">
+        </td>
+
+        <td>
+
+            <form th:action="@{/edit-topic/{id}(id=${topic.id})}"
+                  method="get">
+
+                <button type="submit">Edit</button>
+
+            </form>
+
+            <br>
+
+            <form th:action="@{/delete-topic/{id}(id=${topic.id})}"
+                  method="post">
+
+                <button type="submit">Delete</button>
+
+            </form>
+
+        </td>
+
+    </tr>
+
+</table>
+
+<br>
+
+<a href="/subjects">Back to Subjects</a>
+
+
+<script>
+
+    const subjectSelect = document.getElementById("subjectSelect");
+    const sectionSelect = document.getElementById("sectionSelect");
+
+    const allSections = Array.from(sectionSelect.options);
+
+    subjectSelect.addEventListener("change", function () {
+
+        const selectedSubjectId = this.value;
+
+        sectionSelect.innerHTML =
+            '<option value="">-- Select Section --</option>';
+
+        allSections.forEach(function (option) {
+
+            if (option.value === "") {
+                return;
+            }
+
+            const sectionSubjectId =
+                option.getAttribute("data-subject-id");
+
+            if (sectionSubjectId === selectedSubjectId) {
+
+                sectionSelect.appendChild(option.cloneNode(true));
+
+            }
+
+        });
+
+    });
+
+</script>
+
+</body>
+
+</html>

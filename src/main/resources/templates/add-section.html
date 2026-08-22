@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Add Section</title>
+</head>
+
+<body>
+
+<h2>Add Section</h2>
+
+<h3 th:text="${subject.name}"></h3>
+
+<form th:action="@{/save-section}" method="post">
+
+    <input type="hidden"
+           name="subject.id"
+           th:value="${subject.id}">
+
+    <label>Section Name:</label>
+
+    <input type="text"
+           name="name"
+           placeholder="Enter Section Name">
+
+    <br><br>
+
+    <button type="submit">Save</button>
+
+</form>
+
+<br>
+
+<a th:href="@{/sections/{id}(id=${subject.id})}">
+    Back to Sections
+</a>
+
+</body>
+
+</html>

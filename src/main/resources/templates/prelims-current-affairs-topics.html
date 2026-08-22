@@ -1,0 +1,70 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Prelims Current Affairs Topics</title>
+</head>
+
+<body>
+
+<h1>
+    <span th:text="${section.name}"></span>
+    <span th:text="${section.year}"></span>
+</h1>
+
+<hr>
+
+<h2>Sections</h2>
+
+<table border="1">
+
+    <tr>
+        <th>Section</th>
+    </tr>
+
+    <tr th:each="topic : ${topics}">
+
+        <td>
+
+            <form
+                    th:action="@{/current-affairs/toggle/{id}(id=${topic.id})}"
+                    method="post">
+
+                <input
+                        type="hidden"
+                        name="type"
+                        value="prelims">
+
+                <button type="submit">
+
+                    <span th:if="${!topic.completed}">
+                        <span th:text="${topic.topicName}"></span>
+                        - Not Completed
+                    </span>
+
+                    <span th:if="${topic.completed}">
+                        <span th:text="${topic.topicName}"></span>
+                        - ✓ Completed
+                    </span>
+
+                </button>
+
+            </form>
+
+        </td>
+
+    </tr>
+
+</table>
+
+<br>
+
+<a href="/current-affairs/prelims">
+    Back to Prelims Current Affairs
+</a>
+
+</body>
+
+</html>
+

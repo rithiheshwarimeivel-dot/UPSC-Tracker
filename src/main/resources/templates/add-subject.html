@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <title>Add Subject</title>
+</head>
+
+<body>
+
+<h2>Add Subject</h2>
+
+<form action="/save-subject" method="post">
+
+  <label>Subject Name:</label>
+  <input type="text" name="name" placeholder="Enter Subject Name">
+
+  <br><br>
+
+  <label>Exam Type:</label>
+
+  <select name="examType">
+    <option value="PRELIMS">PRELIMS</option>
+    <option value="MAINS">MAINS</option>
+  </select>
+
+  <br><br>
+
+  <button type="submit">Save</button>
+
+</form>
+
+<br>
+
+<a href="/subjects">Back to Subjects</a>
+
+</body>
+
+</html>

@@ -1,0 +1,74 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <title>Mains Current Affairs</title>
+</head>
+
+<body>
+
+<h1>Mains Current Affairs</h1>
+
+<hr>
+
+<h2>
+  Mains Current Affairs -
+  <span th:text="${attemptYear}"></span>
+</h2>
+
+<hr>
+
+<h2>Revision Period</h2>
+
+<table border="1">
+
+  <tr>
+    <th>Revision</th>
+  </tr>
+
+  <tr th:each="section, stat : ${mainsSections}">
+
+    <td>
+
+      <form
+              th:action="@{/current-affairs/toggle/{id}(id=${mainsStatus[stat.index].id})}"
+              method="post">
+
+        <input
+                type="hidden"
+                name="type"
+                value="mains">
+
+        <button type="submit">
+
+                    <span
+                            th:if="${!mainsStatus[stat.index].completed}"
+                            th:text="${section.name + ' - Not Completed'}">
+                    </span>
+
+          <span
+                  th:if="${mainsStatus[stat.index].completed}"
+                  th:text="${section.name + ' - ✓ Completed'}">
+                    </span>
+
+        </button>
+
+      </form>
+
+    </td>
+
+  </tr>
+
+</table>
+
+<br>
+
+<a th:href="@{/current-affairs}">
+  Back to Current Affairs
+</a>
+
+</body>
+
+</html>
+

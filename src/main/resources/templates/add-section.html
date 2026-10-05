@@ -1,39 +1,626 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <title>Add Section</title>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Add Subject | UPSC Tracker</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+
+            background:
+                    radial-gradient(
+                            circle at 10% 10%,
+                            rgba(168, 85, 247, 0.14),
+                            transparent 32%
+                    ),
+                    radial-gradient(
+                            circle at 90% 85%,
+                            rgba(34, 211, 238, 0.08),
+                            transparent 32%
+                    ),
+                    radial-gradient(
+                            circle at 55% 40%,
+                            rgba(217, 70, 239, 0.05),
+                            transparent 35%
+                    ),
+                    #080814;
+
+            color: #e5e7eb;
+
+            overflow-x: hidden;
+        }
+
+        /* =====================================================
+           MAIN CONTENT
+        ===================================================== */
+
+        .main-content {
+
+            margin-left: 250px !important;
+
+            width: calc(100% - 250px) !important;
+
+            min-height: 100vh;
+
+            padding: 40px 45px;
+        }
+
+        /* =====================================================
+           TOP BAR
+        ===================================================== */
+
+        .top-bar {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 28px;
+        }
+
+        .back-buttons {
+
+            display: flex;
+
+            gap: 10px;
+
+            flex-wrap: wrap;
+        }
+
+        .back-button {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            text-decoration: none;
+
+            color: #cbd5e1;
+
+            background:
+                    rgba(255, 255, 255, 0.04);
+
+            border:
+                    1px solid rgba(255, 255, 255, 0.09);
+
+            padding: 9px 15px;
+
+            border-radius: 10px;
+
+            font-size: 13px;
+
+            font-weight: 600;
+
+            transition: 0.25s ease;
+        }
+
+        .back-button:hover {
+
+            color: #ffffff;
+
+            background:
+                    rgba(168, 85, 247, 0.12);
+
+            border-color:
+                    rgba(217, 70, 239, 0.35);
+
+            transform:
+                    translateX(-2px);
+
+            box-shadow:
+                    0 0 18px
+                    rgba(168, 85, 247, 0.10);
+        }
+
+        /* =====================================================
+           PAGE HEADER
+        ===================================================== */
+
+        .page-header {
+
+            margin-bottom: 25px;
+        }
+
+        .page-header h1 {
+
+            font-size: 32px;
+
+            font-weight: 800;
+
+            margin-bottom: 8px;
+
+            background:
+                    linear-gradient(
+                            90deg,
+                            #ffffff,
+                            #d8b4fe,
+                            #67e8f9
+                    );
+
+            -webkit-background-clip: text;
+
+            -webkit-text-fill-color: transparent;
+
+            background-clip: text;
+        }
+
+        .page-header p {
+
+            color: #94a3b8;
+
+            font-size: 14px;
+
+            line-height: 1.6;
+        }
+
+        /* =====================================================
+           FORM CARD
+        ===================================================== */
+
+        .form-card {
+
+            width: 100%;
+
+            max-width: 700px;
+
+            padding: 30px;
+
+            background:
+                    linear-gradient(
+                            145deg,
+                            rgba(21, 13, 35, 0.84),
+                            rgba(8, 8, 20, 0.78)
+                    );
+
+            border:
+                    1px solid rgba(192, 92, 255, 0.15);
+
+            border-radius: 20px;
+
+            backdrop-filter: blur(18px);
+
+            box-shadow:
+                    0 20px 50px
+                    rgba(0, 0, 0, 0.28),
+
+                    inset 0 0 25px
+                    rgba(168, 85, 247, 0.025);
+        }
+
+        .form-card:hover {
+
+            border-color:
+                    rgba(192, 92, 255, 0.22);
+
+            box-shadow:
+                    0 22px 55px
+                    rgba(0, 0, 0, 0.30),
+
+                    0 0 25px
+                    rgba(168, 85, 247, 0.05);
+        }
+
+        /* =====================================================
+           FORM TITLE
+        ===================================================== */
+
+        .form-title {
+
+            color: #ffffff;
+
+            font-size: 20px;
+
+            font-weight: 700;
+
+            margin-bottom: 6px;
+        }
+
+        .form-description {
+
+            color: #64748b;
+
+            font-size: 12px;
+
+            margin-bottom: 25px;
+        }
+
+        /* =====================================================
+           FORM GROUP
+        ===================================================== */
+
+        .form-group {
+
+            margin-bottom: 22px;
+        }
+
+        .form-group label {
+
+            display: block;
+
+            color: #cbd5e1;
+
+            font-size: 13px;
+
+            font-weight: 600;
+
+            margin-bottom: 8px;
+        }
+
+        /* =====================================================
+           INPUT + SELECT
+        ===================================================== */
+
+        input[type="text"],
+        select {
+
+            width: 100%;
+
+            padding: 13px 14px;
+
+            border-radius: 11px;
+
+            border:
+                    1px solid
+                    rgba(255, 255, 255, 0.10);
+
+            outline: none;
+
+            background:
+                    rgba(3, 2, 10, 0.70);
+
+            color: #ffffff;
+
+            font-size: 14px;
+
+            transition: 0.25s ease;
+        }
+
+        input[type="text"]::placeholder {
+
+            color: #64748b;
+        }
+
+        input[type="text"]:focus,
+        select:focus {
+
+            border-color:
+                    rgba(192, 92, 255, 0.55);
+
+            box-shadow:
+                    0 0 0 3px
+                    rgba(168, 85, 247, 0.08),
+
+                    0 0 18px
+                    rgba(168, 85, 247, 0.08);
+        }
+
+        select {
+
+            cursor: pointer;
+        }
+
+        select option {
+
+            background: #0f0b18;
+
+            color: #ffffff;
+        }
+
+        /* =====================================================
+           SAVE BUTTON
+        ===================================================== */
+
+        .save-button {
+
+            width: 100%;
+
+            border: none;
+
+            padding: 13px;
+
+            border-radius: 11px;
+
+            background:
+                    linear-gradient(
+                            135deg,
+                            #d946ef,
+                            #a855f7,
+                            #7c3aed
+                    );
+
+            color: #ffffff;
+
+            font-size: 14px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+            transition: 0.25s ease;
+
+            box-shadow:
+                    0 7px 20px
+                    rgba(168, 85, 247, 0.15);
+        }
+
+        .save-button:hover {
+
+            transform:
+                    translateY(-2px);
+
+            box-shadow:
+                    0 10px 28px
+                    rgba(168, 85, 247, 0.30);
+        }
+
+        /* =====================================================
+           NOTE
+        ===================================================== */
+
+        .note {
+
+            margin-top: 18px;
+
+            padding: 14px 16px;
+
+            border-radius: 12px;
+
+            background:
+                    rgba(168, 85, 247, 0.045);
+
+            border:
+                    1px solid
+                    rgba(168, 85, 247, 0.08);
+
+            color: #64748b;
+
+            font-size: 11px;
+
+            line-height: 1.6;
+        }
+
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+        @media (max-width: 800px) {
+
+            .main-content {
+
+                margin-left: 250px !important;
+
+                width: calc(100% - 250px) !important;
+
+                padding: 30px 25px;
+            }
+        }
+
+        @media (max-width: 550px) {
+
+            .main-content {
+
+                padding: 25px 18px;
+            }
+
+            .form-card {
+
+                padding: 22px;
+            }
+
+            .page-header h1 {
+
+                font-size: 27px;
+            }
+
+            .back-buttons {
+
+                flex-direction: column;
+
+                align-items: stretch;
+            }
+
+            .back-button {
+
+                justify-content: center;
+            }
+        }
+
+    </style>
+
 </head>
+
 
 <body>
 
-<h2>Add Section</h2>
 
-<h3 th:text="${subject.name}"></h3>
+<!-- =========================================================
+     COMMON SIDEBAR
+========================================================= -->
 
-<form th:action="@{/save-section}" method="post">
+<div th:replace="~{fragments/sidebar :: sidebar}"></div>
 
-    <input type="hidden"
-           name="subject.id"
-           th:value="${subject.id}">
 
-    <label>Section Name:</label>
+<!-- =========================================================
+     MAIN CONTENT
+========================================================= -->
 
-    <input type="text"
-           name="name"
-           placeholder="Enter Section Name">
+<main class="main-content">
 
-    <br><br>
 
-    <button type="submit">Save</button>
+    <!-- =====================================================
+         BACK BUTTONS
+    ====================================================== -->
 
-</form>
+    <div class="top-bar">
 
-<br>
+        <div class="back-buttons">
 
-<a th:href="@{/sections/{id}(id=${subject.id})}">
-    Back to Sections
-</a>
+            <a href="/subjects"
+               class="back-button">
+
+                ← Back to Subjects
+
+            </a>
+
+
+            <a href="/dashboard"
+               class="back-button">
+
+                ⌂ Back to Dashboard
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <div class="page-header">
+
+        <h1>
+            Add Subject
+        </h1>
+
+        <p>
+            Create a new subject and assign it to
+            Prelims or Mains.
+        </p>
+
+    </div>
+
+
+    <!-- =====================================================
+         FORM CARD
+    ====================================================== -->
+
+    <section class="form-card">
+
+
+        <div class="form-title">
+
+            Subject Details
+
+        </div>
+
+
+        <div class="form-description">
+
+            Enter the subject information below.
+
+        </div>
+
+
+        <form
+                action="/save-subject"
+                method="post">
+
+
+            <!-- SUBJECT NAME -->
+
+            <div class="form-group">
+
+                <label for="name">
+
+                    Subject Name
+
+                </label>
+
+
+                <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        placeholder="e.g. Indian Polity"
+                        maxlength="150"
+                        required>
+
+            </div>
+
+
+            <!-- EXAM TYPE -->
+
+            <div class="form-group">
+
+                <label for="examType">
+
+                    Exam Type
+
+                </label>
+
+
+                <select
+                        id="examType"
+                        name="examType"
+                        required>
+
+                    <option value="PRELIMS">
+
+                        PRELIMS
+
+                    </option>
+
+                    <option value="MAINS">
+
+                        MAINS
+
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- SAVE -->
+
+            <button
+                    type="submit"
+                    class="save-button">
+
+                ✦ Save Subject
+
+            </button>
+
+
+        </form>
+
+
+        <div class="note">
+
+            Choose the correct exam type so the subject
+            appears in the appropriate UPSC Tracker section.
+
+        </div>
+
+
+    </section>
+
+
+</main>
+
 
 </body>
 

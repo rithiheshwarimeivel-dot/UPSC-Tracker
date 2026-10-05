@@ -1,0 +1,1248 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Prelims GS | UPSC Tracker</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            min-height: 100%;
+        }
+
+        body {
+            min-height: 100vh;
+
+            font-family:
+                    "Segoe UI",
+                    Arial,
+                    sans-serif;
+
+            background: #080814;
+
+            color: #ffffff;
+
+            overflow-x: hidden;
+        }
+
+        /* =====================================================
+           MAIN PAGE
+        ===================================================== */
+
+        .page {
+
+            min-height: 100vh;
+
+            position: relative;
+
+            margin-left: 250px !important;
+
+            width:
+                    calc(100% - 250px) !important;
+
+            padding:
+                    35px 0 70px;
+
+            background:
+                    radial-gradient(
+                            circle at 50% 5%,
+                            rgba(
+                                    168,
+                                    85,
+                                    247,
+                                    0.14
+                            ),
+                            transparent 35%
+                    ),
+                    radial-gradient(
+                            circle at 10% 80%,
+                            rgba(
+                                    34,
+                                    211,
+                                    238,
+                                    0.07
+                            ),
+                            transparent 30%
+                    ),
+                    radial-gradient(
+                            circle at 90% 70%,
+                            rgba(
+                                    217,
+                                    70,
+                                    239,
+                                    0.07
+                            ),
+                            transparent 30%
+                    ),
+                    #080814;
+
+            overflow: hidden;
+        }
+
+        .page::before {
+
+            content: "";
+
+            position: absolute;
+
+            width: 500px;
+            height: 500px;
+
+            top: -200px;
+            left: -180px;
+
+            border-radius: 50%;
+
+            background:
+                    rgba(
+                            168,
+                            85,
+                            247,
+                            0.08
+                    );
+
+            filter: blur(100px);
+
+            pointer-events: none;
+        }
+
+        .page::after {
+
+            content: "";
+
+            position: absolute;
+
+            width: 450px;
+            height: 450px;
+
+            right: -180px;
+            bottom: -180px;
+
+            border-radius: 50%;
+
+            background:
+                    rgba(
+                            34,
+                            211,
+                            238,
+                            0.06
+                    );
+
+            filter: blur(100px);
+
+            pointer-events: none;
+        }
+
+        /* =====================================================
+           CONTENT
+        ===================================================== */
+
+        .content {
+
+            position: relative;
+
+            z-index: 2;
+
+            width:
+                    min(
+                            1200px,
+                            92%
+                    );
+
+            margin:
+                    0 auto;
+        }
+
+        /* =====================================================
+           TOP BAR
+        ===================================================== */
+
+        .top-bar {
+
+            display: flex;
+
+            justify-content:
+                    space-between;
+
+            align-items: center;
+
+            gap: 15px;
+
+            margin-bottom: 28px;
+
+            flex-wrap: wrap;
+        }
+
+        .brand {
+
+            font-size: 18px;
+
+            font-weight: 800;
+
+            letter-spacing: 1px;
+
+            color: #ffffff;
+        }
+
+        .brand span {
+
+            background:
+                    linear-gradient(
+                            90deg,
+                            #d946ef,
+                            #a855f7,
+                            #22d3ee
+                    );
+
+            -webkit-background-clip: text;
+
+            -webkit-text-fill-color: transparent;
+
+            background-clip: text;
+        }
+
+        .navigation {
+
+            display: flex;
+
+            gap: 10px;
+
+            flex-wrap: wrap;
+        }
+
+        .back-button {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            text-decoration: none;
+
+            padding:
+                    10px 16px;
+
+            border-radius: 11px;
+
+            background:
+                    rgba(
+                            255,
+                            255,
+                            255,
+                            0.025
+                    );
+
+            border:
+                    1px solid
+                    rgba(
+                            168,
+                            85,
+                            247,
+                            0.18
+                    );
+
+            color: #c6c9d5;
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+            transition:
+                    0.25s ease;
+        }
+
+        .back-button:hover {
+
+            color: #ffffff;
+
+            border-color:
+                    rgba(
+                            168,
+                            85,
+                            247,
+                            0.55
+                    );
+
+            transform:
+                    translateY(-2px);
+
+            box-shadow:
+                    0 0 20px
+                    rgba(
+                            168,
+                            85,
+                            247,
+                            0.12
+                    );
+        }
+
+        .dashboard-button {
+
+            border-color:
+                    rgba(
+                            34,
+                            211,
+                            238,
+                            0.18
+                    );
+        }
+
+        .dashboard-button:hover {
+
+            border-color:
+                    rgba(
+                            34,
+                            211,
+                            238,
+                            0.55
+                    );
+
+            box-shadow:
+                    0 0 20px
+                    rgba(
+                            34,
+                            211,
+                            238,
+                            0.12
+                    );
+        }
+
+        /* =====================================================
+           HEADER
+        ===================================================== */
+
+        .header-card {
+
+            position: relative;
+
+            padding: 32px;
+
+            margin-bottom: 22px;
+
+            border-radius: 24px;
+
+            background:
+                    linear-gradient(
+                            145deg,
+                            rgba(
+                                    25,
+                                    18,
+                                    43,
+                                    0.97
+                            ),
+                            rgba(
+                                    10,
+                                    11,
+                                    23,
+                                    0.98
+                            )
+                    );
+
+            border:
+                    1px solid
+                    rgba(
+                            168,
+                            85,
+                            247,
+                            0.16
+                    );
+
+            box-shadow:
+                    14px 14px 35px
+                    rgba(
+                            0,
+                            0,
+                            0,
+                            0.55
+                    );
+
+            overflow: hidden;
+        }
+
+        .header-card::before {
+
+            content: "";
+
+            position: absolute;
+
+            top: 0;
+            left: 8%;
+
+            width: 84%;
+            height: 2px;
+
+            background:
+                    linear-gradient(
+                            90deg,
+                            transparent,
+                            #d946ef,
+                            #a855f7,
+                            #22d3ee,
+                            transparent
+                    );
+        }
+
+        .eyebrow {
+
+            color: #d946ef;
+
+            font-size: 11px;
+
+            font-weight: 800;
+
+            letter-spacing: 2px;
+
+            margin-bottom: 10px;
+        }
+
+        .header-card h1 {
+
+            font-size:
+                    clamp(
+                            30px,
+                            5vw,
+                            40px
+                    );
+
+            margin-bottom: 9px;
+
+            background:
+                    linear-gradient(
+                            90deg,
+                            #ffffff,
+                            #e9d5ff,
+                            #c4f7ff
+                    );
+
+            -webkit-background-clip: text;
+
+            -webkit-text-fill-color: transparent;
+
+            background-clip: text;
+        }
+
+        .header-card p {
+
+            color: #858094;
+
+            font-size: 14px;
+
+            line-height: 1.7;
+        }
+
+        /* =====================================================
+           OVERALL PROGRESS
+        ===================================================== */
+
+        .progress-card {
+
+            padding: 22px;
+
+            margin-bottom: 28px;
+
+            border-radius: 18px;
+
+            background:
+                    linear-gradient(
+                            145deg,
+                            rgba(
+                                    25,
+                                    18,
+                                    43,
+                                    0.94
+                            ),
+                            rgba(
+                                    10,
+                                    11,
+                                    23,
+                                    0.96
+                            )
+                    );
+
+            border:
+                    1px solid
+                    rgba(
+                            168,
+                            85,
+                            247,
+                            0.12
+                    );
+
+            box-shadow:
+                    10px 10px 25px
+                    rgba(
+                            0,
+                            0,
+                            0,
+                            0.40
+                    );
+        }
+
+        .progress-top {
+
+            display: flex;
+
+            justify-content:
+                    space-between;
+
+            align-items: center;
+
+            margin-bottom: 11px;
+        }
+
+        .progress-label {
+
+            color: #858094;
+
+            font-size: 12px;
+
+            font-weight: 700;
+        }
+
+        .progress-value {
+
+            color: #22d3ee;
+
+            font-size: 13px;
+
+            font-weight: 800;
+
+            text-shadow:
+                    0 0 8px
+                    rgba(
+                            34,
+                            211,
+                            238,
+                            0.30
+                    );
+        }
+
+        .progress-bar {
+
+            width: 100%;
+
+            height: 8px;
+
+            border-radius: 20px;
+
+            background:
+                    rgba(
+                            255,
+                            255,
+                            255,
+                            0.06
+                    );
+
+            overflow: hidden;
+        }
+
+        .progress-fill {
+
+            height: 100%;
+
+            border-radius: 20px;
+
+            background:
+                    linear-gradient(
+                            90deg,
+                            #d946ef,
+                            #a855f7,
+                            #22d3ee
+                    );
+
+            box-shadow:
+                    0 0 12px
+                    rgba(
+                            168,
+                            85,
+                            247,
+                            0.35
+                    );
+
+            transition:
+                    width 0.3s ease;
+        }
+
+        /* =====================================================
+           SUBJECT GRID
+        ===================================================== */
+
+        .section-title {
+
+            margin-bottom: 18px;
+
+            color: #f4edff;
+
+            font-size: 22px;
+
+            font-weight: 800;
+        }
+
+        .subjects-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(
+                    auto-fit,
+                    minmax(
+                            270px,
+                            1fr
+                    )
+                );
+
+            gap: 18px;
+        }
+
+        /* =====================================================
+           SUBJECT CARD
+        ===================================================== */
+
+        .subject-card {
+
+            position: relative;
+
+            display: block;
+
+            min-height: 190px;
+
+            padding: 24px;
+
+            text-decoration: none;
+
+            border-radius: 20px;
+
+            background:
+                    linear-gradient(
+                            145deg,
+                            rgba(
+                                    25,
+                                    18,
+                                    43,
+                                    0.98
+                            ),
+                            rgba(
+                                    10,
+                                    11,
+                                    23,
+                                    0.98
+                            )
+                    );
+
+            border:
+                    1px solid
+                    rgba(
+                            168,
+                            85,
+                            247,
+                            0.13
+                    );
+
+            box-shadow:
+                    10px 10px 25px
+                    rgba(
+                            0,
+                            0,
+                            0,
+                            0.45
+                    );
+
+            overflow: hidden;
+
+            transition:
+                    0.25s ease;
+        }
+
+        .subject-card::before {
+
+            content: "";
+
+            position: absolute;
+
+            top: 0;
+            left: 0;
+
+            width: 100%;
+            height: 2px;
+
+            background:
+                    linear-gradient(
+                            90deg,
+                            transparent,
+                            #d946ef,
+                            #a855f7,
+                            #22d3ee,
+                            transparent
+                    );
+
+            opacity: 0.55;
+        }
+
+        .subject-card::after {
+
+            content: "";
+
+            position: absolute;
+
+            width: 120px;
+            height: 120px;
+
+            right: -50px;
+            bottom: -55px;
+
+            border-radius: 50%;
+
+            background:
+                    rgba(
+                            168,
+                            85,
+                            247,
+                            0.07
+                    );
+
+            filter: blur(25px);
+
+            transition:
+                    0.25s ease;
+        }
+
+        .subject-card:hover {
+
+            transform:
+                    translateY(-5px);
+
+            border-color:
+                    rgba(
+                            168,
+                            85,
+                            247,
+                            0.42
+                    );
+
+            box-shadow:
+                    0 0 25px
+                    rgba(
+                            168,
+                            85,
+                            247,
+                            0.10
+                    ),
+                    10px 15px 30px
+                    rgba(
+                            0,
+                            0,
+                            0,
+                            0.50
+                    );
+        }
+
+        .subject-card:hover::after {
+
+            background:
+                    rgba(
+                            34,
+                            211,
+                            238,
+                            0.10
+                    );
+        }
+
+        .subject-number {
+
+            color: #737c8e;
+
+            font-size: 11px;
+
+            font-weight: 800;
+
+            letter-spacing: 1px;
+
+            margin-bottom: 12px;
+        }
+
+        .subject-name {
+
+            color: #ffffff;
+
+            font-size: 20px;
+
+            font-weight: 800;
+
+            line-height: 1.35;
+
+            margin-bottom: 22px;
+        }
+
+        .subject-bottom {
+
+            position: relative;
+
+            z-index: 2;
+        }
+
+        .subject-progress-top {
+
+            display: flex;
+
+            justify-content:
+                    space-between;
+
+            align-items: center;
+
+            margin-bottom: 8px;
+        }
+
+        .subject-progress-label {
+
+            color: #737c8e;
+
+            font-size: 10px;
+
+            font-weight: 700;
+        }
+
+        .subject-progress-value {
+
+            color: #22d3ee;
+
+            font-size: 11px;
+
+            font-weight: 800;
+        }
+
+        .subject-progress-bar {
+
+            width: 100%;
+
+            height: 6px;
+
+            border-radius: 20px;
+
+            background:
+                    rgba(
+                            255,
+                            255,
+                            255,
+                            0.06
+                    );
+
+            overflow: hidden;
+        }
+
+        .subject-progress-fill {
+
+            height: 100%;
+
+            border-radius: 20px;
+
+            background:
+                    linear-gradient(
+                            90deg,
+                            #d946ef,
+                            #a855f7,
+                            #22d3ee
+                    );
+
+            box-shadow:
+                    0 0 10px
+                    rgba(
+                            168,
+                            85,
+                            247,
+                            0.30
+                    );
+        }
+
+        .subject-card.completed {
+
+            border-color:
+                    rgba(
+                            34,
+                            211,
+                            238,
+                            0.32
+                    );
+
+            background:
+                    linear-gradient(
+                            145deg,
+                            rgba(
+                                    18,
+                                    40,
+                                    45,
+                                    0.96
+                            ),
+                            rgba(
+                                    10,
+                                    18,
+                                    23,
+                                    0.98
+                            )
+                    );
+        }
+
+        .subject-card.completed::before {
+
+            background:
+                    linear-gradient(
+                            90deg,
+                            transparent,
+                            #22d3ee,
+                            #a855f7,
+                            #22d3ee,
+                            transparent
+                    );
+        }
+
+        .completed-badge {
+
+            position: absolute;
+
+            top: 20px;
+            right: 20px;
+
+            padding:
+                    5px 9px;
+
+            border-radius: 20px;
+
+            background:
+                    rgba(
+                            34,
+                            211,
+                            238,
+                            0.10
+                    );
+
+            border:
+                    1px solid
+                    rgba(
+                            34,
+                            211,
+                            238,
+                            0.25
+                    );
+
+            color: #67e8f9;
+
+            font-size: 9px;
+
+            font-weight: 800;
+
+            letter-spacing: 0.5px;
+        }
+
+        .empty-state {
+
+            padding: 50px 25px;
+
+            text-align: center;
+
+            border-radius: 18px;
+
+            background:
+                    rgba(
+                            255,
+                            255,
+                            255,
+                            0.02
+                    );
+
+            border:
+                    1px dashed
+                    rgba(
+                            168,
+                            85,
+                            247,
+                            0.22
+                    );
+
+            color: #858094;
+
+            font-size: 14px;
+        }
+
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+        @media (max-width: 800px) {
+
+            .page {
+
+                margin-left:
+                        250px !important;
+
+                width:
+                        calc(100% - 250px) !important;
+            }
+
+            .content {
+                width: 92%;
+            }
+
+            .header-card {
+                padding: 26px;
+            }
+
+            .subjects-grid {
+
+                grid-template-columns:
+                    repeat(
+                        auto-fit,
+                        minmax(
+                                220px,
+                                1fr
+                        )
+                    );
+            }
+        }
+
+        @media (max-width: 550px) {
+
+            .page {
+
+                margin-left:
+                        250px !important;
+
+                width:
+                        calc(100% - 250px) !important;
+            }
+
+            .content {
+                width: 94%;
+            }
+
+            .navigation {
+                width: 100%;
+            }
+
+            .back-button {
+                flex: 1;
+                justify-content: center;
+            }
+
+            .header-card {
+                padding: 22px;
+            }
+
+            .subjects-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<!-- =========================================================
+     COMMON SIDEBAR
+========================================================= -->
+
+<div th:replace="~{fragments/sidebar :: sidebar}"></div>
+
+
+<!-- =========================================================
+     PAGE
+========================================================= -->
+
+<div class="page">
+
+    <div class="content">
+
+        <!-- TOP BAR -->
+
+        <div class="top-bar">
+
+            <div class="brand">
+                <span>UPSC</span> TRACKER
+            </div>
+
+            <div class="navigation">
+
+                <a href="/prelims"
+                   class="back-button">
+
+                    ← Back to Prelims
+
+                </a>
+
+                <a href="/dashboard"
+                   class="back-button dashboard-button">
+
+                    ⌂ Dashboard
+
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- HEADER -->
+
+        <div class="header-card">
+
+            <div class="eyebrow">
+                UPSC PRELIMS
+            </div>
+
+            <h1>
+                General Studies
+            </h1>
+
+            <p>
+                Track your preparation across all
+                UPSC Prelims General Studies subjects.
+            </p>
+
+        </div>
+
+
+        <!-- OVERALL PROGRESS -->
+
+        <div class="progress-card">
+
+            <div class="progress-top">
+
+                <span class="progress-label">
+                    Overall GS Progress
+                </span>
+
+                <span class="progress-value"
+                      th:text="${overallProgress + '%'}">
+
+                    0%
+
+                </span>
+
+            </div>
+
+            <div class="progress-bar">
+
+                <div class="progress-fill"
+                     th:style="'width:' + ${overallProgress} + '%'">
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- SUBJECTS -->
+
+        <h2 class="section-title">
+            General Studies Subjects
+        </h2>
+
+
+        <div class="subjects-grid"
+             th:if="${subjects != null and !subjects.isEmpty()}">
+
+            <a th:each="subject, stat : ${subjects}"
+
+               th:href="@{/sections/{subjectId}(subjectId=${subject.id})}"
+
+               class="subject-card"
+
+               th:classappend="${subjectCompleted[subject.id]} ? ' completed' : ''">
+
+
+                <!-- COMPLETED BADGE -->
+
+                <div class="completed-badge"
+                     th:if="${subjectCompleted[subject.id]}">
+
+                    ✓ COMPLETED
+
+                </div>
+
+
+                <!-- SUBJECT NUMBER -->
+
+                <div class="subject-number"
+                     th:text="'SUBJECT ' + ${stat.count}">
+
+                    SUBJECT 1
+
+                </div>
+
+
+                <!-- SUBJECT NAME -->
+
+                <div class="subject-name"
+                     th:text="${subject.name}">
+
+                    Subject Name
+
+                </div>
+
+
+                <!-- PROGRESS -->
+
+                <div class="subject-bottom">
+
+                    <div class="subject-progress-top">
+
+                        <span class="subject-progress-label">
+                            PROGRESS
+                        </span>
+
+                        <span class="subject-progress-value"
+                              th:text="${subjectProgress[subject.id] + '%'}">
+
+                            0%
+
+                        </span>
+
+                    </div>
+
+
+                    <div class="subject-progress-bar">
+
+                        <div class="subject-progress-fill"
+                             th:style="'width:' + ${subjectProgress[subject.id]} + '%'">
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </a>
+
+        </div>
+
+
+        <!-- EMPTY STATE -->
+
+        <div class="empty-state"
+             th:if="${subjects == null or subjects.isEmpty()}">
+
+            No Prelims General Studies subjects available yet.
+
+        </div>
+
+
+    </div>
+
+</div>
+
+</body>
+</html>

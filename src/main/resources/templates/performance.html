@@ -1,0 +1,1488 @@
+<!DOCTYPE html>
+
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>UPSC Tracker - Performance</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Inter", "Segoe UI", Arial, sans-serif;
+
+            background:
+                    radial-gradient(
+                            circle at 15% 10%,
+                            rgba(168, 85, 247, 0.10),
+                            transparent 30%
+                    ),
+                    radial-gradient(
+                            circle at 85% 85%,
+                            rgba(34, 211, 238, 0.07),
+                            transparent 30%
+                    ),
+                    #080814;
+
+            color: #ffffff;
+
+            min-height: 100vh;
+        }
+
+        .main {
+            margin-left: 250px !important;
+
+            width: calc(100% - 250px) !important;
+
+            min-height: 100vh;
+
+            padding: 35px 45px;
+
+            background:
+                    radial-gradient(
+                            circle at 70% 5%,
+                            rgba(217, 70, 239, 0.05),
+                            transparent 28%
+                    );
+        }
+
+        .back-button {
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            text-decoration: none;
+
+            color: #cfc5da;
+
+            background:
+                    rgba(255, 255, 255, 0.035);
+
+            border:
+                    1px solid
+                    rgba(190, 80, 255, 0.20);
+
+            padding: 10px 16px;
+
+            border-radius: 10px;
+
+            font-size: 13px;
+
+            font-weight: 600;
+
+            margin-bottom: 22px;
+
+            transition: 0.25s ease;
+        }
+
+        .back-button:hover {
+            color: #ffffff;
+
+            border-color:
+                    rgba(217, 70, 239, 0.45);
+
+            background:
+                    rgba(168, 85, 247, 0.09);
+
+            transform: translateY(-2px);
+
+            box-shadow:
+                    0 0 18px
+                    rgba(168, 85, 247, 0.10);
+        }
+
+        .header {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            gap: 20px;
+
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 30px;
+
+            font-weight: 750;
+
+            margin-bottom: 7px;
+
+            background:
+                    linear-gradient(
+                            90deg,
+                            #ffffff,
+                            #d946ef,
+                            #22d3ee
+                    );
+
+            -webkit-background-clip: text;
+
+            -webkit-text-fill-color: transparent;
+
+            background-clip: text;
+        }
+
+        .header p {
+            color: #91889f;
+
+            font-size: 14px;
+        }
+
+        .attempt {
+            background:
+                    linear-gradient(
+                            135deg,
+                            rgba(168, 85, 247, 0.15),
+                            rgba(34, 211, 238, 0.06)
+                    );
+
+            border:
+                    1px solid
+                    rgba(190, 80, 255, 0.25);
+
+            color: #d9b8ff;
+
+            padding: 10px 16px;
+
+            border-radius: 10px;
+
+            font-size: 13px;
+
+            font-weight: 600;
+
+            white-space: nowrap;
+
+            box-shadow:
+                    0 0 18px
+                    rgba(168, 85, 247, 0.06);
+        }
+
+        .performance-hero {
+            background:
+                    linear-gradient(
+                            135deg,
+                            rgba(168, 85, 247, 0.16),
+                            rgba(217, 70, 239, 0.06),
+                            rgba(10, 8, 18, 0.98)
+                    );
+
+            border:
+                    1px solid
+                    rgba(190, 80, 255, 0.18);
+
+            border-radius: 20px;
+
+            padding: 30px;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 28px;
+
+            box-shadow:
+                    0 20px 50px
+                    rgba(0, 0, 0, 0.25),
+                    0 0 30px
+                    rgba(168, 85, 247, 0.04);
+        }
+
+        .hero-left h2 {
+            font-size: 22px;
+
+            margin-bottom: 10px;
+        }
+
+        .hero-left p {
+            color: #91889f;
+
+            font-size: 14px;
+
+            max-width: 500px;
+
+            line-height: 1.6;
+        }
+
+        .hero-right {
+            display: flex;
+
+            align-items: center;
+
+            gap: 25px;
+        }
+
+        .circle {
+            width: 120px;
+
+            height: 120px;
+
+            border-radius: 50%;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            position: relative;
+
+            background:
+                    conic-gradient(
+                            #d946ef 0deg,
+                            #a855f7 0deg,
+                            rgba(255,255,255,0.07) 0deg,
+                            rgba(255,255,255,0.07) 360deg
+                    );
+
+            box-shadow:
+                    0 0 25px
+                    rgba(168, 85, 247, 0.15);
+        }
+
+        .circle::before {
+            content: "";
+
+            position: absolute;
+
+            width: 90px;
+
+            height: 90px;
+
+            background: #100b18;
+
+            border-radius: 50%;
+
+            border:
+                    1px solid
+                    rgba(255, 255, 255, 0.04);
+        }
+
+        .circle span {
+            position: relative;
+
+            z-index: 2;
+
+            font-size: 24px;
+
+            font-weight: 700;
+
+            color: #ffffff;
+        }
+
+        .hero-stats {
+            min-width: 160px;
+        }
+
+        .hero-stat {
+            margin-bottom: 13px;
+        }
+
+        .hero-stat strong {
+            display: block;
+
+            font-size: 19px;
+
+            color: #ffffff;
+        }
+
+        .hero-stat span {
+            color: #8f849b;
+
+            font-size: 12px;
+        }
+
+        .section-title {
+            font-size: 19px;
+
+            font-weight: 700;
+
+            margin: 30px 0 18px;
+
+            color: #f5effb;
+        }
+
+        .summary-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, minmax(0, 1fr));
+
+            gap: 18px;
+        }
+
+        .summary-card {
+            background:
+                    linear-gradient(
+                            145deg,
+                            rgba(24, 14, 36, 0.96),
+                            rgba(11, 8, 18, 0.98)
+                    );
+
+            border:
+                    1px solid
+                    rgba(190, 80, 255, 0.14);
+
+            border-radius: 18px;
+
+            padding: 22px;
+
+            transition: 0.25s ease;
+
+            box-shadow:
+                    0 10px 28px
+                    rgba(0, 0, 0, 0.16);
+        }
+
+        .summary-card:hover {
+            transform: translateY(-3px);
+
+            border-color:
+                    rgba(217, 70, 239, 0.30);
+
+            box-shadow:
+                    0 15px 35px
+                    rgba(0, 0, 0, 0.25),
+                    0 0 20px
+                    rgba(168, 85, 247, 0.06);
+        }
+
+        .summary-top {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 18px;
+        }
+
+        .summary-icon {
+            width: 42px;
+
+            height: 42px;
+
+            border-radius: 12px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            background:
+                    linear-gradient(
+                            135deg,
+                            rgba(168, 85, 247, 0.18),
+                            rgba(34, 211, 238, 0.07)
+                    );
+
+            border:
+                    1px solid
+                    rgba(190, 80, 255, 0.14);
+
+            font-size: 20px;
+        }
+
+        .summary-percent {
+            font-size: 24px;
+
+            font-weight: 700;
+
+            background:
+                    linear-gradient(
+                            90deg,
+                            #d946ef,
+                            #a855f7,
+                            #22d3ee
+                    );
+
+            -webkit-background-clip: text;
+
+            -webkit-text-fill-color: transparent;
+
+            background-clip: text;
+        }
+
+        .summary-card h3 {
+            font-size: 16px;
+
+            margin-bottom: 8px;
+        }
+
+        .summary-description {
+            color: #81778d;
+
+            font-size: 12px;
+
+            margin-bottom: 15px;
+        }
+
+        .progress-bar {
+            width: 100%;
+
+            height: 7px;
+
+            background:
+                    rgba(255, 255, 255, 0.07);
+
+            border-radius: 10px;
+
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+
+            background:
+                    linear-gradient(
+                            90deg,
+                            #d946ef,
+                            #a855f7,
+                            #22d3ee
+                    );
+
+            border-radius: 10px;
+
+            min-width: 0;
+
+            box-shadow:
+                    0 0 10px
+                    rgba(168, 85, 247, 0.30);
+        }
+
+        .summary-bottom {
+            margin-top: 12px;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            color: #7f748b;
+
+            font-size: 12px;
+        }
+
+        .statistics-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, minmax(0, 1fr));
+
+            gap: 18px;
+        }
+
+        .stat-card {
+            background:
+                    linear-gradient(
+                            145deg,
+                            rgba(24, 14, 36, 0.96),
+                            rgba(11, 8, 18, 0.98)
+                    );
+
+            border:
+                    1px solid
+                    rgba(190, 80, 255, 0.14);
+
+            border-radius: 18px;
+
+            padding: 24px;
+
+            transition: 0.25s ease;
+        }
+
+        .stat-card:hover {
+            border-color:
+                    rgba(34, 211, 238, 0.20);
+
+            transform: translateY(-2px);
+
+            box-shadow:
+                    0 12px 30px
+                    rgba(0, 0, 0, 0.20);
+        }
+
+        .stat-label {
+            color: #8f849b;
+
+            font-size: 13px;
+
+            margin-bottom: 10px;
+        }
+
+        .stat-value {
+            font-size: 30px;
+
+            font-weight: 700;
+
+            margin-bottom: 5px;
+
+            background:
+                    linear-gradient(
+                            90deg,
+                            #ffffff,
+                            #c084fc
+                    );
+
+            -webkit-background-clip: text;
+
+            -webkit-text-fill-color: transparent;
+
+            background-clip: text;
+        }
+
+        .stat-subtitle {
+            color: #776d83;
+
+            font-size: 12px;
+        }
+
+        .subject-section {
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 20px;
+        }
+
+        .subject-card {
+            background:
+                    linear-gradient(
+                            145deg,
+                            rgba(24, 14, 36, 0.96),
+                            rgba(11, 8, 18, 0.98)
+                    );
+
+            border:
+                    1px solid
+                    rgba(190, 80, 255, 0.14);
+
+            border-radius: 18px;
+
+            padding: 24px;
+
+            box-shadow:
+                    0 10px 30px
+                    rgba(0, 0, 0, 0.16);
+        }
+
+        .subject-header {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 20px;
+        }
+
+        .subject-header h3 {
+            font-size: 17px;
+        }
+
+        .subject-header span {
+            color: #7f748b;
+
+            font-size: 12px;
+        }
+
+        .subject-row {
+            padding: 15px 0;
+
+            border-bottom:
+                    1px solid
+                    rgba(255, 255, 255, 0.05);
+        }
+
+        .subject-row:last-child {
+            border-bottom: none;
+        }
+
+        .subject-row-top {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 9px;
+        }
+
+        .subject-name {
+            font-size: 14px;
+
+            font-weight: 600;
+
+            color: #ffffff;
+        }
+
+        .subject-percent {
+            font-size: 13px;
+
+            font-weight: 700;
+
+            background:
+                    linear-gradient(
+                            90deg,
+                            #d946ef,
+                            #22d3ee
+                    );
+
+            -webkit-background-clip: text;
+
+            -webkit-text-fill-color: transparent;
+
+            background-clip: text;
+        }
+
+        .subject-progress {
+            width: 100%;
+
+            height: 6px;
+
+            background:
+                    rgba(255, 255, 255, 0.07);
+
+            border-radius: 10px;
+
+            overflow: hidden;
+
+            margin-bottom: 8px;
+        }
+
+        .subject-progress-fill {
+            height: 100%;
+
+            background:
+                    linear-gradient(
+                            90deg,
+                            #d946ef,
+                            #a855f7,
+                            #22d3ee
+                    );
+
+            border-radius: 10px;
+
+            box-shadow:
+                    0 0 10px
+                    rgba(168, 85, 247, 0.25);
+        }
+
+        .subject-row-bottom {
+            display: flex;
+
+            justify-content: space-between;
+
+            color: #756b81;
+
+            font-size: 11px;
+        }
+
+        .empty-state {
+            text-align: center;
+
+            padding: 30px 10px;
+
+            color: #756b81;
+
+            font-size: 13px;
+        }
+
+        .insight-card {
+            background:
+                    linear-gradient(
+                            135deg,
+                            rgba(168, 85, 247, 0.11),
+                            rgba(217, 70, 239, 0.05),
+                            rgba(10, 8, 18, 0.98)
+                    );
+
+            border:
+                    1px solid
+                    rgba(190, 80, 255, 0.17);
+
+            border-radius: 18px;
+
+            padding: 24px;
+
+            margin-top: 20px;
+
+            margin-bottom: 30px;
+
+            box-shadow:
+                    0 12px 30px
+                    rgba(0, 0, 0, 0.18);
+        }
+
+        .insight-card h3 {
+            font-size: 16px;
+
+            margin-bottom: 8px;
+        }
+
+        .insight-card p {
+            color: #91889f;
+
+            font-size: 13px;
+
+            line-height: 1.6;
+        }
+
+        @media (max-width: 1100px) {
+
+            .summary-grid {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+            .statistics-grid {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+            .subject-section {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+        @media (max-width: 800px) {
+
+            .main {
+                margin-left: 250px !important;
+
+                width: calc(100% - 250px) !important;
+
+                padding: 25px 20px 40px;
+            }
+
+            .header {
+                align-items: flex-start;
+
+                gap: 15px;
+            }
+
+            .performance-hero {
+                flex-direction: column;
+
+                align-items: flex-start;
+
+                gap: 25px;
+            }
+
+        }
+
+        @media (max-width: 600px) {
+
+            .main {
+                margin-left: 250px !important;
+
+                width: calc(100% - 250px) !important;
+
+                padding: 20px 14px 35px;
+            }
+
+            .header {
+                flex-direction: column;
+            }
+
+            .header h1 {
+                font-size: 25px;
+            }
+
+            .attempt {
+                width: fit-content;
+            }
+
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .statistics-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-right {
+                width: 100%;
+
+                justify-content: space-between;
+            }
+
+            .circle {
+                width: 100px;
+
+                height: 100px;
+            }
+
+            .circle::before {
+                width: 74px;
+
+                height: 74px;
+            }
+
+            .circle span {
+                font-size: 21px;
+            }
+
+        }
+
+    </style>
+    ```
+
+</head>
+
+<body>
+
+<div th:replace="~{fragments/sidebar :: sidebar}"></div>
+
+<main class="main">
+
+    ```
+    <a href="/dashboard"
+       class="back-button">
+
+        ← Back to Dashboard
+
+    </a>
+
+    <header class="header">
+
+        <div>
+
+            <h1>
+                Performance
+            </h1>
+
+            <p>
+                Track your UPSC preparation and understand
+                where you stand.
+            </p>
+
+        </div>
+
+        <div class="attempt">
+
+            UPSC Attempt:
+
+            <span th:text="${attemptYear}">
+            2027
+        </span>
+
+        </div>
+
+    </header>
+
+    <section class="performance-hero">
+
+        <div class="hero-left">
+
+            <h2>
+                Overall Performance
+            </h2>
+
+            <p>
+                Your preparation progress across
+                Prelims, Mains, CSAT and Current Affairs.
+                Stay consistent and keep improving every day.
+            </p>
+
+        </div>
+
+        <div class="hero-right">
+
+            <div
+                    class="circle"
+
+                    th:style="'background: conic-gradient(#d946ef 0deg, #a855f7 ' + (${overallProgress} * 3.6) + 'deg, rgba(255,255,255,0.07) ' + (${overallProgress} * 3.6) + 'deg, rgba(255,255,255,0.07) 360deg)'">
+
+            <span
+                    th:text="${overallProgress + '%'}">
+
+                0%
+
+            </span>
+
+            </div>
+
+            <div class="hero-stats">
+
+                <div class="hero-stat">
+
+                    <strong
+                            th:text="${totalCompleted}">
+
+                        0
+
+                    </strong>
+
+                    <span>
+                    Topics Completed
+                </span>
+
+                </div>
+
+                <div class="hero-stat">
+
+                    <strong
+                            th:text="${totalPending}">
+
+                        0
+
+                    </strong>
+
+                    <span>
+                    Topics Pending
+                </span>
+
+                </div>
+
+                <div class="hero-stat">
+
+                    <strong
+                            th:text="${totalTopics}">
+
+                        0
+
+                    </strong>
+
+                    <span>
+                    Total Topics
+                </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <h2 class="section-title">
+        Exam Area Performance
+    </h2>
+
+    <div class="summary-grid">
+
+        <div class="summary-card">
+
+            <div class="summary-top">
+
+                <div class="summary-icon">
+                    📘
+                </div>
+
+                <div
+                        class="summary-percent"
+                        th:text="${prelimsProgress + '%'}">
+
+                    0%
+
+                </div>
+
+            </div>
+
+            <h3>
+                Prelims GS
+            </h3>
+
+            <p class="summary-description">
+                General Studies preparation
+            </p>
+
+            <div class="progress-bar">
+
+                <div
+                        class="progress-fill"
+                        th:style="'width:' + ${prelimsProgress} + '%'">
+
+                </div>
+
+            </div>
+
+            <div class="summary-bottom">
+
+            <span
+                    th:text="${prelimsCompleted + ' completed'}">
+
+                0 completed
+
+            </span>
+
+                <span
+                        th:text="${prelimsPending + ' pending'}">
+
+                0 pending
+
+            </span>
+
+            </div>
+
+        </div>
+
+        <div class="summary-card">
+
+            <div class="summary-top">
+
+                <div class="summary-icon">
+                    📝
+                </div>
+
+                <div
+                        class="summary-percent"
+                        th:text="${mainsProgress + '%'}">
+
+                    0%
+
+                </div>
+
+            </div>
+
+            <h3>
+                Mains
+            </h3>
+
+            <p class="summary-description">
+                Mains subjects and topics
+            </p>
+
+            <div class="progress-bar">
+
+                <div
+                        class="progress-fill"
+                        th:style="'width:' + ${mainsProgress} + '%'">
+
+                </div>
+
+            </div>
+
+            <div class="summary-bottom">
+
+            <span
+                    th:text="${mainsCompleted + ' completed'}">
+
+                0 completed
+
+            </span>
+
+                <span
+                        th:text="${mainsPending + ' pending'}">
+
+                0 pending
+
+            </span>
+
+            </div>
+
+        </div>
+
+        <div class="summary-card">
+
+            <div class="summary-top">
+
+                <div class="summary-icon">
+                    🧮
+                </div>
+
+                <div
+                        class="summary-percent"
+                        th:text="${csatProgress + '%'}">
+
+                    0%
+
+                </div>
+
+            </div>
+
+            <h3>
+                CSAT
+            </h3>
+
+            <p class="summary-description">
+                CSAT preparation
+            </p>
+
+            <div class="progress-bar">
+
+                <div
+                        class="progress-fill"
+                        th:style="'width:' + ${csatProgress} + '%'">
+
+                </div>
+
+            </div>
+
+            <div class="summary-bottom">
+
+            <span
+                    th:text="${csatCompleted + ' completed'}">
+
+                0 completed
+
+            </span>
+
+                <span
+                        th:text="${csatPending + ' pending'}">
+
+                0 pending
+
+            </span>
+
+            </div>
+
+        </div>
+
+        <div class="summary-card">
+
+            <div class="summary-top">
+
+                <div class="summary-icon">
+                    📰
+                </div>
+
+                <div
+                        class="summary-percent"
+                        th:text="${currentAffairsProgress + '%'}">
+
+                    0%
+
+                </div>
+
+            </div>
+
+            <h3>
+                Current Affairs
+            </h3>
+
+            <p class="summary-description">
+                Current Affairs preparation
+            </p>
+
+            <div class="progress-bar">
+
+                <div
+                        class="progress-fill"
+                        th:style="'width:' + ${currentAffairsProgress} + '%'">
+
+                </div>
+
+            </div>
+
+            <div class="summary-bottom">
+
+            <span
+                    th:text="${currentAffairsCompleted + ' completed'}">
+
+                0 completed
+
+            </span>
+
+                <span
+                        th:text="${currentAffairsPending + ' pending'}">
+
+                0 pending
+
+            </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <h2 class="section-title">
+        Preparation Statistics
+    </h2>
+
+    <div class="statistics-grid">
+
+        <div class="stat-card">
+
+            <div class="stat-label">
+                Total Topics
+            </div>
+
+            <div
+                    class="stat-value"
+                    th:text="${totalTopics}">
+
+                0
+
+            </div>
+
+            <div class="stat-subtitle">
+                Across all tracked areas
+            </div>
+
+        </div>
+
+        <div class="stat-card">
+
+            <div class="stat-label">
+                Completed
+            </div>
+
+            <div
+                    class="stat-value"
+                    th:text="${totalCompleted}">
+
+                0
+
+            </div>
+
+            <div class="stat-subtitle">
+                Topics completed so far
+            </div>
+
+        </div>
+
+        <div class="stat-card">
+
+            <div class="stat-label">
+                Remaining
+            </div>
+
+            <div
+                    class="stat-value"
+                    th:text="${totalPending}">
+
+                0
+
+            </div>
+
+            <div class="stat-subtitle">
+                Topics still to complete
+            </div>
+
+        </div>
+
+    </div>
+
+    <h2 class="section-title">
+        Subject-wise Performance
+    </h2>
+
+    <div class="subject-section">
+
+        <div class="subject-card">
+
+            <div class="subject-header">
+
+                <h3>
+                    📘 Prelims Subjects
+                </h3>
+
+                <span>
+                Progress
+            </span>
+
+            </div>
+
+            <div
+                    th:if="${prelimsPerformance == null or #lists.isEmpty(prelimsPerformance)}"
+                    class="empty-state">
+
+                No Prelims subject data available yet.
+
+            </div>
+
+            <div
+                    th:each="subject : ${prelimsPerformance}"
+                    class="subject-row">
+
+                <div class="subject-row-top">
+
+                <span
+                        class="subject-name"
+                        th:text="${subject.subjectName}">
+
+                    Subject
+
+                </span>
+
+                    <span
+                            class="subject-percent"
+                            th:text="${subject.progress + '%'}">
+
+                    0%
+
+                </span>
+
+                </div>
+
+                <div class="subject-progress">
+
+                    <div
+                            class="subject-progress-fill"
+                            th:style="'width:' + ${subject.progress} + '%'">
+
+                    </div>
+
+                </div>
+
+                <div class="subject-row-bottom">
+
+                <span
+                        th:text="${subject.completed + ' completed'}">
+
+                    0 completed
+
+                </span>
+
+                    <span
+                            th:text="${subject.pending + ' pending'}">
+
+                    0 pending
+
+                </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="subject-card">
+
+            <div class="subject-header">
+
+                <h3>
+                    📝 Mains Subjects
+                </h3>
+
+                <span>
+                Progress
+            </span>
+
+            </div>
+
+            <div
+                    th:if="${mainsPerformance == null or #lists.isEmpty(mainsPerformance)}"
+                    class="empty-state">
+
+                No Mains subject data available yet.
+
+            </div>
+
+            <div
+                    th:each="subject : ${mainsPerformance}"
+                    class="subject-row">
+
+                <div class="subject-row-top">
+
+                <span
+                        class="subject-name"
+                        th:text="${subject.subjectName}">
+
+                    Subject
+
+                </span>
+
+                    <span
+                            class="subject-percent"
+                            th:text="${subject.progress + '%'}">
+
+                    0%
+
+                </span>
+
+                </div>
+
+                <div class="subject-progress">
+
+                    <div
+                            class="subject-progress-fill"
+                            th:style="'width:' + ${subject.progress} + '%'">
+
+                    </div>
+
+                </div>
+
+                <div class="subject-row-bottom">
+
+                <span
+                        th:text="${subject.completed + ' completed'}">
+
+                    0 completed
+
+                </span>
+
+                    <span
+                            th:text="${subject.pending + ' pending'}">
+
+                    0 pending
+
+                </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="insight-card">
+
+        <h3>
+            💡 Preparation Insight
+        </h3>
+
+        <p th:if="${overallProgress == 0}">
+
+            You are just getting started. Complete your first
+            few topics and your performance dashboard will
+            begin showing your preparation progress.
+
+        </p>
+
+        <p th:if="${overallProgress > 0 and overallProgress < 50}">
+
+            Your preparation has started. Focus on completing
+            topics consistently and try to maintain a steady
+            daily study routine.
+
+        </p>
+
+        <p th:if="${overallProgress >= 50 and overallProgress < 80}">
+
+            Good progress! More than half of your tracked
+            preparation is complete. Continue working on the
+            remaining topics and strengthen your weaker areas.
+
+        </p>
+
+        <p th:if="${overallProgress >= 80}">
+
+            Excellent progress! You have completed most of your
+            tracked preparation. Focus now on revision, practice
+            and strengthening the remaining topics.
+
+        </p>
+
+    </div>
+
+
+</main>
+
+</body>
+
+</html>

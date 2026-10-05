@@ -1,0 +1,1309 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Settings | UPSC Tracker</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            min-height: 100vh;
+
+            background:
+                    radial-gradient(
+                            circle at 15% 10%,
+                            rgba(168, 85, 247, 0.10),
+                            transparent 30%
+                    ),
+                    radial-gradient(
+                            circle at 85% 85%,
+                            rgba(34, 211, 238, 0.07),
+                            transparent 30%
+                    ),
+                    linear-gradient(
+                            135deg,
+                            #090611 0%,
+                            #100817 50%,
+                            #08060e 100%
+                    );
+
+            color: #f5eaff;
+        }
+
+        /* =====================================================
+           PAGE
+           ===================================================== */
+
+        .page {
+            min-height: 100vh;
+        }
+
+        /* =====================================================
+           MAIN
+           ===================================================== */
+
+        .main {
+            margin-left: 250px;
+            width: calc(100% - 250px);
+            min-height: 100vh;
+            padding: 35px;
+        }
+
+        /* =====================================================
+           BACK BUTTON
+           ===================================================== */
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+
+            text-decoration: none;
+
+            color: #c9bfd6;
+
+            background:
+                    rgba(255, 255, 255, 0.035);
+
+            border:
+                    1px solid rgba(190, 80, 255, 0.20);
+
+            padding: 9px 15px;
+
+            border-radius: 10px;
+
+            font-size: 13px;
+            font-weight: 600;
+
+            margin-bottom: 24px;
+
+            transition: 0.25s ease;
+
+            box-shadow:
+                    0 5px 20px rgba(0, 0, 0, 0.20);
+        }
+
+        .back-button:hover {
+            color: #ffffff;
+
+            background:
+                    linear-gradient(
+                            90deg,
+                            rgba(168, 85, 247, 0.15),
+                            rgba(34, 211, 238, 0.06)
+                    );
+
+            border-color:
+                    rgba(192, 92, 255, 0.40);
+
+            transform: translateX(-2px);
+
+            box-shadow:
+                    0 0 20px rgba(168, 85, 247, 0.12);
+        }
+
+        /* =====================================================
+           HEADER
+           ===================================================== */
+
+        .header {
+            margin-bottom: 28px;
+        }
+
+        .header h1 {
+            font-size: 30px;
+            font-weight: 800;
+
+            background:
+                    linear-gradient(
+                            90deg,
+                            #ffffff,
+                            #e8c8ff,
+                            #8eeeff
+                    );
+
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            margin-top: 7px;
+
+            color: #958aa3;
+
+            font-size: 14px;
+
+            line-height: 1.6;
+        }
+
+        /* =====================================================
+           MESSAGES
+           ===================================================== */
+
+        .success-message {
+            background:
+                    linear-gradient(
+                            90deg,
+                            rgba(34, 197, 94, 0.10),
+                            rgba(34, 211, 238, 0.04)
+                    );
+
+            border:
+                    1px solid rgba(74, 222, 128, 0.25);
+
+            color: #86efac;
+
+            padding: 13px 16px;
+
+            border-radius: 12px;
+
+            margin-bottom: 20px;
+
+            font-size: 14px;
+            font-weight: 600;
+
+            box-shadow:
+                    0 0 20px rgba(34, 197, 94, 0.05);
+        }
+
+        .error-message {
+            background:
+                    linear-gradient(
+                            90deg,
+                            rgba(244, 63, 94, 0.10),
+                            rgba(217, 70, 239, 0.04)
+                    );
+
+            border:
+                    1px solid rgba(251, 113, 133, 0.25);
+
+            color: #fda4af;
+
+            padding: 13px 16px;
+
+            border-radius: 12px;
+
+            margin-bottom: 20px;
+
+            font-size: 14px;
+            font-weight: 600;
+
+            box-shadow:
+                    0 0 20px rgba(244, 63, 94, 0.05);
+        }
+
+        /* =====================================================
+           SETTINGS GRID
+           ===================================================== */
+
+        .settings-grid {
+            display: grid;
+
+            grid-template-columns:
+                minmax(0, 1fr)
+                320px;
+
+            gap: 24px;
+
+            align-items: start;
+        }
+
+        /* =====================================================
+           CARD
+           ===================================================== */
+
+        .card {
+            position: relative;
+
+            background:
+                    linear-gradient(
+                            145deg,
+                            rgba(25, 14, 39, 0.92),
+                            rgba(12, 8, 20, 0.96)
+                    );
+
+            border:
+                    1px solid rgba(190, 80, 255, 0.18);
+
+            border-radius: 20px;
+
+            padding: 26px;
+
+            box-shadow:
+                    0 18px 45px rgba(0, 0, 0, 0.35),
+                    inset 0 0 30px rgba(168, 85, 247, 0.025);
+
+            margin-bottom: 24px;
+
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: "";
+
+            position: absolute;
+
+            top: 0;
+            left: 0;
+
+            width: 100%;
+            height: 1px;
+
+            background:
+                    linear-gradient(
+                            90deg,
+                            transparent,
+                            rgba(217, 70, 239, 0.60),
+                            rgba(34, 211, 238, 0.40),
+                            transparent
+                    );
+        }
+
+        .card:last-child {
+            margin-bottom: 0;
+        }
+
+        .card-title {
+            font-size: 19px;
+
+            font-weight: 700;
+
+            color: #f7edff;
+
+            margin-bottom: 5px;
+        }
+
+        .card-subtitle {
+            font-size: 13px;
+
+            color: #8f849d;
+
+            margin-bottom: 25px;
+
+            line-height: 1.5;
+        }
+
+        /* =====================================================
+           FORM
+           ===================================================== */
+
+        .form-group {
+            margin-bottom: 21px;
+        }
+
+        .form-group label {
+            display: block;
+
+            font-size: 13px;
+
+            font-weight: 600;
+
+            color: #c7b9d4;
+
+            margin-bottom: 8px;
+        }
+
+        .form-group input {
+            width: 100%;
+
+            padding: 13px 14px;
+
+            border:
+                    1px solid rgba(190, 80, 255, 0.18);
+
+            border-radius: 11px;
+
+            background:
+                    rgba(255, 255, 255, 0.035);
+
+            color: #f7edff;
+
+            font-family: inherit;
+
+            font-size: 14px;
+
+            outline: none;
+
+            transition: 0.25s ease;
+        }
+
+        .form-group input::placeholder {
+            color: #665b70;
+        }
+
+        .form-group input:focus {
+            border-color:
+                    rgba(217, 70, 239, 0.55);
+
+            background:
+                    rgba(168, 85, 247, 0.055);
+
+            box-shadow:
+                    0 0 0 3px rgba(168, 85, 247, 0.08),
+                    0 0 18px rgba(168, 85, 247, 0.08);
+        }
+
+        .form-group input[readonly] {
+            background:
+                    rgba(255, 255, 255, 0.025);
+
+            color: #7f748b;
+
+            cursor: not-allowed;
+
+            border-color:
+                    rgba(255, 255, 255, 0.08);
+        }
+
+        .password-hint {
+            font-size: 11px;
+
+            color: #776c82;
+
+            margin-top: 6px;
+        }
+
+        /* =====================================================
+           ATTEMPT YEAR
+           ===================================================== */
+
+        .year-label {
+            display: block;
+
+            font-size: 13px;
+
+            font-weight: 600;
+
+            color: #c7b9d4;
+
+            margin-bottom: 12px;
+        }
+
+        .year-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 10px;
+        }
+
+        .year-option {
+            position: relative;
+        }
+
+        .year-option input {
+            position: absolute;
+
+            opacity: 0;
+
+            pointer-events: none;
+        }
+
+        .year-option label {
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            min-height: 45px;
+
+            border:
+                    1px solid rgba(190, 80, 255, 0.18);
+
+            border-radius: 11px;
+
+            background:
+                    rgba(255, 255, 255, 0.025);
+
+            color: #9d91a8;
+
+            font-size: 13px;
+
+            font-weight: 600;
+
+            cursor: pointer;
+
+            transition: 0.25s ease;
+        }
+
+        .year-option label:hover {
+            border-color:
+                    rgba(217, 70, 239, 0.45);
+
+            background:
+                    rgba(168, 85, 247, 0.08);
+
+            color: #e8c8ff;
+
+            box-shadow:
+                    0 0 15px rgba(168, 85, 247, 0.08);
+        }
+
+        .year-option input:checked + label {
+            background:
+                    linear-gradient(
+                            135deg,
+                            #a855f7,
+                            #d946ef,
+                            #22d3ee
+                    );
+
+            border-color:
+                    rgba(255, 255, 255, 0.18);
+
+            color: #ffffff;
+
+            box-shadow:
+                    0 0 20px rgba(168, 85, 247, 0.28),
+                    0 6px 18px rgba(0, 0, 0, 0.25);
+        }
+
+        /* =====================================================
+           BUTTONS
+           ===================================================== */
+
+        .form-actions {
+            margin-top: 27px;
+
+            display: flex;
+
+            justify-content: flex-end;
+        }
+
+        .save-button,
+        .security-button {
+            border: none;
+
+            background:
+                    linear-gradient(
+                            135deg,
+                            #a855f7,
+                            #d946ef,
+                            #22d3ee
+                    );
+
+            color: #ffffff;
+
+            padding: 13px 25px;
+
+            border-radius: 11px;
+
+            font-family: inherit;
+
+            font-size: 14px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+            box-shadow:
+                    0 8px 22px rgba(168, 85, 247, 0.20);
+
+            transition: 0.25s ease;
+        }
+
+        .save-button:hover,
+        .security-button:hover {
+            transform: translateY(-2px);
+
+            box-shadow:
+                    0 10px 28px rgba(168, 85, 247, 0.30),
+                    0 0 20px rgba(217, 70, 239, 0.12);
+        }
+
+        .save-button:active,
+        .security-button:active {
+            transform: translateY(0);
+        }
+
+        /* =====================================================
+           SECURITY
+           ===================================================== */
+
+        .security-card {
+            border-color:
+                    rgba(34, 211, 238, 0.16);
+        }
+
+        .security-header {
+            display: flex;
+
+            align-items: center;
+
+            gap: 13px;
+
+            margin-bottom: 6px;
+        }
+
+        .security-icon {
+            width: 42px;
+            height: 42px;
+
+            border-radius: 12px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            background:
+                    linear-gradient(
+                            135deg,
+                            rgba(168, 85, 247, 0.18),
+                            rgba(34, 211, 238, 0.10)
+                    );
+
+            border:
+                    1px solid rgba(168, 85, 247, 0.20);
+
+            font-size: 20px;
+
+            box-shadow:
+                    0 0 18px rgba(168, 85, 247, 0.08);
+        }
+
+        .security-header .card-title {
+            margin-bottom: 0;
+        }
+
+        .security-description {
+            font-size: 13px;
+
+            color: #8f849d;
+
+            margin-bottom: 25px;
+
+            line-height: 1.6;
+        }
+
+        /* =====================================================
+           ACCOUNT CARD
+           ===================================================== */
+
+        .account-card {
+            background:
+                    radial-gradient(
+                            circle at 80% 10%,
+                            rgba(34, 211, 238, 0.08),
+                            transparent 35%
+                    ),
+                    linear-gradient(
+                            145deg,
+                            rgba(27, 15, 43, 0.96),
+                            rgba(10, 7, 17, 0.98)
+                    );
+        }
+
+        .account-icon {
+            width: 60px;
+            height: 60px;
+
+            border-radius: 17px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            background:
+                    linear-gradient(
+                            135deg,
+                            #a855f7,
+                            #d946ef,
+                            #22d3ee
+                    );
+
+            color: #ffffff;
+
+            font-size: 27px;
+
+            margin-bottom: 17px;
+
+            box-shadow:
+                    0 10px 25px rgba(168, 85, 247, 0.25),
+                    0 0 22px rgba(34, 211, 238, 0.08);
+        }
+
+        .account-name {
+            font-size: 19px;
+
+            font-weight: 700;
+
+            color: #f7edff;
+
+            margin-bottom: 5px;
+
+            word-break: break-word;
+        }
+
+        .account-email {
+            color: #91859d;
+
+            font-size: 13px;
+
+            word-break: break-word;
+
+            margin-bottom: 22px;
+        }
+
+        .account-details {
+            border-top:
+                    1px solid rgba(255, 255, 255, 0.07);
+
+            padding-top: 18px;
+        }
+
+        .detail-row {
+            display: flex;
+
+            justify-content: space-between;
+
+            gap: 15px;
+
+            padding: 9px 0;
+
+            font-size: 12px;
+        }
+
+        .detail-label {
+            color: #756a80;
+        }
+
+        .detail-value {
+            color: #d7c9e2;
+
+            font-weight: 600;
+
+            text-align: right;
+        }
+
+        /* =====================================================
+           SECURITY NOTE
+           ===================================================== */
+
+        .security-note {
+            margin-top: 20px;
+
+            padding: 14px;
+
+            border-radius: 12px;
+
+            background:
+                    linear-gradient(
+                            90deg,
+                            rgba(168, 85, 247, 0.08),
+                            rgba(34, 211, 238, 0.04)
+                    );
+
+            border:
+                    1px solid rgba(168, 85, 247, 0.15);
+
+            color: #8d8299;
+
+            font-size: 11px;
+
+            line-height: 1.6;
+        }
+
+        /* =====================================================
+           RESPONSIVE
+           ===================================================== */
+
+        @media (max-width: 1000px) {
+
+            .settings-grid {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+        @media (max-width: 800px) {
+
+            .main {
+                margin-left: 250px;
+                width: calc(100% - 250px);
+                padding: 25px;
+            }
+
+            .settings-grid {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+        @media (max-width: 650px) {
+
+            .main {
+                margin-left: 250px;
+                width: calc(100% - 250px);
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 25px;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .year-grid {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+        }
+
+        @media (max-width: 480px) {
+
+            .year-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-actions {
+                justify-content: stretch;
+            }
+
+            .save-button,
+            .security-button {
+                width: 100%;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="page">
+
+    <!-- =====================================================
+         COMMON SIDEBAR
+         ===================================================== -->
+
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+
+
+    <!-- =====================================================
+         MAIN
+         ===================================================== -->
+
+    <main class="main">
+
+        <!-- BACK TO DASHBOARD -->
+
+        <a href="/dashboard"
+           class="back-button">
+
+            ← Back to Dashboard
+
+        </a>
+
+
+        <!-- =================================================
+             HEADER
+             ================================================= -->
+
+        <div class="header">
+
+            <h1>
+                Settings
+            </h1>
+
+            <p>
+                Manage your account, security and UPSC preparation preferences
+            </p>
+
+        </div>
+
+
+        <!-- =================================================
+             ACCOUNT SUCCESS
+             ================================================= -->
+
+        <div
+                th:if="${param.success}"
+                class="success-message">
+
+            ✓ Account settings updated successfully.
+
+        </div>
+
+
+        <!-- =================================================
+             ACCOUNT ERROR
+             ================================================= -->
+
+        <div
+                th:if="${param.error}"
+                class="error-message"
+                th:text="${param.error}">
+
+            Something went wrong.
+
+        </div>
+
+
+        <!-- =================================================
+             PASSWORD SUCCESS
+             ================================================= -->
+
+        <div
+                th:if="${param.passwordChanged}"
+                class="success-message">
+
+            ✓ Password changed successfully.
+
+        </div>
+
+
+        <!-- =================================================
+             PASSWORD ERROR
+             ================================================= -->
+
+        <div
+                th:if="${param.passwordError}"
+                class="error-message"
+                th:text="${param.passwordError}">
+
+            Password error.
+
+        </div>
+
+
+        <!-- =================================================
+             SETTINGS GRID
+             ================================================= -->
+
+        <div class="settings-grid">
+
+
+            <!-- =================================================
+                 LEFT SIDE
+                 ================================================= -->
+
+            <div>
+
+
+                <!-- =================================================
+                     ACCOUNT SETTINGS
+                     ================================================= -->
+
+                <section class="card">
+
+                    <div class="card-title">
+                        Account Settings
+                    </div>
+
+                    <div class="card-subtitle">
+                        Update your personal details and UPSC preparation target.
+                    </div>
+
+
+                    <form
+                            action="/settings"
+                            method="post">
+
+
+                        <!-- NAME -->
+
+                        <div class="form-group">
+
+                            <label for="name">
+                                Full Name
+                            </label>
+
+                            <input
+                                    type="text"
+                                    id="name"
+                                    name="name"
+                                    th:value="${user.name}"
+                                    placeholder="Enter your name"
+                                    maxlength="100"
+                                    required>
+
+                        </div>
+
+
+                        <!-- EMAIL -->
+
+                        <div class="form-group">
+
+                            <label for="email">
+                                Email Address
+                            </label>
+
+                            <input
+                                    type="email"
+                                    id="email"
+                                    name="email"
+                                    th:value="${user.email}"
+                                    readonly>
+
+                        </div>
+
+
+                        <!-- ATTEMPT YEAR -->
+
+                        <div class="form-group">
+
+                            <span class="year-label">
+                                UPSC Attempt Year
+                            </span>
+
+
+                            <div class="year-grid">
+
+
+                                <div class="year-option">
+
+                                    <input
+                                            type="radio"
+                                            id="year2026"
+                                            name="attemptYear"
+                                            value="2026"
+                                            th:checked="${attemptYear == 2026}"
+                                            required>
+
+                                    <label for="year2026">
+                                        2026
+                                    </label>
+
+                                </div>
+
+
+                                <div class="year-option">
+
+                                    <input
+                                            type="radio"
+                                            id="year2027"
+                                            name="attemptYear"
+                                            value="2027"
+                                            th:checked="${attemptYear == 2027}">
+
+                                    <label for="year2027">
+                                        2027
+                                    </label>
+
+                                </div>
+
+
+                                <div class="year-option">
+
+                                    <input
+                                            type="radio"
+                                            id="year2028"
+                                            name="attemptYear"
+                                            value="2028"
+                                            th:checked="${attemptYear == 2028}">
+
+                                    <label for="year2028">
+                                        2028
+                                    </label>
+
+                                </div>
+
+
+                                <div class="year-option">
+
+                                    <input
+                                            type="radio"
+                                            id="year2029"
+                                            name="attemptYear"
+                                            value="2029"
+                                            th:checked="${attemptYear == 2029}">
+
+                                    <label for="year2029">
+                                        2029
+                                    </label>
+
+                                </div>
+
+
+                                <div class="year-option">
+
+                                    <input
+                                            type="radio"
+                                            id="year2030"
+                                            name="attemptYear"
+                                            value="2030"
+                                            th:checked="${attemptYear == 2030}">
+
+                                    <label for="year2030">
+                                        2030
+                                    </label>
+
+                                </div>
+
+
+                                <div class="year-option">
+
+                                    <input
+                                            type="radio"
+                                            id="year2031"
+                                            name="attemptYear"
+                                            value="2031"
+                                            th:checked="${attemptYear == 2031}">
+
+                                    <label for="year2031">
+                                        2031
+                                    </label>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- SAVE -->
+
+                        <div class="form-actions">
+
+                            <button
+                                    type="submit"
+                                    class="save-button">
+
+                                Save Changes
+
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </section>
+
+
+                <!-- =================================================
+                     SECURITY
+                     ================================================= -->
+
+                <section class="card security-card">
+
+                    <div class="security-header">
+
+                        <div class="security-icon">
+                            🔒
+                        </div>
+
+                        <div class="card-title">
+                            Security
+                        </div>
+
+                    </div>
+
+
+                    <div class="security-description">
+
+                        Change your account password. You will need to
+                        enter your current password before creating a new one.
+
+                    </div>
+
+
+                    <form
+                            action="/settings/change-password"
+                            method="post">
+
+
+                        <!-- CURRENT PASSWORD -->
+
+                        <div class="form-group">
+
+                            <label for="currentPassword">
+                                Current Password
+                            </label>
+
+                            <input
+                                    type="password"
+                                    id="currentPassword"
+                                    name="currentPassword"
+                                    placeholder="Enter your current password"
+                                    required>
+
+                        </div>
+
+
+                        <!-- NEW PASSWORD -->
+
+                        <div class="form-group">
+
+                            <label for="newPassword">
+                                New Password
+                            </label>
+
+                            <input
+                                    type="password"
+                                    id="newPassword"
+                                    name="newPassword"
+                                    placeholder="Enter your new password"
+                                    minlength="6"
+                                    required>
+
+                            <div class="password-hint">
+                                Password must contain at least 6 characters.
+                            </div>
+
+                        </div>
+
+
+                        <!-- CONFIRM PASSWORD -->
+
+                        <div class="form-group">
+
+                            <label for="confirmPassword">
+                                Confirm New Password
+                            </label>
+
+                            <input
+                                    type="password"
+                                    id="confirmPassword"
+                                    name="confirmPassword"
+                                    placeholder="Re-enter your new password"
+                                    minlength="6"
+                                    required>
+
+                        </div>
+
+
+                        <!-- CHANGE PASSWORD BUTTON -->
+
+                        <div class="form-actions">
+
+                            <button
+                                    type="submit"
+                                    class="security-button">
+
+                                Change Password
+
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </section>
+
+            </div>
+
+
+            <!-- =================================================
+                 RIGHT SIDE - ACCOUNT INFORMATION
+                 ================================================= -->
+
+            <aside>
+
+                <section class="card account-card">
+
+
+                    <div class="account-icon">
+                        👤
+                    </div>
+
+
+                    <div class="account-name"
+                         th:text="${user.name}">
+
+                        User Name
+
+                    </div>
+
+
+                    <div class="account-email"
+                         th:text="${user.email}">
+
+                        user@example.com
+
+                    </div>
+
+
+                    <div class="account-details">
+
+
+                        <div class="detail-row">
+
+                            <span class="detail-label">
+                                Account
+                            </span>
+
+                            <span class="detail-value">
+                                Active
+                            </span>
+
+                        </div>
+
+
+                        <div class="detail-row">
+
+                            <span class="detail-label">
+                                UPSC Attempt
+                            </span>
+
+                            <span
+                                    class="detail-value"
+                                    th:text="${attemptYear}">
+
+                                2027
+
+                            </span>
+
+                        </div>
+
+
+                        <div class="detail-row">
+
+                            <span class="detail-label">
+                                Email
+                            </span>
+
+                            <span class="detail-value">
+                                Verified
+                            </span>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="security-note">
+
+                        🔒 Your account settings are saved
+                        securely to your UPSC Tracker account.
+
+                    </div>
+
+                </section>
+
+            </aside>
+
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+
+</html>

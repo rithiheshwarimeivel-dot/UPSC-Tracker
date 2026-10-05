@@ -1,0 +1,333 @@
+<aside th:fragment="sidebar"
+       class="sidebar"
+       id="commonSidebar">
+
+    <style>
+        #commonSidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+
+            width: 250px;
+            min-width: 250px;
+            height: 100vh;
+
+            box-sizing: border-box;
+
+            z-index: 1000;
+
+            display: flex;
+            flex-direction: column;
+
+            padding: 24px 14px;
+
+            background:
+                    radial-gradient(
+                            circle at 20% 10%,
+                            rgba(180, 70, 255, 0.14),
+                            transparent 35%
+                    ),
+                    radial-gradient(
+                            circle at 80% 90%,
+                            rgba(0, 220, 255, 0.08),
+                            transparent 35%
+                    ),
+                    linear-gradient(
+                            180deg,
+                            #12091f 0%,
+                            #090611 100%
+                    );
+
+            border-right: 1px solid rgba(190, 80, 255, 0.25);
+
+            box-shadow:
+                    8px 0 35px rgba(0, 0, 0, 0.45);
+
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        #commonSidebar .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+            padding: 8px 12px 28px;
+
+            font-size: 20px;
+            font-weight: 800;
+
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        #commonSidebar .logo-main {
+            background: linear-gradient(
+                    90deg,
+                    #d946ef,
+                    #a855f7,
+                    #22d3ee
+            );
+
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        #commonSidebar .logo span:last-child {
+            color: #f5eaff;
+        }
+
+        #commonSidebar .nav {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+
+            flex: 1;
+            min-height: 0;
+        }
+
+        #commonSidebar .nav a {
+            position: relative;
+
+            display: flex;
+            align-items: center;
+            gap: 13px;
+
+            width: 100%;
+            min-height: 46px;
+
+            padding: 11px 13px;
+
+            box-sizing: border-box;
+
+            border-radius: 12px;
+
+            color: #bdb3ca;
+            text-decoration: none;
+
+            font-size: 14px;
+            font-weight: 600;
+
+            white-space: nowrap;
+            flex-shrink: 0;
+
+            transition: 0.25s ease;
+        }
+
+        #commonSidebar .nav a:hover {
+            color: #ffffff;
+
+            background: linear-gradient(
+                    90deg,
+                    rgba(168, 85, 247, 0.18),
+                    rgba(34, 211, 238, 0.08)
+            );
+
+            transform: translateX(3px);
+        }
+
+        #commonSidebar .nav a.active {
+            color: #ffffff;
+
+            background: linear-gradient(
+                    90deg,
+                    rgba(168, 85, 247, 0.30),
+                    rgba(217, 70, 239, 0.16),
+                    rgba(34, 211, 238, 0.08)
+            );
+
+            border: 1px solid rgba(192, 92, 255, 0.30);
+
+            box-shadow:
+                    0 0 20px rgba(168, 85, 247, 0.18);
+        }
+
+        #commonSidebar .logout {
+            margin-top: auto;
+            padding-top: 15px;
+
+            border-top: 1px solid rgba(255, 255, 255, 0.07);
+
+            flex-shrink: 0;
+        }
+
+        #commonSidebar .logout a {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+
+            width: 100%;
+            min-height: 46px;
+
+            padding: 11px 13px;
+
+            box-sizing: border-box;
+
+            border-radius: 12px;
+
+            color: #ff8fa3;
+            text-decoration: none;
+
+            font-size: 14px;
+            font-weight: 600;
+
+            white-space: nowrap;
+        }
+
+        #commonSidebar .nav a span,
+        #commonSidebar .logout a span {
+            display: inline !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            white-space: nowrap !important;
+        }
+
+        /* NEVER COLLAPSE SIDEBAR */
+        @media (max-width: 800px) {
+            #commonSidebar {
+                width: 250px;
+                min-width: 250px;
+            }
+        }
+
+        @media (max-width: 500px) {
+            #commonSidebar {
+                width: 250px;
+                min-width: 250px;
+            }
+        }
+    </style>
+
+    <div class="logo">
+        <span class="logo-main">UPSC</span>
+        <span>Tracker</span>
+    </div>
+
+    <nav class="nav">
+
+        <a href="/dashboard"
+           data-path="/dashboard">
+            🏠
+            <span>Dashboard</span>
+        </a>
+
+        <a href="/subjects"
+           data-path="/subjects">
+            📚
+            <span>Tracker</span>
+        </a>
+
+        <a href="/chatbot"
+           data-path="/chatbot">
+            🤖
+            <span>Chatbot</span>
+        </a>
+
+        <a href="/performance"
+           data-path="/performance">
+            📊
+            <span>Performance</span>
+        </a>
+
+        <a href="/feedback"
+           data-path="/feedback">
+            💬
+            <span>Feedback</span>
+        </a>
+
+        <a href="/about-me"
+           data-path="/about-me">
+            👤
+            <span>About Me</span>
+        </a>
+
+        <a href="/settings"
+           data-path="/settings">
+            ⚙️
+            <span>Settings</span>
+        </a>
+
+        <a href="/revision"
+           data-path="/revision">
+            🔄
+            <span>Revision</span>
+        </a>
+
+    </nav>
+
+    <div class="logout">
+        <a href="/logout">
+            🚪
+            <span>Logout</span>
+        </a>
+    </div>
+
+    <script>
+        (function () {
+
+            const currentPath = window.location.pathname;
+
+            const links =
+                document.querySelectorAll(
+                    '#commonSidebar .nav a[data-path]'
+                );
+
+            links.forEach(function (link) {
+
+                const path =
+                    link.getAttribute('data-path');
+
+                if (
+                    path === '/dashboard' &&
+                    currentPath === '/dashboard'
+                ) {
+                    link.classList.add('active');
+                    return;
+                }
+
+                if (path === '/subjects') {
+
+                    const trackerPaths = [
+                        '/subjects',
+                        '/prelims',
+                        '/mains',
+                        '/current-affairs',
+                        '/csat'
+                    ];
+
+                    const isTrackerPage =
+                        trackerPaths.some(function (trackerPath) {
+
+                            return (
+                                currentPath === trackerPath ||
+                                currentPath.startsWith(
+                                    trackerPath + '/'
+                                )
+                            );
+
+                        });
+
+                    if (isTrackerPage) {
+                        link.classList.add('active');
+                        return;
+                    }
+                }
+
+                if (
+                    path !== '/dashboard' &&
+                    path !== '/subjects' &&
+                    (
+                        currentPath === path ||
+                        currentPath.startsWith(path + '/')
+                    )
+                ) {
+                    link.classList.add('active');
+                }
+
+            });
+
+        })();
+    </script>
+
+</aside>

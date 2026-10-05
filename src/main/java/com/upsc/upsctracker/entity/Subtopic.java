@@ -1,20 +1,25 @@
-package com.upsc.upsctracker.entity;
+
+        package com.upsc.upsctracker.entity;
 
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "subtopic")
 public class Subtopic {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "name")
     private String name;
 
-    private boolean completed;
-
     @ManyToOne
+    @JoinColumn(name = "topic_id")
     private Topic topic;
+
+    @Column(name = "completed")
+    private boolean completed = false;
 
     public Subtopic() {
     }
@@ -27,12 +32,12 @@ public class Subtopic {
         return name;
     }
 
-    public boolean isCompleted() {
-        return completed;
-    }
-
     public Topic getTopic() {
         return topic;
+    }
+
+    public boolean isCompleted() {
+        return completed;
     }
 
     public void setId(Long id) {
@@ -43,11 +48,12 @@ public class Subtopic {
         this.name = name;
     }
 
-    public void setCompleted(boolean completed) {
-        this.completed = completed;
-    }
-
     public void setTopic(Topic topic) {
         this.topic = topic;
     }
+
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
+    }
 }
+

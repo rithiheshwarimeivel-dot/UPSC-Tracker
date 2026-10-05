@@ -1,148 +1,1159 @@
-
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <title>UPSC Subjects</title>
+
+    <meta charset="UTF-8">
+
+
+
+
+
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Tracker | UPSC Tracker</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+
+            font-family: "Inter", "Segoe UI", Arial, sans-serif;
+
+            background:
+                    radial-gradient(
+                            circle at 78% 8%,
+                            rgba(124, 58, 237, 0.10),
+                            transparent 28%
+                    ),
+                    radial-gradient(
+                            circle at 15% 82%,
+                            rgba(236, 72, 153, 0.06),
+                            transparent 25%
+                    ),
+                    #080814;
+
+            color: #ffffff;
+
+            min-height: 100vh;
+
+        }
+
+
+        /* =====================================================
+           MAIN
+        ===================================================== */
+
+        .main {
+
+            margin-left: 250px;
+
+            width: calc(100% - 250px);
+
+            min-height: 100vh;
+
+            padding: 35px 45px;
+
+        }
+
+
+        /* =====================================================
+           BACK BUTTON
+        ===================================================== */
+
+        .back-button {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 7px;
+
+            text-decoration: none;
+
+            color: #b18aff;
+
+            font-size: 13px;
+
+            font-weight: 700;
+
+            margin-bottom: 18px;
+
+            padding: 8px 12px;
+
+            border-radius: 10px;
+
+            transition:
+                    background 0.2s ease,
+                    color 0.2s ease,
+                    transform 0.2s ease;
+
+        }
+
+
+        .back-button:hover {
+
+            background:
+                    rgba(
+                            139,
+                            92,
+                            246,
+                            0.10
+                    );
+
+            color: #d8c4ff;
+
+            transform:
+                    translateX(-2px);
+
+        }
+
+
+        /* =====================================================
+           HEADER
+        ===================================================== */
+
+        .header {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: flex-start;
+
+            gap: 20px;
+
+            margin-bottom: 30px;
+
+        }
+
+
+        .header h1 {
+
+            font-size: 30px;
+
+            font-weight: 700;
+
+            color: #ffffff;
+
+        }
+
+
+        .header h1::after {
+
+            content: "";
+
+            display: block;
+
+            width: 55px;
+
+            height: 3px;
+
+            margin-top: 9px;
+
+            border-radius: 10px;
+
+            background:
+                    linear-gradient(
+                            90deg,
+                            #9b5cff,
+                            #ff3cac,
+                            #25dfff
+                    );
+
+            box-shadow:
+                    0 0 12px
+                    rgba(
+                            155,
+                            92,
+                            255,
+                            0.45
+                    );
+
+        }
+
+
+        .header p {
+
+            margin-top: 10px;
+
+            color: #85829d;
+
+            font-size: 14px;
+
+        }
+
+
+        .attempt-badge {
+
+            background:
+                    linear-gradient(
+                            135deg,
+                            rgba(
+                                    139,
+                                    92,
+                                    246,
+                                    0.15
+                            ),
+                            rgba(
+                                    37,
+                                    223,
+                                    255,
+                                    0.06
+                            )
+                    );
+
+            border:
+                    1px solid rgba(
+                            155,
+                            92,
+                            255,
+                            0.25
+                    );
+
+            color: #c6adff;
+
+            padding: 10px 16px;
+
+            border-radius: 12px;
+
+            font-size: 13px;
+
+            font-weight: 700;
+
+            white-space: nowrap;
+
+            box-shadow:
+                    0 0 20px
+                    rgba(
+                            139,
+                            92,
+                            246,
+                            0.05
+                    );
+
+        }
+
+
+        /* =====================================================
+           INTRO CARD
+        ===================================================== */
+
+        .intro-card {
+
+            position: relative;
+
+            overflow: hidden;
+
+            background:
+                    linear-gradient(
+                            135deg,
+                            rgba(
+                                    102,
+                                    58,
+                                    190,
+                                    0.16
+                            ),
+                            rgba(
+                                    17,
+                                    18,
+                                    39,
+                                    0.97
+                            ) 65%,
+                            rgba(
+                                    24,
+                                    14,
+                                    38,
+                                    0.97
+                            )
+                    );
+
+            border:
+                    1px solid rgba(
+                            155,
+                            92,
+                            255,
+                            0.14
+                    );
+
+            border-radius: 20px;
+
+            padding: 25px;
+
+            margin-bottom: 25px;
+
+            box-shadow:
+                    0 15px 40px
+                    rgba(
+                            0,
+                            0,
+                            0,
+                            0.22
+                    );
+
+        }
+
+
+        .intro-card::after {
+
+            content: "";
+
+            position: absolute;
+
+            width: 230px;
+
+            height: 230px;
+
+            right: -100px;
+
+            top: -140px;
+
+            border-radius: 50%;
+
+            background:
+                    rgba(
+                            37,
+                            223,
+                            255,
+                            0.07
+                    );
+
+            filter: blur(60px);
+
+            pointer-events: none;
+
+        }
+
+
+        .intro-title {
+
+            position: relative;
+
+            z-index: 1;
+
+            font-size: 20px;
+
+            font-weight: 700;
+
+            color: #ffffff;
+
+            margin-bottom: 7px;
+
+        }
+
+
+        .intro-text {
+
+            position: relative;
+
+            z-index: 1;
+
+            color: #85829d;
+
+            font-size: 13px;
+
+            line-height: 1.7;
+
+            max-width: 900px;
+
+        }
+
+
+        /* =====================================================
+           TRACKER GRID
+        ===================================================== */
+
+        .tracker-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                    repeat(
+                            2,
+                            minmax(
+                                    0,
+                                    1fr
+                            )
+                    );
+
+            gap: 22px;
+
+        }
+
+
+        /* =====================================================
+           TRACKER CARD
+        ===================================================== */
+
+        .tracker-card {
+
+            position: relative;
+
+            overflow: hidden;
+
+            text-decoration: none;
+
+            color: inherit;
+
+            background:
+                    linear-gradient(
+                            145deg,
+                            rgba(
+                                    20,
+                                    20,
+                                    43,
+                                    0.98
+                            ),
+                            rgba(
+                                    14,
+                                    14,
+                                    31,
+                                    0.98
+                            )
+                    );
+
+            border:
+                    1px solid rgba(
+                            255,
+                            255,
+                            255,
+                            0.06
+                    );
+
+            border-radius: 20px;
+
+            padding: 25px;
+
+            min-height: 210px;
+
+            box-shadow:
+                    0 12px 35px
+                    rgba(
+                            0,
+                            0,
+                            0,
+                            0.22
+                    );
+
+            transition:
+                    transform 0.25s ease,
+                    box-shadow 0.25s ease,
+                    border-color 0.25s ease;
+
+            display: flex;
+
+            flex-direction: column;
+
+            justify-content: space-between;
+
+        }
+
+
+        .tracker-card::before {
+
+            content: "";
+
+            position: absolute;
+
+            width: 170px;
+
+            height: 170px;
+
+            right: -90px;
+
+            top: -90px;
+
+            border-radius: 50%;
+
+            background:
+                    rgba(
+                            139,
+                            92,
+                            246,
+                            0.07
+                    );
+
+            filter: blur(30px);
+
+            transition:
+                    0.3s ease;
+
+            pointer-events: none;
+
+        }
+
+
+        .tracker-card:hover {
+
+            transform:
+                    translateY(-5px);
+
+            border-color:
+                    rgba(
+                            155,
+                            92,
+                            255,
+                            0.27
+                    );
+
+            box-shadow:
+                    0 18px 40px
+                    rgba(
+                            0,
+                            0,
+                            0,
+                            0.28
+                    ),
+                    0 0 25px
+                    rgba(
+                            139,
+                            92,
+                            246,
+                            0.06
+                    );
+
+        }
+
+
+        .tracker-card:hover::before {
+
+            background:
+                    rgba(
+                            236,
+                            72,
+                            153,
+                            0.11
+                    );
+
+        }
+
+
+        .card-top {
+
+            position: relative;
+
+            z-index: 1;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: flex-start;
+
+            gap: 15px;
+
+        }
+
+
+        .card-icon {
+
+            width: 52px;
+
+            height: 52px;
+
+            border-radius: 15px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 25px;
+
+            background:
+                    linear-gradient(
+                            135deg,
+                            rgba(
+                                    139,
+                                    92,
+                                    246,
+                                    0.18
+                            ),
+                            rgba(
+                                    236,
+                                    72,
+                                    153,
+                                    0.08
+                            )
+                    );
+
+            border:
+                    1px solid rgba(
+                            155,
+                            92,
+                            255,
+                            0.12
+                    );
+
+            box-shadow:
+                    0 0 20px
+                    rgba(
+                            139,
+                            92,
+                            246,
+                            0.06
+                    );
+
+        }
+
+
+        .arrow {
+
+            font-size: 20px;
+
+            color: #77748d;
+
+            transition:
+                    0.2s ease;
+
+        }
+
+
+        .tracker-card:hover .arrow {
+
+            color: #c09cff;
+
+            transform:
+                    translateX(4px);
+
+        }
+
+
+        .card-title {
+
+            position: relative;
+
+            z-index: 1;
+
+            margin-top: 20px;
+
+            font-size: 19px;
+
+            font-weight: 700;
+
+            color: #ffffff;
+
+        }
+
+
+        .card-description {
+
+            position: relative;
+
+            z-index: 1;
+
+            margin-top: 7px;
+
+            color: #85829d;
+
+            font-size: 13px;
+
+            line-height: 1.6;
+
+        }
+
+
+        .card-link {
+
+            position: relative;
+
+            z-index: 1;
+
+            margin-top: 20px;
+
+            color: #b18aff;
+
+            font-size: 13px;
+
+            font-weight: 700;
+
+        }
+
+
+        /* =====================================================
+           PRELIMS
+        ===================================================== */
+
+        .prelims-card .card-icon {
+
+            background:
+                    linear-gradient(
+                            135deg,
+                            rgba(
+                                    59,
+                                    130,
+                                    246,
+                                    0.18
+                            ),
+                            rgba(
+                                    139,
+                                    92,
+                                    246,
+                                    0.10
+                            )
+                    );
+
+        }
+
+
+        /* =====================================================
+           MAINS
+        ===================================================== */
+
+        .mains-card .card-icon {
+
+            background:
+                    linear-gradient(
+                            135deg,
+                            rgba(
+                                    168,
+                                    85,
+                                    247,
+                                    0.20
+                            ),
+                            rgba(
+                                    236,
+                                    72,
+                                    153,
+                                    0.09
+                            )
+                    );
+
+        }
+
+
+        /* =====================================================
+           CURRENT AFFAIRS
+        ===================================================== */
+
+        .current-card .card-icon {
+
+            background:
+                    linear-gradient(
+                            135deg,
+                            rgba(
+                                    34,
+                                    211,
+                                    238,
+                                    0.17
+                            ),
+                            rgba(
+                                    168,
+                                    85,
+                                    247,
+                                    0.09
+                            )
+                    );
+
+        }
+
+
+        /* =====================================================
+           FOOT NOTE
+        ===================================================== */
+
+        .tracker-note {
+
+            margin-top: 25px;
+
+            background:
+                    linear-gradient(
+                            145deg,
+                            rgba(
+                                    20,
+                                    20,
+                                    43,
+                                    0.98
+                            ),
+                            rgba(
+                                    14,
+                                    14,
+                                    31,
+                                    0.98
+                            )
+                    );
+
+            border:
+                    1px solid rgba(
+                            255,
+                            255,
+                            255,
+                            0.06
+                    );
+
+            border-radius: 16px;
+
+            padding: 17px 20px;
+
+            color: #77748d;
+
+            font-size: 12px;
+
+            line-height: 1.6;
+
+        }
+
+
+        .tracker-note strong {
+
+            color: #bda1ff;
+
+        }
+
+
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+        @media (max-width: 900px) {
+
+            .main {
+
+                padding:
+                        30px;
+
+            }
+
+            .header {
+
+                align-items:
+                        flex-start;
+
+                gap: 15px;
+
+            }
+
+        }
+
+
+        @media (max-width: 850px) {
+
+            .tracker-grid {
+
+                grid-template-columns: 1fr;
+
+            }
+
+        }
+
+
+        @media (max-width: 800px) {
+
+            .main {
+
+                margin-left: 78px;
+
+                width:
+                        calc(100% - 78px);
+
+                padding:
+                        25px 20px 40px;
+
+            }
+
+        }
+
+
+        @media (max-width: 600px) {
+
+            .main {
+
+                padding:
+                        22px 15px 35px;
+
+            }
+
+            .header {
+
+                flex-direction:
+                        column;
+
+            }
+
+            .header h1 {
+
+                font-size: 25px;
+
+            }
+
+            .attempt-badge {
+
+                align-self:
+                        flex-start;
+
+            }
+
+            .tracker-card {
+
+                min-height: 190px;
+
+            }
+
+        }
+
+    </style>
+
 </head>
+
 
 <body>
 
-<h1>UPSC Subjects</h1>
 
-<!-- ================================================== -->
-<!-- PRELIMS                                            -->
-<!-- ================================================== -->
+<!-- =========================================================
+     COMMON SIDEBAR
+========================================================= -->
 
-<h2>PRELIMS</h2>
-
-<a href="/add-subject">Add Subject</a>
-
-<br><br>
-
-<table border="1">
-
-    <tr>
-        <th>ID</th>
-        <th>Subject Name</th>
-        <th>Action</th>
-    </tr>
-
-    <tr th:each="subject : ${prelimsSubjects}">
-
-        <td th:text="${subject.id}"></td>
-
-        <td th:text="${subject.name}"></td>
-
-        <td>
-
-            <!-- EDIT -->
-
-            <form th:action="@{/edit-subject/{id}(id=${subject.id})}"
-                  method="get">
-
-                <button type="submit">Edit</button>
-
-            </form>
+<div th:replace="~{fragments/sidebar :: sidebar}"></div>
 
 
-            <!-- CURRENT AFFAIRS -->
+<!-- =========================================================
+     MAIN
+========================================================= -->
 
-            <form th:if="${subject.id == 8}"
-                  th:action="@{/current-affairs}"
-                  method="get">
-
-                <button type="submit">Current Affairs</button>
-
-            </form>
+<main class="main">
 
 
-            <!-- NORMAL PRELIMS SUBJECTS -->
+    <!-- =====================================================
+         BACK TO DASHBOARD
+    ====================================================== -->
 
-            <form th:unless="${subject.id == 8}"
-                  th:action="@{/sections/{id}(id=${subject.id})}"
-                  method="get">
+    <a href="/dashboard"
+       class="back-button">
 
-                <button type="submit">Sections</button>
+        ← Back to Dashboard
 
-            </form>
-
-
-            <!-- DELETE -->
-
-            <form th:action="@{/delete-subject/{id}(id=${subject.id})}"
-                  method="post">
-
-                <button type="submit">Delete</button>
-
-            </form>
-
-        </td>
-
-    </tr>
-
-</table>
+    </a>
 
 
-<br><br>
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <div class="header">
+
+        <div>
+
+            <h1>
+                UPSC Tracker
+            </h1>
+
+            <p>
+                Track your preparation subject by subject and topic by topic.
+            </p>
+
+        </div>
 
 
-<!-- ================================================== -->
-<!-- MAINS                                              -->
-<!-- ================================================== -->
+        <div class="attempt-badge">
 
-<h2>MAINS</h2>
+            UPSC Attempt:
 
-<table border="1">
+            <span th:if="${session.attemptYear != null}"
+                  th:text="${session.attemptYear}">
+                2027
+            </span>
 
-    <tr>
-        <th>ID</th>
-        <th>Subject Name</th>
-        <th>Action</th>
-    </tr>
+            <span th:if="${session.attemptYear == null}">
+                Not Set
+            </span>
 
-    <tr th:each="subject : ${mainsSubjects}">
+        </div>
 
-        <td th:text="${subject.id}"></td>
-
-        <td th:text="${subject.name}"></td>
-
-        <td>
-
-            <!-- EDIT -->
-
-            <form th:action="@{/edit-subject/{id}(id=${subject.id})}"
-                  method="get">
-
-                <button type="submit">Edit</button>
-
-            </form>
+    </div>
 
 
-            <!-- SECTIONS -->
+    <!-- =====================================================
+         INTRO
+    ====================================================== -->
 
-            <form th:action="@{/sections/{id}(id=${subject.id})}"
-                  method="get">
+    <section class="intro-card">
 
-                <button type="submit">Sections</button>
+        <div class="intro-title">
+            Choose Your Preparation Area
+        </div>
 
-            </form>
+        <div class="intro-text">
+
+            Select an exam area below to continue your preparation.
+            You can open subjects, sections, topics and subtopics,
+            then mark your completed topics for automatic progress
+            and revision tracking.
+
+        </div>
+
+    </section>
 
 
-            <!-- DELETE -->
+    <!-- =====================================================
+         TRACKER OPTIONS
+    ====================================================== -->
 
-            <form th:action="@{/delete-subject/{id}(id=${subject.id})}"
-                  method="post">
+    <div class="tracker-grid">
 
-                <button type="submit">Delete</button>
 
-            </form>
+        <!-- =================================================
+             PRELIMS
+        ================================================== -->
 
-        </td>
+        <a href="/prelims"
+           class="tracker-card prelims-card">
 
-    </tr>
+            <div>
 
-</table>
+                <div class="card-top">
+
+                    <div class="card-icon">
+                        📘
+                    </div>
+
+                    <div class="arrow">
+                        →
+                    </div>
+
+                </div>
+
+
+                <div class="card-title">
+                    Prelims
+                </div>
+
+
+                <div class="card-description">
+
+                    Track your UPSC Prelims preparation,
+                    including General Studies and CSAT.
+
+                </div>
+
+            </div>
+
+
+            <div class="card-link">
+                Open Prelims Tracker →
+            </div>
+
+        </a>
+
+
+        <!-- =================================================
+             MAINS
+        ================================================== -->
+
+        <a href="/mains"
+           class="tracker-card mains-card">
+
+            <div>
+
+                <div class="card-top">
+
+                    <div class="card-icon">
+                        📝
+                    </div>
+
+                    <div class="arrow">
+                        →
+                    </div>
+
+                </div>
+
+
+                <div class="card-title">
+                    Mains
+                </div>
+
+
+                <div class="card-description">
+
+                    Track your UPSC Mains subjects,
+                    topics and preparation progress
+                    in an organized way.
+
+                </div>
+
+            </div>
+
+
+            <div class="card-link">
+                Open Mains Tracker →
+            </div>
+
+        </a>
+
+
+        <!-- =================================================
+             CURRENT AFFAIRS
+        ================================================== -->
+
+        <a href="/current-affairs"
+           class="tracker-card current-card">
+
+            <div>
+
+                <div class="card-top">
+
+                    <div class="card-icon">
+                        📰
+                    </div>
+
+                    <div class="arrow">
+                        →
+                    </div>
+
+                </div>
+
+
+                <div class="card-title">
+                    Current Affairs
+                </div>
+
+
+                <div class="card-description">
+
+                    Track your current affairs preparation
+                    and keep important topics organized
+                    for your UPSC preparation.
+
+                </div>
+
+            </div>
+
+
+            <div class="card-link">
+                Open Current Affairs →
+            </div>
+
+        </a>
+
+
+    </div>
+
+
+    <!-- =====================================================
+         NOTE
+    ====================================================== -->
+
+    <div class="tracker-note">
+
+        <strong>How the Tracker works:</strong>
+
+        Open an area → choose a subject → open its sections →
+        complete topics/subtopics. Once a topic is fully completed,
+        it will automatically be added to your Revision section.
+
+    </div>
+
+
+</main>
+
 
 </body>
 

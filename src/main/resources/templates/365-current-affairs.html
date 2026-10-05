@@ -1,72 +1,840 @@
-
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <title>365 Days Current Affairs</title>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>365 Days - UPSC Tracker</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+
+            background:
+                    radial-gradient(
+                            circle at 75% 10%,
+                            rgba(168, 85, 247, 0.15),
+                            transparent 30%
+                    ),
+                    radial-gradient(
+                            circle at 30% 90%,
+                            rgba(34, 211, 238, 0.08),
+                            transparent 30%
+                    ),
+                    #08050d;
+
+            color: #ffffff;
+
+            font-family:
+                    Inter,
+                    Arial,
+                    sans-serif;
+        }
+
+        /* =====================================================
+           MAIN CONTENT
+           ===================================================== */
+
+        .main-content {
+
+            margin-left: 250px !important;
+
+            width: calc(100% - 250px) !important;
+
+            min-height: 100vh;
+
+            padding: 40px 45px;
+
+            overflow-x: hidden;
+        }
+
+        /* =====================================================
+           PAGE HEADER
+           ===================================================== */
+
+        .page-header {
+            margin-bottom: 30px;
+        }
+
+        /* =====================================================
+           BACK TO DASHBOARD
+           ===================================================== */
+
+        .back-dashboard {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            margin-bottom: 20px;
+
+            padding: 9px 15px;
+
+            border-radius: 10px;
+
+            text-decoration: none;
+
+            color: #c4b5fd;
+
+            background:
+                    rgba(168, 85, 247, 0.10);
+
+            border:
+                    1px solid
+                    rgba(168, 85, 247, 0.25);
+
+            font-size: 13px;
+
+            font-weight: 700;
+
+            transition:
+                    all 0.25s ease;
+        }
+
+        .back-dashboard:hover {
+
+            color: #ffffff;
+
+            background:
+                    rgba(168, 85, 247, 0.20);
+
+            border-color:
+                    rgba(217, 70, 239, 0.45);
+
+            transform:
+                    translateX(-3px);
+
+            box-shadow:
+                    0 0 18px
+                    rgba(168, 85, 247, 0.15);
+        }
+
+        /* =====================================================
+           TITLE
+           ===================================================== */
+
+        .page-header h1 {
+
+            margin: 0;
+
+            font-size: 34px;
+
+            font-weight: 800;
+
+            background:
+                    linear-gradient(
+                            90deg,
+                            #d946ef,
+                            #a855f7,
+                            #22d3ee
+                    );
+
+            -webkit-background-clip: text;
+
+            -webkit-text-fill-color: transparent;
+
+            background-clip: text;
+        }
+
+        .page-header p {
+
+            margin-top: 8px;
+
+            color: #a99eb5;
+
+            font-size: 15px;
+        }
+
+        /* =====================================================
+           YEAR BADGE
+           ===================================================== */
+
+        .year-badge {
+
+            display: inline-block;
+
+            margin-top: 12px;
+
+            padding: 8px 15px;
+
+            border-radius: 20px;
+
+            background:
+                    rgba(168, 85, 247, 0.12);
+
+            border:
+                    1px solid
+                    rgba(168, 85, 247, 0.35);
+
+            color: #d8b4fe;
+
+            font-size: 13px;
+
+            font-weight: 700;
+        }
+
+        /* =====================================================
+           PROGRESS CARD
+           ===================================================== */
+
+        .progress-card {
+
+            padding: 25px;
+
+            margin-bottom: 30px;
+
+            border-radius: 18px;
+
+            background:
+                    linear-gradient(
+                            135deg,
+                            rgba(168, 85, 247, 0.12),
+                            rgba(217, 70, 239, 0.06),
+                            rgba(34, 211, 238, 0.04)
+                    );
+
+            border:
+                    1px solid
+                    rgba(168, 85, 247, 0.25);
+
+            box-shadow:
+                    0 0 30px
+                    rgba(168, 85, 247, 0.08);
+        }
+
+        .progress-top {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 15px;
+        }
+
+        .progress-title {
+
+            color: #e9d5ff;
+
+            font-size: 16px;
+
+            font-weight: 700;
+        }
+
+        .progress-number {
+
+            color: #22d3ee;
+
+            font-size: 18px;
+
+            font-weight: 800;
+        }
+
+        .progress-bar {
+
+            width: 100%;
+
+            height: 12px;
+
+            border-radius: 20px;
+
+            overflow: hidden;
+
+            background:
+                    rgba(255, 255, 255, 0.07);
+        }
+
+        .progress-fill {
+
+            height: 100%;
+
+            border-radius: 20px;
+
+            background:
+                    linear-gradient(
+                            90deg,
+                            #d946ef,
+                            #a855f7,
+                            #22d3ee
+                    );
+
+            box-shadow:
+                    0 0 15px
+                    rgba(168, 85, 247, 0.55);
+
+            transition:
+                    width 0.4s ease;
+        }
+
+        .progress-info {
+
+            margin-top: 12px;
+
+            color: #91869d;
+
+            font-size: 13px;
+        }
+
+        /* =====================================================
+           CATEGORY GRID
+           ===================================================== */
+
+        .categories-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, minmax(0, 1fr));
+
+            gap: 20px;
+        }
+
+        /* =====================================================
+           CATEGORY CARD
+           ===================================================== */
+
+        .category-card {
+
+            position: relative;
+
+            min-height: 170px;
+
+            padding: 24px;
+
+            border-radius: 18px;
+
+            background:
+                    linear-gradient(
+                            145deg,
+                            rgba(25, 13, 38, 0.96),
+                            rgba(13, 9, 20, 0.96)
+                    );
+
+            border:
+                    1px solid
+                    rgba(168, 85, 247, 0.22);
+
+            box-shadow:
+                    0 0 25px
+                    rgba(0, 0, 0, 0.25);
+
+            transition:
+                    transform 0.25s ease,
+                    border-color 0.25s ease,
+                    box-shadow 0.25s ease;
+        }
+
+        .category-card:hover {
+
+            transform:
+                    translateY(-4px);
+
+            border-color:
+                    rgba(217, 70, 239, 0.45);
+
+            box-shadow:
+                    0 0 30px
+                    rgba(168, 85, 247, 0.15);
+        }
+
+        .category-card.completed {
+
+            border-color:
+                    rgba(34, 211, 238, 0.4);
+
+            box-shadow:
+                    0 0 25px
+                    rgba(34, 211, 238, 0.08);
+        }
+
+        /* =====================================================
+           CATEGORY TOP
+           ===================================================== */
+
+        .category-top {
+
+            display: flex;
+
+            align-items: flex-start;
+
+            gap: 16px;
+        }
+
+        /* =====================================================
+           CATEGORY ICON
+           ===================================================== */
+
+        .category-icon {
+
+            width: 48px;
+
+            height: 48px;
+
+            flex-shrink: 0;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius: 14px;
+
+            background:
+                    linear-gradient(
+                            135deg,
+                            rgba(168, 85, 247, 0.25),
+                            rgba(217, 70, 239, 0.12)
+                    );
+
+            border:
+                    1px solid
+                    rgba(168, 85, 247, 0.25);
+
+            font-size: 22px;
+        }
+
+        /* =====================================================
+           CATEGORY INFO
+           ===================================================== */
+
+        .category-info {
+
+            flex: 1;
+        }
+
+        .category-number {
+
+            margin-bottom: 5px;
+
+            color: #8f829b;
+
+            font-size: 11px;
+
+            font-weight: 700;
+
+            text-transform: uppercase;
+
+            letter-spacing: 1px;
+        }
+
+        .category-name {
+
+            margin: 0;
+
+            color: #f5eaff;
+
+            font-size: 17px;
+
+            line-height: 1.35;
+
+            font-weight: 750;
+        }
+
+        /* =====================================================
+           STATUS
+           ===================================================== */
+
+        .status {
+
+            margin-top: 18px;
+
+            color: #9d93a7;
+
+            font-size: 13px;
+        }
+
+        .status.completed {
+
+            color: #22d3ee;
+
+            font-weight: 700;
+        }
+
+        /* =====================================================
+           COMPLETE BUTTON
+           ===================================================== */
+
+        .complete-form {
+
+            margin-top: 20px;
+        }
+
+        .complete-button {
+
+            width: 100%;
+
+            min-height: 42px;
+
+            border: 0;
+
+            border-radius: 11px;
+
+            cursor: pointer;
+
+            color: #ffffff;
+
+            font-size: 13px;
+
+            font-weight: 700;
+
+            background:
+                    linear-gradient(
+                            90deg,
+                            rgba(168, 85, 247, 0.75),
+                            rgba(217, 70, 239, 0.65)
+                    );
+
+            box-shadow:
+                    0 0 15px
+                    rgba(168, 85, 247, 0.12);
+
+            transition:
+                    transform 0.2s ease,
+                    box-shadow 0.2s ease;
+        }
+
+        .complete-button:hover {
+
+            transform:
+                    translateY(-2px);
+
+            box-shadow:
+                    0 0 22px
+                    rgba(217, 70, 239, 0.25);
+        }
+
+        .category-card.completed
+        .complete-button {
+
+            background:
+                    linear-gradient(
+                            90deg,
+                            rgba(34, 211, 238, 0.55),
+                            rgba(168, 85, 247, 0.65)
+                    );
+        }
+
+        /* =====================================================
+           RESPONSIVE
+           ===================================================== */
+
+        @media (max-width: 900px) {
+
+            .categories-grid {
+
+                grid-template-columns:
+                    1fr;
+            }
+
+            .main-content {
+
+                padding: 30px;
+            }
+        }
+
+        @media (max-width: 600px) {
+
+            .main-content {
+
+                padding: 25px 20px;
+            }
+
+            .page-header h1 {
+
+                font-size: 28px;
+            }
+        }
+
+    </style>
+
 </head>
+
 
 <body>
 
-<h1>365 Days Current Affairs</h1>
 
-<hr>
+<!-- =========================================================
+     COMMON SIDEBAR
+     ========================================================= -->
 
-<h2>
-    365 Days Revision -
-    <span th:text="${attemptYear}"></span>
-</h2>
+<div th:replace="~{fragments/sidebar :: sidebar}"></div>
 
-<hr>
 
-<h2>Yearly Magazine Revision</h2>
+<!-- =========================================================
+     MAIN CONTENT
+     ========================================================= -->
 
-<table border="1">
+<main class="main-content">
 
-    <tr>
-        <th>Revision</th>
-    </tr>
 
-    <tr>
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
 
-        <td>
+    <div class="page-header">
 
-            <form
-                    th:action="@{/current-affairs/toggle/{id}(id=${topic.id})}"
-                    method="post">
 
-                <input
-                        type="hidden"
-                        name="type"
-                        value="365">
+        <!-- BACK TO DASHBOARD -->
 
-                <button type="submit">
+        <a href="/dashboard"
+           class="back-dashboard">
 
-                    <span th:if="${!topic.completed}">
-                        365 Days Revision - Not Completed
+            ← Back to Dashboard
+
+        </a>
+
+
+        <!-- TITLE -->
+
+        <h1>
+            365 Days Current Affairs
+        </h1>
+
+
+        <p>
+            Cover the most important current affairs
+            areas for your UPSC preparation.
+        </p>
+
+
+        <!-- ATTEMPT YEAR -->
+
+        <span class="year-badge">
+
+            UPSC Attempt Year:
+
+            <span th:text="${attemptYear}">
+                2027
+            </span>
+
+        </span>
+
+
+    </div>
+
+
+    <!-- =====================================================
+         OVERALL PROGRESS
+         ===================================================== -->
+
+    <div class="progress-card">
+
+
+        <div class="progress-top">
+
+
+            <span class="progress-title">
+                Overall Progress
+            </span>
+
+
+            <span class="progress-number"
+                  th:text="${progress} + '%'">
+
+                0%
+
+            </span>
+
+
+        </div>
+
+
+        <div class="progress-bar">
+
+
+            <div class="progress-fill"
+                 th:style="'width:' + ${progress} + '%'">
+
+            </div>
+
+
+        </div>
+
+
+        <div class="progress-info">
+
+            <span th:text="${completedCategories}">
+                0
+            </span>
+
+            /
+
+            <span th:text="${totalCategories}">
+                10
+            </span>
+
+            categories completed
+
+        </div>
+
+
+    </div>
+
+
+    <!-- =====================================================
+         10 CATEGORIES
+         ===================================================== -->
+
+    <div class="categories-grid">
+
+
+        <div class="category-card"
+             th:each="category, stat : ${categories365}"
+             th:classappend="${category.completed} ? ' completed' : ''">
+
+
+            <!-- CATEGORY HEADER -->
+
+            <div class="category-top">
+
+
+                <!-- ICON -->
+
+                <div class="category-icon">
+
+                    <span th:switch="${stat.index}">
+
+                        <span th:case="0">
+                            🏛️
+                        </span>
+
+                        <span th:case="1">
+                            💰
+                        </span>
+
+                        <span th:case="2">
+                            🌱
+                        </span>
+
+                        <span th:case="3">
+                            🔬
+                        </span>
+
+                        <span th:case="4">
+                            🌍
+                        </span>
+
+                        <span th:case="5">
+                            🗺️
+                        </span>
+
+                        <span th:case="6">
+                            👥
+                        </span>
+
+                        <span th:case="7">
+                            🏺
+                        </span>
+
+                        <span th:case="8">
+                            🌾
+                        </span>
+
+                        <span th:case="9">
+                            📰
+                        </span>
+
                     </span>
 
-                    <span th:if="${topic.completed}">
-                        365 Days Revision - ✓ Completed
-                    </span>
+                </div>
+
+
+                <!-- CATEGORY NAME -->
+
+                <div class="category-info">
+
+
+                    <div class="category-number">
+
+                        Category
+
+                        <span th:text="${stat.index + 1}">
+                            1
+                        </span>
+
+                    </div>
+
+
+                    <h2 class="category-name"
+                        th:text="${category.name}">
+
+                        Polity &amp; Governance
+
+                    </h2>
+
+
+                </div>
+
+
+            </div>
+
+
+            <!-- STATUS -->
+
+            <div class="status"
+                 th:classappend="${category.completed} ? ' completed' : ''">
+
+
+                <span th:if="${category.completed}">
+
+                    ✓ Completed
+
+                </span>
+
+
+                <span th:unless="${category.completed}">
+
+                    ○ Not completed
+
+                </span>
+
+
+            </div>
+
+
+            <!-- COMPLETE FORM -->
+
+            <form class="complete-form"
+                  th:action="@{/current-affairs/365/toggle/{id}(id=${category.id})}"
+                  method="post">
+
+
+                <button type="submit"
+                        class="complete-button"
+                        th:text="${category.completed} ? 'Mark Incomplete' : 'Complete'">
+
+                    Complete
 
                 </button>
 
+
             </form>
 
-        </td>
 
-    </tr>
+        </div>
 
-</table>
 
-<br>
+    </div>
 
-<a th:href="@{/current-affairs}">
-    Back to Current Affairs
-</a>
+
+</main>
+
 
 </body>
 
 </html>
-

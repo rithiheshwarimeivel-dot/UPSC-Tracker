@@ -1,0 +1,1675 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>UPSC Tracker - Dashboard</title>
+
+    <style>
+
+        /* =====================================================
+           GLOBAL
+        ===================================================== */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+
+            font-family: "Inter", "Segoe UI", Arial, sans-serif;
+
+            background:
+                    radial-gradient(
+                            circle at 75% 10%,
+                            rgba(124, 58, 237, 0.10),
+                            transparent 28%
+                    ),
+                    radial-gradient(
+                            circle at 20% 80%,
+                            rgba(236, 72, 153, 0.06),
+                            transparent 25%
+                    ),
+                    #080814;
+
+            color: #ffffff;
+
+            min-height: 100vh;
+
+        }
+
+
+        /* =====================================================
+           MAIN CONTENT
+        ===================================================== */
+
+        .main {
+
+            margin-left: 250px !important;
+
+            width: calc(100% - 250px) !important;
+
+            padding: 38px 45px;
+
+            min-height: 100vh;
+
+        }
+
+
+        /* =====================================================
+           HEADER
+        ===================================================== */
+
+        .header {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            gap: 25px;
+
+            margin-bottom: 35px;
+
+        }
+
+
+        .header h1 {
+
+            font-size: 30px;
+
+            font-weight: 700;
+
+            margin-bottom: 7px;
+
+        }
+
+
+        .header h1 span {
+
+            background:
+                    linear-gradient(
+                            90deg,
+                            #b58aff,
+                            #ff63b5
+                    );
+
+            -webkit-background-clip: text;
+
+            background-clip: text;
+
+            color: transparent;
+
+        }
+
+
+        .header p {
+
+            color: #85829d;
+
+            font-size: 14px;
+
+            line-height: 1.5;
+
+        }
+
+
+        .attempt {
+
+            flex-shrink: 0;
+
+            background:
+                    linear-gradient(
+                            135deg,
+                            rgba(139, 92, 246, 0.12),
+                            rgba(37, 223, 255, 0.06)
+                    );
+
+            border:
+                    1px solid rgba(
+                            155,
+                            92,
+                            255,
+                            0.25
+                    );
+
+            color: #c1a7ff;
+
+            padding: 10px 16px;
+
+            border-radius: 10px;
+
+            font-size: 13px;
+
+            font-weight: 600;
+
+            box-shadow:
+                    0 0 20px
+                    rgba(
+                            139,
+                            92,
+                            246,
+                            0.05
+                    );
+
+        }
+
+
+        /* =====================================================
+           OVERALL PREPARATION
+        ===================================================== */
+
+        .overall-card {
+
+            position: relative;
+
+            overflow: hidden;
+
+            background:
+                    linear-gradient(
+                            135deg,
+                            rgba(102, 58, 190, 0.19),
+                            rgba(17, 18, 39, 0.96) 60%,
+                            rgba(24, 14, 38, 0.96)
+                    );
+
+            border:
+                    1px solid rgba(
+                            155,
+                            92,
+                            255,
+                            0.14
+                    );
+
+            border-radius: 20px;
+
+            padding: 30px;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            gap: 30px;
+
+            margin-bottom: 28px;
+
+            box-shadow:
+                    0 20px 50px
+                    rgba(
+                            0,
+                            0,
+                            0,
+                            0.25
+                    );
+
+        }
+
+
+        .overall-card::before {
+
+            content: "";
+
+            position: absolute;
+
+            width: 260px;
+
+            height: 260px;
+
+            right: -100px;
+
+            bottom: -170px;
+
+            border-radius: 50%;
+
+            background:
+                    rgba(
+                            236,
+                            72,
+                            153,
+                            0.07
+                    );
+
+            filter: blur(65px);
+
+            pointer-events: none;
+
+        }
+
+
+        .overall-card::after {
+
+            content: "";
+
+            position: absolute;
+
+            width: 300px;
+
+            height: 300px;
+
+            right: -120px;
+
+            top: -180px;
+
+            border-radius: 50%;
+
+            background:
+                    rgba(
+                            37,
+                            223,
+                            255,
+                            0.06
+                    );
+
+            filter: blur(70px);
+
+            pointer-events: none;
+
+        }
+
+
+        .overall-info {
+
+            position: relative;
+
+            z-index: 2;
+
+        }
+
+
+        .overall-info h2 {
+
+            font-size: 22px;
+
+            margin-bottom: 10px;
+
+        }
+
+
+        .overall-info p {
+
+            color: #85829d;
+
+            font-size: 14px;
+
+            line-height: 1.6;
+
+            max-width: 500px;
+
+        }
+
+
+        .overall-progress {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 25px;
+
+            position: relative;
+
+            z-index: 2;
+
+        }
+
+
+        /* =====================================================
+           OVERALL CIRCLE
+        ===================================================== */
+
+        .circle {
+
+            width: 110px;
+
+            height: 110px;
+
+            min-width: 110px;
+
+            border-radius: 50%;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            position: relative;
+
+            box-shadow:
+                    0 0 25px
+                    rgba(
+                            155,
+                            92,
+                            255,
+                            0.15
+                    );
+
+        }
+
+
+        .circle::before {
+
+            content: "";
+
+            position: absolute;
+
+            width: 82px;
+
+            height: 82px;
+
+            background: #111126;
+
+            border-radius: 50%;
+
+        }
+
+
+        .circle span {
+
+            position: relative;
+
+            z-index: 2;
+
+            font-size: 22px;
+
+            font-weight: 700;
+
+            background:
+                    linear-gradient(
+                            90deg,
+                            #bd9aff,
+                            #ff7bc2,
+                            #65eaff
+                    );
+
+            -webkit-background-clip: text;
+
+            background-clip: text;
+
+            color: transparent;
+
+        }
+
+
+        /* =====================================================
+           PROGRESS DETAILS
+        ===================================================== */
+
+        .progress-details {
+
+            min-width: 150px;
+
+        }
+
+
+        .progress-details div {
+
+            margin-bottom: 10px;
+
+        }
+
+
+        .progress-details div:last-child {
+
+            margin-bottom: 0;
+
+        }
+
+
+        .progress-details strong {
+
+            font-size: 18px;
+
+        }
+
+
+        .progress-details small {
+
+            display: block;
+
+            color: #85829d;
+
+            margin-top: 3px;
+
+            font-size: 12px;
+
+        }
+
+
+        /* =====================================================
+           SECTION TITLE
+        ===================================================== */
+
+        .section-title {
+
+            font-size: 19px;
+
+            font-weight: 700;
+
+            margin: 30px 0 18px;
+
+        }
+
+
+        /* =====================================================
+           EXAM CARDS
+        ===================================================== */
+
+        .cards {
+
+            display: grid;
+
+            grid-template-columns:
+                    repeat(
+                            4,
+                            minmax(
+                                    0,
+                                    1fr
+                            )
+                    );
+
+            gap: 18px;
+
+        }
+
+
+        .card {
+
+            background:
+                    linear-gradient(
+                            145deg,
+                            rgba(20, 20, 43, 0.98),
+                            rgba(14, 14, 31, 0.98)
+                    );
+
+            border:
+                    1px solid rgba(
+                            255,
+                            255,
+                            255,
+                            0.06
+                    );
+
+            border-radius: 18px;
+
+            padding: 22px;
+
+            transition:
+                    all 0.25s ease;
+
+            text-decoration: none;
+
+            color: inherit;
+
+            display: block;
+
+        }
+
+
+        .card:hover {
+
+            transform:
+                    translateY(-4px);
+
+            border-color:
+                    rgba(
+                            155,
+                            92,
+                            255,
+                            0.25
+                    );
+
+            box-shadow:
+                    0 15px 35px
+                    rgba(
+                            0,
+                            0,
+                            0,
+                            0.25
+                    ),
+                    0 0 25px
+                    rgba(
+                            139,
+                            92,
+                            246,
+                            0.05
+                    );
+
+        }
+
+
+        .card-top {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 18px;
+
+        }
+
+
+        .card-icon {
+
+            width: 42px;
+
+            height: 42px;
+
+            border-radius: 12px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            background:
+                    linear-gradient(
+                            135deg,
+                            rgba(139, 92, 246, 0.16),
+                            rgba(236, 72, 153, 0.08)
+                    );
+
+            border:
+                    1px solid rgba(
+                            155,
+                            92,
+                            255,
+                            0.10
+                    );
+
+            font-size: 20px;
+
+        }
+
+
+        .card h3 {
+
+            font-size: 16px;
+
+            margin-bottom: 8px;
+
+        }
+
+
+        .percentage {
+
+            font-size: 25px;
+
+            font-weight: 700;
+
+            background:
+                    linear-gradient(
+                            90deg,
+                            #a875ff,
+                            #ff55ae,
+                            #38ddff
+                    );
+
+            -webkit-background-clip: text;
+
+            background-clip: text;
+
+            color: transparent;
+
+        }
+
+
+        /* =====================================================
+           PROGRESS BAR
+        ===================================================== */
+
+        .progress-bar {
+
+            width: 100%;
+
+            height: 7px;
+
+            background:
+                    rgba(
+                            255,
+                            255,
+                            255,
+                            0.07
+                    );
+
+            border-radius: 10px;
+
+            overflow: hidden;
+
+            margin-top: 15px;
+
+        }
+
+
+        .progress-fill {
+
+            height: 100%;
+
+            background:
+                    linear-gradient(
+                            90deg,
+                            #8b5cf6,
+                            #ec4899,
+                            #22d3ee
+                    );
+
+            border-radius: 10px;
+
+            box-shadow:
+                    0 0 10px
+                    rgba(
+                            236,
+                            72,
+                            153,
+                            0.25
+                    );
+
+        }
+
+
+        /* =====================================================
+           CARD BOTTOM
+        ===================================================== */
+
+        .card-bottom {
+
+            margin-top: 12px;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            gap: 10px;
+
+            color: #77748d;
+
+            font-size: 12px;
+
+        }
+
+
+        /* =====================================================
+           QUICK ACCESS
+        ===================================================== */
+
+        .quick-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                    repeat(
+                            4,
+                            minmax(
+                                    0,
+                                    1fr
+                            )
+                    );
+
+            gap: 18px;
+
+            margin-top: 5px;
+
+        }
+
+
+        .quick-card {
+
+            position: relative;
+
+            overflow: hidden;
+
+            text-decoration: none;
+
+            background:
+                    linear-gradient(
+                            145deg,
+                            rgba(20, 20, 43, 0.98),
+                            rgba(14, 14, 31, 0.98)
+                    );
+
+            border:
+                    1px solid rgba(
+                            255,
+                            255,
+                            255,
+                            0.06
+                    );
+
+            border-radius: 18px;
+
+            padding: 22px;
+
+            color: white;
+
+            transition:
+                    all 0.25s ease;
+
+        }
+
+
+        .quick-card::before {
+
+            content: "";
+
+            position: absolute;
+
+            width: 120px;
+
+            height: 120px;
+
+            right: -60px;
+
+            top: -60px;
+
+            border-radius: 50%;
+
+            background:
+                    rgba(
+                            139,
+                            92,
+                            246,
+                            0.08
+                    );
+
+            filter: blur(20px);
+
+            transition:
+                    0.3s ease;
+
+        }
+
+
+        .quick-card:hover {
+
+            transform:
+                    translateY(-4px);
+
+            border-color:
+                    rgba(
+                            155,
+                            92,
+                            255,
+                            0.28
+                    );
+
+            box-shadow:
+                    0 15px 35px
+                    rgba(
+                            0,
+                            0,
+                            0,
+                            0.25
+                    );
+
+        }
+
+
+        .quick-card:hover::before {
+
+            background:
+                    rgba(
+                            236,
+                            72,
+                            153,
+                            0.12
+                    );
+
+        }
+
+
+        .quick-card h3 {
+
+            font-size: 16px;
+
+            margin-bottom: 8px;
+
+            position: relative;
+
+        }
+
+
+        .quick-card p {
+
+            color: #77748d;
+
+            font-size: 13px;
+
+            line-height: 1.5;
+
+            position: relative;
+
+        }
+
+
+        .arrow {
+
+            display: inline-block;
+
+            margin-top: 15px;
+
+            color: #b18aff;
+
+            font-size: 13px;
+
+            position: relative;
+
+        }
+
+
+        /* =====================================================
+           RESPONSIVE
+
+           IMPORTANT:
+           Sidebar is fixed at 250px.
+           Main content NEVER changes to 78px.
+        ===================================================== */
+
+        @media (max-width: 1200px) {
+
+            .cards {
+
+                grid-template-columns:
+                        repeat(
+                                2,
+                                minmax(
+                                        0,
+                                        1fr
+                                )
+                        );
+
+            }
+
+            .quick-grid {
+
+                grid-template-columns:
+                        repeat(
+                                2,
+                                minmax(
+                                        0,
+                                        1fr
+                                )
+                        );
+
+            }
+
+        }
+
+
+        @media (max-width: 900px) {
+
+            .main {
+
+                padding:
+                        30px 25px;
+
+            }
+
+            .header {
+
+                align-items:
+                        flex-start;
+
+            }
+
+            .overall-card {
+
+                flex-direction:
+                        column;
+
+                align-items:
+                        flex-start;
+
+            }
+
+            .overall-progress {
+
+                width: 100%;
+
+                justify-content:
+                        flex-start;
+
+            }
+
+        }
+
+
+        @media (max-width: 650px) {
+
+            .main {
+
+                padding:
+                        25px 20px 40px;
+
+            }
+
+            .header {
+
+                flex-direction:
+                        column;
+
+            }
+
+            .attempt {
+
+                width: 100%;
+
+            }
+
+            .cards {
+
+                grid-template-columns:
+                        1fr;
+
+            }
+
+            .quick-grid {
+
+                grid-template-columns:
+                        1fr;
+
+            }
+
+            .overall-progress {
+
+                align-items:
+                        center;
+
+            }
+
+        }
+
+
+        @media (max-width: 450px) {
+
+            .main {
+
+                padding:
+                        22px 15px 35px;
+
+            }
+
+            .header h1 {
+
+                font-size: 25px;
+
+            }
+
+            .overall-card {
+
+                padding: 22px;
+
+            }
+
+            .overall-progress {
+
+                flex-direction:
+                        column;
+
+                align-items:
+                        flex-start;
+
+            }
+
+            .progress-details {
+
+                width: 100%;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     COMMON SIDEBAR
+========================================================= -->
+
+<div th:replace="~{fragments/sidebar :: sidebar}"></div>
+
+
+<!-- =========================================================
+     MAIN
+========================================================= -->
+
+<main class="main">
+
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <header class="header">
+
+        <div>
+
+            <h1>
+
+                Welcome back,
+
+                <span th:text="${userName}">
+                    User
+                </span>
+
+                👋
+
+            </h1>
+
+
+            <p>
+
+                Keep going. Your UPSC preparation is moving forward.
+
+            </p>
+
+        </div>
+
+
+        <div class="attempt">
+
+            UPSC Attempt:
+
+            <span th:text="${attemptYear}">
+                2027
+            </span>
+
+        </div>
+
+    </header>
+
+
+    <!-- =====================================================
+         OVERALL PREPARATION
+    ====================================================== -->
+
+    <section class="overall-card">
+
+
+        <div class="overall-info">
+
+            <h2>
+
+                Overall Preparation
+
+            </h2>
+
+
+            <p>
+
+                Your complete preparation progress
+                across all tracked areas.
+
+            </p>
+
+        </div>
+
+
+        <div class="overall-progress">
+
+
+            <div
+                    class="circle"
+
+                    th:style="'background: conic-gradient(#9b5cff 0deg, #ff3cac ' + (${overallProgress} * 1.8) + 'deg, #25dfff ' + (${overallProgress} * 2.7) + 'deg, rgba(255,255,255,0.07) ' + (${overallProgress} * 3.6) + 'deg, rgba(255,255,255,0.07) 360deg)'">
+
+
+                <span
+                        th:text="${overallProgress + '%'}">
+
+                    0%
+
+                </span>
+
+
+            </div>
+
+
+            <div class="progress-details">
+
+
+                <div>
+
+                    <strong
+                            th:text="${overallCompleted}">
+
+                        0
+
+                    </strong>
+
+
+                    <small>
+
+                        Topics Completed
+
+                    </small>
+
+                </div>
+
+
+                <div>
+
+                    <strong
+                            th:text="${overallTotal}">
+
+                        0
+
+                    </strong>
+
+
+                    <small>
+
+                        Total Topics
+
+                    </small>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </section>
+
+
+    <!-- =====================================================
+         EXAM PROGRESS
+    ====================================================== -->
+
+    <h2 class="section-title">
+
+        Exam Progress
+
+    </h2>
+
+
+    <div class="cards">
+
+
+        <!-- =================================================
+             PRELIMS
+        ================================================== -->
+
+        <a
+                th:href="@{/prelims}"
+                href="/prelims"
+                class="card">
+
+
+            <div class="card-top">
+
+
+                <div class="card-icon">
+
+                    📘
+
+                </div>
+
+
+                <div
+                        class="percentage"
+                        th:text="${prelimsProgress + '%'}">
+
+                    0%
+
+                </div>
+
+
+            </div>
+
+
+            <h3>
+
+                Prelims GS
+
+            </h3>
+
+
+            <div class="progress-bar">
+
+
+                <div
+                        class="progress-fill"
+
+                        th:style="'width:' + ${prelimsProgress} + '%'">
+
+                </div>
+
+
+            </div>
+
+
+            <div class="card-bottom">
+
+
+                <span>
+
+                    Completed
+
+                </span>
+
+
+                <span
+                        th:text="${prelimsCompleted + ' / ' + prelimsTotal}">
+
+                    0 / 0
+
+                </span>
+
+
+            </div>
+
+
+        </a>
+
+
+        <!-- =================================================
+             MAINS
+        ================================================== -->
+
+        <a
+                th:href="@{/mains}"
+                href="/mains"
+                class="card">
+
+
+            <div class="card-top">
+
+
+                <div class="card-icon">
+
+                    📝
+
+                </div>
+
+
+                <div
+                        class="percentage"
+                        th:text="${mainsProgress + '%'}">
+
+                    0%
+
+                </div>
+
+
+            </div>
+
+
+            <h3>
+
+                Mains
+
+            </h3>
+
+
+            <div class="progress-bar">
+
+
+                <div
+                        class="progress-fill"
+
+                        th:style="'width:' + ${mainsProgress} + '%'">
+
+                </div>
+
+
+            </div>
+
+
+            <div class="card-bottom">
+
+
+                <span>
+
+                    Completed
+
+                </span>
+
+
+                <span
+                        th:text="${mainsCompleted + ' / ' + mainsTotal}">
+
+                    0 / 0
+
+                </span>
+
+
+            </div>
+
+
+        </a>
+
+
+        <!-- =================================================
+             CSAT
+        ================================================== -->
+
+        <a
+                th:href="@{/csat}"
+                href="/csat"
+                class="card">
+
+
+            <div class="card-top">
+
+
+                <div class="card-icon">
+
+                    🧮
+
+                </div>
+
+
+                <div
+                        class="percentage"
+                        th:text="${csatProgress + '%'}">
+
+                    0%
+
+                </div>
+
+
+            </div>
+
+
+            <h3>
+
+                CSAT
+
+            </h3>
+
+
+            <div class="progress-bar">
+
+
+                <div
+                        class="progress-fill"
+
+                        th:style="'width:' + ${csatProgress} + '%'">
+
+                </div>
+
+
+            </div>
+
+
+            <div class="card-bottom">
+
+
+                <span>
+
+                    Completed
+
+                </span>
+
+
+                <span
+                        th:text="${csatCompleted + ' / ' + csatTotal}">
+
+                    0 / 0
+
+                </span>
+
+
+            </div>
+
+
+        </a>
+
+
+        <!-- =================================================
+             CURRENT AFFAIRS
+        ================================================== -->
+
+        <a
+                th:href="@{/current-affairs}"
+                href="/current-affairs"
+                class="card">
+
+
+            <div class="card-top">
+
+
+                <div class="card-icon">
+
+                    📰
+
+                </div>
+
+
+                <div
+                        class="percentage"
+                        th:text="${currentAffairsProgress + '%'}">
+
+                    0%
+
+                </div>
+
+
+            </div>
+
+
+            <h3>
+
+                Current Affairs
+
+            </h3>
+
+
+            <div class="progress-bar">
+
+
+                <div
+                        class="progress-fill"
+
+                        th:style="'width:' + ${currentAffairsProgress} + '%'">
+
+                </div>
+
+
+            </div>
+
+
+            <div class="card-bottom">
+
+
+                <span>
+
+                    Completed
+
+                </span>
+
+
+                <span
+                        th:text="${currentAffairsCompleted + ' / ' + currentAffairsTotal}">
+
+                    0 / 0
+
+                </span>
+
+
+            </div>
+
+
+        </a>
+
+
+    </div>
+
+
+    <!-- =====================================================
+         QUICK ACCESS
+    ====================================================== -->
+
+    <h2 class="section-title">
+
+        Quick Access
+
+    </h2>
+
+
+    <div class="quick-grid">
+
+
+        <!-- PRELIMS -->
+
+        <a
+                th:href="@{/prelims}"
+                href="/prelims"
+                class="quick-card">
+
+
+            <h3>
+
+                📘 Prelims Tracker
+
+            </h3>
+
+
+            <p>
+
+                Continue tracking your GS
+                preparation and topic completion.
+
+            </p>
+
+
+            <span class="arrow">
+
+                Open Tracker →
+
+            </span>
+
+
+        </a>
+
+
+        <!-- MAINS -->
+
+        <a
+                th:href="@{/mains}"
+                href="/mains"
+                class="quick-card">
+
+
+            <h3>
+
+                📝 Mains Tracker
+
+            </h3>
+
+
+            <p>
+
+                Track your Mains subjects,
+                topics and preparation progress.
+
+            </p>
+
+
+            <span class="arrow">
+
+                Open Tracker →
+
+            </span>
+
+
+        </a>
+
+
+        <!-- CSAT -->
+
+        <a
+                th:href="@{/csat}"
+                href="/csat"
+                class="quick-card">
+
+
+            <h3>
+
+                🧮 CSAT Tracker
+
+            </h3>
+
+
+            <p>
+
+                Track Aptitude, Reasoning and
+                English preparation.
+
+            </p>
+
+
+            <span class="arrow">
+
+                Open CSAT →
+
+            </span>
+
+
+        </a>
+
+
+        <!-- CURRENT AFFAIRS -->
+
+        <a
+                th:href="@{/current-affairs}"
+                href="/current-affairs"
+                class="quick-card">
+
+
+            <h3>
+
+                📰 Current Affairs
+
+            </h3>
+
+
+            <p>
+
+                Track Prelims, Mains and
+                365 Days Current Affairs.
+
+            </p>
+
+
+            <span class="arrow">
+
+                Open Current Affairs →
+
+            </span>
+
+
+        </a>
+
+
+    </div>
+
+
+</main>
+
+
+</body>
+
+</html>

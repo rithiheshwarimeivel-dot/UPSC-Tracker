@@ -1,0 +1,2172 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>About Me | UPSC Tracker</title>
+
+    <style>
+
+        /* =====================================================
+           GLOBAL
+        ===================================================== */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+
+            min-height: 100vh;
+
+            background:
+                    radial-gradient(
+                            circle at 75% 5%,
+                            rgba(168, 85, 247, 0.14),
+                            transparent 30%
+                    ),
+                    radial-gradient(
+                            circle at 20% 90%,
+                            rgba(34, 211, 238, 0.07),
+                            transparent 30%
+                    ),
+                    radial-gradient(
+                            circle at 50% 45%,
+                            rgba(217, 70, 239, 0.04),
+                            transparent 35%
+                    ),
+                    #08050d;
+
+            color: #ffffff;
+
+            font-family:
+                    "Segoe UI",
+                    Inter,
+                    Arial,
+                    sans-serif;
+
+            overflow-x: hidden;
+        }
+
+        /* =====================================================
+           MAIN
+        ===================================================== */
+
+        .main {
+
+            margin-left: 250px !important;
+
+            width: calc(100% - 250px) !important;
+
+            min-height: 100vh;
+
+            padding: 38px 45px 50px;
+
+            position: relative;
+        }
+
+        /* =====================================================
+           BACK BUTTON
+        ===================================================== */
+
+        .back-button {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            text-decoration: none;
+
+            color: #cbd5e1;
+
+            background:
+                    rgba(255, 255, 255, 0.04);
+
+            border:
+                    1px solid
+                    rgba(255, 255, 255, 0.09);
+
+            padding: 9px 15px;
+
+            border-radius: 10px;
+
+            font-size: 13px;
+
+            font-weight: 600;
+
+            margin-bottom: 22px;
+
+            transition:
+                    all 0.25s ease;
+        }
+
+        .back-button:hover {
+
+            color: #ffffff;
+
+            background:
+                    rgba(168, 85, 247, 0.12);
+
+            border-color:
+                    rgba(192, 92, 255, 0.35);
+
+            transform:
+                    translateX(-3px);
+
+            box-shadow:
+                    0 0 20px
+                    rgba(168, 85, 247, 0.12);
+        }
+
+        /* =====================================================
+           PAGE HEADER
+        ===================================================== */
+
+        .page-header {
+
+            display: flex;
+
+            align-items: flex-start;
+
+            justify-content: space-between;
+
+            gap: 20px;
+
+            margin-bottom: 30px;
+        }
+
+        .page-title h1 {
+
+            font-size: 32px;
+
+            line-height: 1.2;
+
+            font-weight: 800;
+
+            background:
+                    linear-gradient(
+                            90deg,
+                            #ffffff,
+                            #d8b4fe,
+                            #67e8f9
+                    );
+
+            -webkit-background-clip: text;
+
+            -webkit-text-fill-color: transparent;
+
+            background-clip: text;
+        }
+
+        .page-title p {
+
+            margin-top: 8px;
+
+            color: #94a3b8;
+
+            font-size: 14px;
+
+            line-height: 1.6;
+        }
+
+        .attempt-badge {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 5px;
+
+            padding: 9px 15px;
+
+            border-radius: 30px;
+
+            white-space: nowrap;
+
+            background:
+                    linear-gradient(
+                            135deg,
+                            rgba(168, 85, 247, 0.15),
+                            rgba(34, 211, 238, 0.06)
+                    );
+
+            border:
+                    1px solid
+                    rgba(192, 92, 255, 0.25);
+
+            color: #d8b4fe;
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+            box-shadow:
+                    0 0 18px
+                    rgba(168, 85, 247, 0.07);
+        }
+
+        /* =====================================================
+           ALERTS
+        ===================================================== */
+
+        .alert {
+
+            padding: 13px 17px;
+
+            border-radius: 12px;
+
+            margin-bottom: 20px;
+
+            font-size: 13px;
+        }
+
+        .success-alert {
+
+            background:
+                    rgba(34, 197, 94, 0.09);
+
+            border:
+                    1px solid
+                    rgba(34, 197, 94, 0.22);
+
+            color: #86efac;
+        }
+
+        .error-alert {
+
+            background:
+                    rgba(239, 68, 68, 0.09);
+
+            border:
+                    1px solid
+                    rgba(239, 68, 68, 0.22);
+
+            color: #fca5a5;
+        }
+
+        /* =====================================================
+           COMMON GLASS CARD
+        ===================================================== */
+
+        .card {
+
+            background:
+                    linear-gradient(
+                            145deg,
+                            rgba(21, 13, 35, 0.86),
+                            rgba(8, 8, 20, 0.80)
+                    );
+
+            border:
+                    1px solid
+                    rgba(192, 92, 255, 0.14);
+
+            border-radius: 20px;
+
+            backdrop-filter: blur(18px);
+
+            box-shadow:
+                    0 20px 50px
+                    rgba(0, 0, 0, 0.25),
+
+                    inset 0 0 25px
+                    rgba(168, 85, 247, 0.025);
+
+            transition:
+                    border-color 0.25s ease,
+                    box-shadow 0.25s ease;
+        }
+
+        .card:hover {
+
+            border-color:
+                    rgba(192, 92, 255, 0.24);
+
+            box-shadow:
+                    0 22px 55px
+                    rgba(0, 0, 0, 0.30),
+
+                    0 0 22px
+                    rgba(168, 85, 247, 0.05);
+        }
+
+        /* =====================================================
+           PROFILE CARD
+        ===================================================== */
+
+        .profile-card {
+
+            padding: 27px;
+
+            margin-bottom: 28px;
+        }
+
+        .profile-top {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 20px;
+        }
+
+        .profile-left {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 18px;
+        }
+
+        /* =====================================================
+           AVATAR
+        ===================================================== */
+
+        .avatar {
+
+            width: 82px;
+
+            height: 82px;
+
+            flex-shrink: 0;
+
+            border-radius: 50%;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            overflow: hidden;
+
+            color: #ffffff;
+
+            font-size: 30px;
+
+            font-weight: 700;
+
+            background:
+                    linear-gradient(
+                            135deg,
+                            #d946ef,
+                            #a855f7,
+                            #22d3ee
+                    );
+
+            border:
+                    3px solid
+                    rgba(255, 255, 255, 0.10);
+
+            box-shadow:
+                    0 0 25px
+                    rgba(168, 85, 247, 0.22);
+        }
+
+        .avatar img {
+
+            width: 100%;
+
+            height: 100%;
+
+            object-fit: cover;
+        }
+
+        /* =====================================================
+           PROFILE INFO
+        ===================================================== */
+
+        .profile-info h2 {
+
+            margin-bottom: 5px;
+
+            color: #ffffff;
+
+            font-size: 23px;
+
+            font-weight: 700;
+        }
+
+        .profile-email {
+
+            margin-bottom: 8px;
+
+            color: #94a3b8;
+
+            font-size: 13px;
+        }
+
+        .role-badge {
+
+            display: inline-block;
+
+            padding: 5px 10px;
+
+            border-radius: 20px;
+
+            background:
+                    linear-gradient(
+                            90deg,
+                            rgba(168, 85, 247, 0.14),
+                            rgba(34, 211, 238, 0.06)
+                    );
+
+            border:
+                    1px solid
+                    rgba(192, 92, 255, 0.20);
+
+            color: #d8b4fe;
+
+            font-size: 10px;
+
+            font-weight: 700;
+        }
+
+        /* =====================================================
+           EDIT BUTTON
+        ===================================================== */
+
+        .edit-btn {
+
+            border: none;
+
+            padding: 10px 17px;
+
+            border-radius: 10px;
+
+            cursor: pointer;
+
+            color: #ffffff;
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+            background:
+                    linear-gradient(
+                            135deg,
+                            #d946ef,
+                            #a855f7,
+                            #7c3aed
+                    );
+
+            box-shadow:
+                    0 7px 20px
+                    rgba(168, 85, 247, 0.15);
+
+            transition:
+                    transform 0.2s ease,
+                    box-shadow 0.2s ease;
+        }
+
+        .edit-btn:hover {
+
+            transform:
+                    translateY(-2px);
+
+            box-shadow:
+                    0 10px 25px
+                    rgba(168, 85, 247, 0.28);
+        }
+
+        /* =====================================================
+           PROFILE DETAILS
+        ===================================================== */
+
+        .upsc-profile-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                    repeat(3, minmax(0, 1fr));
+
+            gap: 16px;
+
+            margin-top: 26px;
+
+            padding-top: 25px;
+
+            border-top:
+                    1px solid
+                    rgba(255, 255, 255, 0.07);
+        }
+
+        .upsc-profile-item {
+
+            padding: 17px;
+
+            border-radius: 14px;
+
+            background:
+                    linear-gradient(
+                            145deg,
+                            rgba(168, 85, 247, 0.055),
+                            rgba(34, 211, 238, 0.025)
+                    );
+
+            border:
+                    1px solid
+                    rgba(192, 92, 255, 0.10);
+
+            transition:
+                    transform 0.2s ease,
+                    border-color 0.2s ease;
+        }
+
+        .upsc-profile-item:hover {
+
+            transform:
+                    translateY(-2px);
+
+            border-color:
+                    rgba(192, 92, 255, 0.22);
+        }
+
+        .upsc-profile-label {
+
+            margin-bottom: 8px;
+
+            color: #64748b;
+
+            font-size: 10px;
+
+            font-weight: 700;
+
+            text-transform: uppercase;
+
+            letter-spacing: 0.7px;
+        }
+
+        .upsc-profile-value {
+
+            color: #f8fafc;
+
+            font-size: 13px;
+
+            line-height: 1.6;
+
+            word-break: break-word;
+        }
+
+        .upsc-profile-value.highlight {
+
+            color: #d8b4fe;
+
+            font-size: 21px;
+
+            font-weight: 700;
+        }
+
+        .not-set {
+
+            color: #64748b;
+
+            font-style: italic;
+        }
+
+        /* =====================================================
+           EDIT PROFILE
+        ===================================================== */
+
+        .edit-section {
+
+            display: none;
+
+            margin-top: 27px;
+
+            padding-top: 25px;
+
+            border-top:
+                    1px solid
+                    rgba(255, 255, 255, 0.07);
+        }
+
+        .edit-section.show {
+
+            display: block;
+        }
+
+        .section-title {
+
+            margin-bottom: 19px;
+
+            color: #ffffff;
+
+            font-size: 18px;
+
+            font-weight: 700;
+        }
+
+        .form-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                    repeat(2, minmax(0, 1fr));
+
+            gap: 17px;
+        }
+
+        .form-group {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 7px;
+        }
+
+        .form-group.full {
+
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+
+            color: #cbd5e1;
+
+            font-size: 11px;
+
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group textarea {
+
+            width: 100%;
+
+            padding: 11px 12px;
+
+            border-radius: 10px;
+
+            outline: none;
+
+            border:
+                    1px solid
+                    rgba(255, 255, 255, 0.09);
+
+            background:
+                    rgba(3, 2, 10, 0.72);
+
+            color: #ffffff;
+
+            font-size: 13px;
+
+            transition:
+                    border-color 0.2s ease,
+                    box-shadow 0.2s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+
+            border-color:
+                    rgba(192, 92, 255, 0.55);
+
+            box-shadow:
+                    0 0 0 3px
+                    rgba(168, 85, 247, 0.07),
+
+                    0 0 18px
+                    rgba(168, 85, 247, 0.08);
+        }
+
+        .form-group input[readonly] {
+
+            opacity: 0.55;
+
+            cursor: not-allowed;
+        }
+
+        .form-group textarea {
+
+            resize: vertical;
+
+            min-height: 100px;
+        }
+
+        .form-group input[type="number"] {
+
+            appearance: textfield;
+        }
+
+        .file-input {
+
+            padding: 9px !important;
+        }
+
+        .file-help,
+        .field-help {
+
+            color: #64748b;
+
+            font-size: 10px;
+
+            line-height: 1.5;
+        }
+
+        .form-actions {
+
+            display: flex;
+
+            justify-content: flex-end;
+
+            gap: 10px;
+
+            margin-top: 21px;
+        }
+
+        .cancel-btn,
+        .save-btn {
+
+            padding: 10px 18px;
+
+            border-radius: 10px;
+
+            cursor: pointer;
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+            transition:
+                    all 0.2s ease;
+        }
+
+        .cancel-btn {
+
+            border:
+                    1px solid
+                    rgba(255, 255, 255, 0.09);
+
+            background:
+                    rgba(255, 255, 255, 0.04);
+
+            color: #cbd5e1;
+        }
+
+        .cancel-btn:hover {
+
+            background:
+                    rgba(255, 255, 255, 0.07);
+
+            color: #ffffff;
+        }
+
+        .save-btn {
+
+            border: none;
+
+            color: #ffffff;
+
+            background:
+                    linear-gradient(
+                            135deg,
+                            #d946ef,
+                            #a855f7,
+                            #7c3aed
+                    );
+
+            box-shadow:
+                    0 7px 20px
+                    rgba(168, 85, 247, 0.14);
+        }
+
+        .save-btn:hover {
+
+            transform:
+                    translateY(-2px);
+
+            box-shadow:
+                    0 10px 24px
+                    rgba(168, 85, 247, 0.25);
+        }
+
+        /* =====================================================
+           SECTION HEADING
+        ===================================================== */
+
+        .section-heading {
+
+            margin-bottom: 17px;
+
+            color: #ffffff;
+
+            font-size: 18px;
+
+            font-weight: 700;
+        }
+
+        /* =====================================================
+           ACCOUNT OVERVIEW
+        ===================================================== */
+
+        .overview-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                    repeat(3, minmax(0, 1fr));
+
+            gap: 17px;
+
+            margin-bottom: 28px;
+        }
+
+        .overview-card {
+
+            padding: 21px;
+        }
+
+        .overview-label {
+
+            margin-bottom: 8px;
+
+            color: #94a3b8;
+
+            font-size: 11px;
+        }
+
+        .overview-value {
+
+            font-size: 26px;
+
+            font-weight: 800;
+
+            background:
+                    linear-gradient(
+                            90deg,
+                            #d946ef,
+                            #a855f7,
+                            #22d3ee
+                    );
+
+            -webkit-background-clip: text;
+
+            -webkit-text-fill-color: transparent;
+
+            background-clip: text;
+        }
+
+        .overview-sub {
+
+            margin-top: 5px;
+
+            color: #64748b;
+
+            font-size: 10px;
+        }
+
+        /* =====================================================
+           PREPARATION
+        ===================================================== */
+
+        .preparation-card {
+
+            padding: 25px;
+
+            margin-bottom: 28px;
+        }
+
+        .progress-item {
+
+            margin-bottom: 20px;
+        }
+
+        .progress-item:last-child {
+
+            margin-bottom: 0;
+        }
+
+        .progress-header {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            margin-bottom: 8px;
+        }
+
+        .progress-name {
+
+            color: #cbd5e1;
+
+            font-size: 12px;
+        }
+
+        .progress-percent {
+
+            color: #d8b4fe;
+
+            font-size: 11px;
+
+            font-weight: 700;
+        }
+
+        .progress-track {
+
+            width: 100%;
+
+            height: 8px;
+
+            overflow: hidden;
+
+            border-radius: 20px;
+
+            background:
+                    rgba(255, 255, 255, 0.07);
+        }
+
+        .progress-fill {
+
+            height: 100%;
+
+            border-radius: 20px;
+
+            background:
+                    linear-gradient(
+                            90deg,
+                            #d946ef,
+                            #a855f7,
+                            #22d3ee
+                    );
+
+            box-shadow:
+                    0 0 12px
+                    rgba(168, 85, 247, 0.30);
+
+            transition:
+                    width 0.5s ease;
+        }
+
+        /* =====================================================
+           JOURNEY
+        ===================================================== */
+
+        .journey-card {
+
+            padding: 26px;
+
+            margin-bottom: 25px;
+        }
+
+        .journey-card h3 {
+
+            margin-bottom: 11px;
+
+            color: #ffffff;
+
+            font-size: 18px;
+        }
+
+        .journey-card p {
+
+            color: #94a3b8;
+
+            font-size: 13px;
+
+            line-height: 1.7;
+        }
+
+        .quote {
+
+            margin-top: 17px;
+
+            padding: 15px 18px;
+
+            border-left:
+                    3px solid
+                    #d946ef;
+
+            border-radius:
+                    0 10px 10px 0;
+
+            background:
+                    linear-gradient(
+                            90deg,
+                            rgba(217, 70, 239, 0.07),
+                            rgba(34, 211, 238, 0.025)
+                    );
+
+            color: #cbd5e1;
+
+            font-size: 12px;
+
+            font-style: italic;
+        }
+
+        /* =====================================================
+           FOOTER
+        ===================================================== */
+
+        .footer {
+
+            padding:
+                    10px 0 15px;
+
+            text-align: center;
+
+            color: #475569;
+
+            font-size: 11px;
+        }
+
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+        @media (max-width: 1050px) {
+
+            .main {
+
+                padding: 30px;
+            }
+
+            .upsc-profile-grid {
+
+                grid-template-columns:
+                        repeat(2, minmax(0, 1fr));
+            }
+
+            .overview-grid {
+
+                grid-template-columns:
+                        repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 800px) {
+
+            /*
+             * Sidebar remains fixed at 250px.
+             */
+
+            .main {
+
+                margin-left: 250px !important;
+
+                width: calc(100% - 250px) !important;
+
+                padding:
+                        25px 20px 40px;
+            }
+
+            .page-header {
+
+                flex-direction: column;
+            }
+
+            .profile-top {
+
+                flex-direction: column;
+
+                align-items: flex-start;
+            }
+
+            .form-grid {
+
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full {
+
+                grid-column: auto;
+            }
+
+            .upsc-profile-grid {
+
+                grid-template-columns: 1fr;
+            }
+
+            .overview-grid {
+
+                grid-template-columns: 1fr;
+            }
+
+            .attempt-badge {
+
+                align-self: flex-start;
+            }
+        }
+
+        @media (max-width: 550px) {
+
+            .main {
+
+                padding:
+                        20px 15px 35px;
+            }
+
+            .page-title h1 {
+
+                font-size: 27px;
+            }
+
+            .profile-left {
+
+                flex-direction: column;
+
+                align-items: flex-start;
+            }
+
+            .profile-card {
+
+                padding: 20px;
+            }
+
+            .avatar {
+
+                width: 75px;
+
+                height: 75px;
+
+                font-size: 27px;
+            }
+
+            .form-actions {
+
+                flex-direction: column;
+            }
+
+            .cancel-btn,
+            .save-btn {
+
+                width: 100%;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     COMMON SIDEBAR
+========================================================= -->
+
+<div th:replace="~{fragments/sidebar :: sidebar}"></div>
+
+
+<!-- =========================================================
+     MAIN
+========================================================= -->
+
+<main class="main">
+
+
+    <!-- BACK TO DASHBOARD -->
+
+    <a href="/dashboard"
+       class="back-button">
+
+        ← Back to Dashboard
+
+    </a>
+
+
+    <!-- =====================================================
+         HEADER
+    ===================================================== -->
+
+    <div class="page-header">
+
+
+        <div class="page-title">
+
+            <h1>
+                About Me
+            </h1>
+
+            <p>
+                Your UPSC preparation profile and progress
+            </p>
+
+        </div>
+
+
+        <div class="attempt-badge">
+
+            UPSC Attempt:
+
+            <span th:if="${attemptYear != null}"
+                  th:text="${attemptYear}">
+
+                2027
+
+            </span>
+
+            <span th:if="${attemptYear == null}">
+
+                Not Set
+
+            </span>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- =====================================================
+         ALERTS
+    ===================================================== -->
+
+    <div th:if="${success}"
+         class="alert success-alert"
+         th:text="${success}">
+
+        Profile updated successfully!
+
+    </div>
+
+
+    <div th:if="${error}"
+         class="alert error-alert"
+         th:text="${error}">
+
+        Something went wrong.
+
+    </div>
+
+
+    <!-- =====================================================
+         PROFILE CARD
+    ===================================================== -->
+
+    <section class="card profile-card">
+
+
+        <div class="profile-top">
+
+
+            <div class="profile-left">
+
+
+                <!-- AVATAR -->
+
+                <div class="avatar">
+
+
+                    <img
+                            th:if="${user.profilePicture != null
+                                and !#strings.isEmpty(user.profilePicture)}"
+
+                            th:src="@{'/uploads/profile/' + ${user.profilePicture}}"
+
+                            alt="Profile Picture">
+
+
+                    <span
+                            th:if="${user.profilePicture == null
+                                or #strings.isEmpty(user.profilePicture)}"
+
+                            th:text="${#strings.substring(
+                            user.name,
+                            0,
+                            1
+                        ).toUpperCase()}">
+
+                        R
+
+                    </span>
+
+
+                </div>
+
+
+                <!-- PROFILE INFO -->
+
+                <div class="profile-info">
+
+                    <h2 th:text="${user.name}">
+
+                        User Name
+
+                    </h2>
+
+
+                    <div class="profile-email"
+                         th:text="${user.email}">
+
+                        user@email.com
+
+                    </div>
+
+
+                    <span class="role-badge">
+
+                        UPSC Aspirant
+
+                    </span>
+
+                </div>
+
+
+            </div>
+
+
+            <!-- EDIT -->
+
+            <button
+                    type="button"
+                    class="edit-btn"
+                    onclick="toggleEditProfile()">
+
+                ✏️ Edit Profile
+
+            </button>
+
+
+        </div>
+
+
+        <!-- =================================================
+             UPSC PROFILE DETAILS
+        ================================================== -->
+
+        <div class="upsc-profile-grid">
+
+
+            <!-- ATTEMPT YEAR -->
+
+            <div class="upsc-profile-item">
+
+                <div class="upsc-profile-label">
+
+                    UPSC Attempt Year
+
+                </div>
+
+
+                <div
+                        class="upsc-profile-value highlight"
+                        th:if="${user.attemptYear != null}"
+                        th:text="${user.attemptYear}">
+
+                    2027
+
+                </div>
+
+
+                <div
+                        class="upsc-profile-value not-set"
+                        th:if="${user.attemptYear == null}">
+
+                    Not set
+
+                </div>
+
+            </div>
+
+
+            <!-- WHY UPSC -->
+
+            <div class="upsc-profile-item">
+
+                <div class="upsc-profile-label">
+
+                    Why do you want to prepare for UPSC?
+
+                </div>
+
+
+                <div
+                        class="upsc-profile-value"
+                        th:if="${user.whyUpsc != null
+                            and !#strings.isEmpty(user.whyUpsc)}"
+                        th:text="${user.whyUpsc}">
+
+                    Your reason for UPSC preparation
+
+                </div>
+
+
+                <div
+                        class="upsc-profile-value not-set"
+                        th:if="${user.whyUpsc == null
+                            or #strings.isEmpty(user.whyUpsc)}">
+
+                    Not provided
+
+                </div>
+
+            </div>
+
+
+            <!-- DREAM POST -->
+
+            <div class="upsc-profile-item">
+
+                <div class="upsc-profile-label">
+
+                    Dream Post
+
+                </div>
+
+
+                <div
+                        class="upsc-profile-value"
+                        th:if="${user.dreamPost != null
+                            and !#strings.isEmpty(user.dreamPost)}"
+                        th:text="${user.dreamPost}">
+
+                    Your dream post
+
+                </div>
+
+
+                <div
+                        class="upsc-profile-value not-set"
+                        th:if="${user.dreamPost == null
+                            or #strings.isEmpty(user.dreamPost)}">
+
+                    Not provided
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+        <!-- =================================================
+             EDIT PROFILE
+        ================================================== -->
+
+        <div id="editProfileSection"
+             class="edit-section">
+
+
+            <div class="section-title">
+
+                Edit Profile
+
+            </div>
+
+
+            <form
+                    action="/about-me/update-profile"
+                    method="post"
+                    enctype="multipart/form-data">
+
+
+                <div class="form-grid">
+
+
+                    <!-- NAME -->
+
+                    <div class="form-group">
+
+                        <label for="name">
+
+                            Full Name
+
+                        </label>
+
+
+                        <input
+                                type="text"
+                                id="name"
+                                name="name"
+                                th:value="${user.name}"
+                                placeholder="Enter your name"
+                                maxlength="100"
+                                required>
+
+                    </div>
+
+
+                    <!-- EMAIL -->
+
+                    <div class="form-group">
+
+                        <label for="email">
+
+                            Email
+
+                        </label>
+
+
+                        <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                th:value="${user.email}"
+                                readonly>
+
+                    </div>
+
+
+                    <!-- WHY UPSC -->
+
+                    <div class="form-group full">
+
+                        <label for="whyUpsc">
+
+                            Why do you want to prepare for UPSC?
+
+                            <span
+                                    style="color:#64748b;font-weight:400;">
+
+                                (Optional)
+
+                            </span>
+
+                        </label>
+
+
+                        <textarea
+                                id="whyUpsc"
+                                name="whyUpsc"
+                                maxlength="2000"
+                                placeholder="Tell us why you want to prepare for UPSC..."
+                                th:text="${user.whyUpsc}">
+                        </textarea>
+
+
+                        <span class="field-help">
+
+                            Your reason can be used by the AI Chatbot
+                            to give you more personalized motivation
+                            when relevant.
+
+                        </span>
+
+                    </div>
+
+
+                    <!-- ATTEMPT YEAR -->
+
+                    <div class="form-group">
+
+                        <label for="attemptYear">
+
+                            UPSC Attempt Year
+
+                        </label>
+
+
+                        <input
+                                type="number"
+                                id="attemptYear"
+                                name="attemptYear"
+                                th:value="${user.attemptYear}"
+                                placeholder="Enter your attempt year"
+                                min="2026"
+                                max="2050"
+                                required>
+
+
+                        <span class="field-help">
+
+                            Enter the UPSC examination year
+                            you are preparing for.
+
+                        </span>
+
+                    </div>
+
+
+                    <!-- DREAM POST -->
+
+                    <div class="form-group">
+
+                        <label for="dreamPost">
+
+                            Dream Post
+
+                            <span
+                                    style="color:#64748b;font-weight:400;">
+
+                                (Optional)
+
+                            </span>
+
+                        </label>
+
+
+                        <input
+                                type="text"
+                                id="dreamPost"
+                                name="dreamPost"
+                                th:value="${user.dreamPost}"
+                                maxlength="100"
+                                placeholder="e.g. IAS, IPS, IFS">
+
+                    </div>
+
+
+                    <!-- EDUCATION -->
+
+                    <div class="form-group">
+
+                        <label for="education">
+
+                            Education
+
+                        </label>
+
+
+                        <input
+                                type="text"
+                                id="education"
+                                name="education"
+                                th:value="${user.education}"
+                                placeholder="e.g. M.E Computer Science"
+                                maxlength="150">
+
+                    </div>
+
+
+                    <!-- PROFESSION -->
+
+                    <div class="form-group">
+
+                        <label for="profession">
+
+                            Profession
+
+                        </label>
+
+
+                        <input
+                                type="text"
+                                id="profession"
+                                name="profession"
+                                th:value="${user.profession}"
+                                placeholder="e.g. Student"
+                                maxlength="100">
+
+                    </div>
+
+
+                    <!-- LOCATION -->
+
+                    <div class="form-group">
+
+                        <label for="location">
+
+                            Location
+
+                        </label>
+
+
+                        <input
+                                type="text"
+                                id="location"
+                                name="location"
+                                th:value="${user.location}"
+                                placeholder="e.g. Your city, State"
+                                maxlength="150">
+
+                    </div>
+
+
+                    <!-- BIO -->
+
+                    <div class="form-group full">
+
+                        <label for="bio">
+
+                            About You
+
+                        </label>
+
+
+                        <textarea
+                                id="bio"
+                                name="bio"
+                                placeholder="Write something about yourself..."
+                                maxlength="1000"
+                                th:text="${user.bio}">
+                        </textarea>
+
+                    </div>
+
+
+                    <!-- PROFILE PICTURE -->
+
+                    <div class="form-group full">
+
+                        <label for="profilePicture">
+
+                            Profile Picture
+
+                        </label>
+
+
+                        <input
+                                type="file"
+                                id="profilePicture"
+                                name="profilePicture"
+                                class="file-input"
+                                accept=".jpg,.jpeg,.png,.webp">
+
+
+                        <span class="file-help">
+
+                            JPG, JPEG, PNG or WEBP • Maximum 5 MB
+
+                        </span>
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- FORM BUTTONS -->
+
+                <div class="form-actions">
+
+
+                    <button
+                            type="button"
+                            class="cancel-btn"
+                            onclick="toggleEditProfile()">
+
+                        Cancel
+
+                    </button>
+
+
+                    <button
+                            type="submit"
+                            class="save-btn">
+
+                        💾 Save Changes
+
+                    </button>
+
+
+                </div>
+
+
+            </form>
+
+
+        </div>
+
+
+    </section>
+
+
+    <!-- =====================================================
+         ACCOUNT OVERVIEW
+    ===================================================== -->
+
+    <h2 class="section-heading">
+
+        Account Overview
+
+    </h2>
+
+
+    <div class="overview-grid">
+
+
+        <!-- ATTEMPT -->
+
+        <div class="card overview-card">
+
+            <div class="overview-label">
+
+                UPSC Attempt Year
+
+            </div>
+
+
+            <div class="overview-value"
+                 th:if="${attemptYear != null}"
+                 th:text="${attemptYear}">
+
+                2027
+
+            </div>
+
+
+            <div class="overview-value"
+                 th:if="${attemptYear == null}">
+
+                N/A
+
+            </div>
+
+
+            <div class="overview-sub">
+
+                Target examination
+
+            </div>
+
+        </div>
+
+
+        <!-- SUBJECTS -->
+
+        <div class="card overview-card">
+
+            <div class="overview-label">
+
+                Subjects
+
+            </div>
+
+
+            <div class="overview-value"
+                 th:text="${totalSubjects}">
+
+                0
+
+            </div>
+
+
+            <div class="overview-sub">
+
+                Subjects being tracked
+
+            </div>
+
+        </div>
+
+
+        <!-- COMPLETED -->
+
+        <div class="card overview-card">
+
+            <div class="overview-label">
+
+                Topics Completed
+
+            </div>
+
+
+            <div class="overview-value"
+                 th:text="${totalCompleted}">
+
+                0
+
+            </div>
+
+
+            <div class="overview-sub">
+
+                Out of
+
+                <span th:text="${totalTopics}">
+
+                    0
+
+                </span>
+
+                topics
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- =====================================================
+         PREPARATION OVERVIEW
+    ===================================================== -->
+
+    <h2 class="section-heading">
+
+        Preparation Overview
+
+    </h2>
+
+
+    <section class="card preparation-card">
+
+
+        <!-- OVERALL -->
+
+        <div class="progress-item">
+
+            <div class="progress-header">
+
+                <span class="progress-name">
+
+                    Overall Preparation
+
+                </span>
+
+
+                <span class="progress-percent"
+                      th:text="${overallProgress + '%'}">
+
+                    0%
+
+                </span>
+
+            </div>
+
+
+            <div class="progress-track">
+
+                <div class="progress-fill"
+                     th:style="'width:' + ${overallProgress} + '%'">
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- PRELIMS -->
+
+        <div class="progress-item">
+
+            <div class="progress-header">
+
+                <span class="progress-name">
+
+                    Prelims GS
+
+                </span>
+
+
+                <span class="progress-percent"
+                      th:text="${prelimsProgress + '%'}">
+
+                    0%
+
+                </span>
+
+            </div>
+
+
+            <div class="progress-track">
+
+                <div class="progress-fill"
+                     th:style="'width:' + ${prelimsProgress} + '%'">
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- MAINS -->
+
+        <div class="progress-item">
+
+            <div class="progress-header">
+
+                <span class="progress-name">
+
+                    Mains
+
+                </span>
+
+
+                <span class="progress-percent"
+                      th:text="${mainsProgress + '%'}">
+
+                    0%
+
+                </span>
+
+            </div>
+
+
+            <div class="progress-track">
+
+                <div class="progress-fill"
+                     th:style="'width:' + ${mainsProgress} + '%'">
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- CSAT -->
+
+        <div class="progress-item">
+
+            <div class="progress-header">
+
+                <span class="progress-name">
+
+                    CSAT
+
+                </span>
+
+
+                <span class="progress-percent"
+                      th:text="${csatProgress + '%'}">
+
+                    0%
+
+                </span>
+
+            </div>
+
+
+            <div class="progress-track">
+
+                <div class="progress-fill"
+                     th:style="'width:' + ${csatProgress} + '%'">
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- CURRENT AFFAIRS -->
+
+        <div class="progress-item">
+
+            <div class="progress-header">
+
+                <span class="progress-name">
+
+                    Current Affairs
+
+                </span>
+
+
+                <span class="progress-percent"
+                      th:text="${currentAffairsProgress + '%'}">
+
+                    0%
+
+                </span>
+
+            </div>
+
+
+            <div class="progress-track">
+
+                <div class="progress-fill"
+                     th:style="'width:' + ${currentAffairsProgress} + '%'">
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </section>
+
+
+    <!-- =====================================================
+         UPSC JOURNEY
+    ===================================================== -->
+
+    <section class="card journey-card">
+
+
+        <h3>
+
+            Your UPSC Journey
+
+        </h3>
+
+
+        <p>
+
+            Every topic you complete brings you one step closer
+            to your UPSC goal. Keep tracking your preparation,
+            stay consistent and trust the process.
+
+        </p>
+
+
+        <div class="quote">
+
+            "Success is the sum of small efforts, repeated day
+            in and day out."
+
+        </div>
+
+
+    </section>
+
+
+    <!-- FOOTER -->
+
+    <div class="footer">
+
+        UPSC Tracker • Keep learning. Keep improving.
+
+    </div>
+
+
+</main>
+
+
+<!-- =========================================================
+     JAVASCRIPT
+========================================================= -->
+
+<script>
+
+    function toggleEditProfile() {
+
+        const section =
+            document.getElementById(
+                "editProfileSection"
+            );
+
+        section.classList.toggle("show");
+
+
+        if (section.classList.contains("show")) {
+
+            setTimeout(function () {
+
+                section.scrollIntoView({
+
+                    behavior: "smooth",
+
+                    block: "start"
+
+                });
+
+            }, 100);
+
+        }
+
+    }
+
+</script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Sign Up | UPSC Tracker</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #f5f7fb;
+            padding: 30px 15px;
+        }
+
+        .signup-container {
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .signup-card {
+            background: white;
+            border-radius: 18px;
+            padding: 35px;
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08);
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 8px;
+            font-size: 30px;
+            font-weight: bold;
+            color: #6c3cff;
+        }
+
+        .title {
+            text-align: center;
+            font-size: 25px;
+            font-weight: bold;
+            color: #222;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #777;
+            font-size: 14px;
+            margin-bottom: 28px;
+        }
+
+        .section-title {
+            font-size: 17px;
+            font-weight: bold;
+            color: #333;
+            margin: 25px 0 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eeeeee;
+        }
+
+        .form-group {
+            margin-bottom: 17px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .optional {
+            font-size: 12px;
+            color: #999;
+            font-weight: normal;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 12px 13px;
+            border: 1px solid #d9dce5;
+            border-radius: 9px;
+            outline: none;
+            font-size: 14px;
+            transition: 0.2s;
+            background: white;
+        }
+
+        input:focus,
+        textarea:focus {
+            border-color: #6c3cff;
+            box-shadow: 0 0 0 3px rgba(108, 60, 255, 0.08);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 90px;
+        }
+
+        input[type="number"] {
+            appearance: textfield;
+            -moz-appearance: textfield;
+        }
+
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            opacity: 1;
+        }
+
+        .password-requirements {
+            margin-top: 9px;
+            padding: 10px 12px;
+            background: #f8f7ff;
+            border-radius: 8px;
+            font-size: 12px;
+        }
+
+        .requirement {
+            margin: 4px 0;
+            color: #777;
+        }
+
+        .requirement.valid {
+            color: #159957;
+        }
+
+        .requirement.invalid {
+            color: #d9534f;
+        }
+
+        .password-match {
+            margin-top: 7px;
+            font-size: 12px;
+        }
+
+        .password-match.valid {
+            color: #159957;
+        }
+
+        .password-match.invalid {
+            color: #d9534f;
+        }
+
+        .error-message {
+            background: #fff0f0;
+            color: #d93025;
+            border: 1px solid #ffd0d0;
+            padding: 11px 13px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 13px;
+        }
+
+        .success-message {
+            background: #effcf4;
+            color: #16834b;
+            border: 1px solid #c9efd9;
+            padding: 11px 13px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 13px;
+        }
+
+        .signup-button {
+            width: 100%;
+            border: none;
+            border-radius: 10px;
+            padding: 13px;
+            background: #6c3cff;
+            color: white;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: 0.2s;
+        }
+
+        .signup-button:hover {
+            background: #5930d6;
+            transform: translateY(-1px);
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #777;
+        }
+
+        .login-link a {
+            color: #6c3cff;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        .hint {
+            font-size: 11px;
+            color: #999;
+            margin-top: 5px;
+        }
+
+        @media (max-width: 600px) {
+
+            body {
+                padding: 15px;
+            }
+
+            .signup-card {
+                padding: 25px 20px;
+            }
+
+            .logo {
+                font-size: 26px;
+            }
+
+            .title {
+                font-size: 22px;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="signup-container">
+
+    <div class="signup-card">
+
+        <div class="logo">UPSC Tracker</div>
+
+        <div class="title">Create Your Account</div>
+
+        <div class="subtitle">
+            Start your UPSC preparation journey with us.
+        </div>
+
+
+        <!-- ERROR MESSAGES -->
+
+        <div class="error-message"
+             th:if="${param.error != null and param.error[0] == 'emailExists'}">
+            An account with this email already exists.
+            Please use a different email.
+        </div>
+
+        <div class="error-message"
+             th:if="${param.error != null and param.error[0] == 'weakPassword'}">
+            Password is not strong enough.
+            Please satisfy all the password requirements.
+        </div>
+
+        <div class="error-message"
+             th:if="${param.error != null and param.error[0] == 'passwordMismatch'}">
+            Passwords do not match.
+        </div>
+
+        <div class="error-message"
+             th:if="${param.error != null and param.error[0] == 'attemptYearRequired'}">
+            Please enter your UPSC attempt year.
+        </div>
+
+
+        <form id="signupForm"
+              action="/signup"
+              method="post">
+
+
+            <!-- ACCOUNT DETAILS -->
+
+            <div class="section-title">
+                Account Details
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="name">
+                    Full Name
+                </label>
+
+                <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        placeholder="Enter your full name"
+                        maxlength="100"
+                        required>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="email">
+                    Email
+                </label>
+
+                <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="Enter your email"
+                        maxlength="150"
+                        required>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="password">
+                    Password
+                </label>
+
+                <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Create a strong password"
+                        required>
+
+                <div class="password-requirements">
+
+                    <div id="lengthRequirement"
+                         class="requirement">
+                        ✗ At least 6 characters
+                    </div>
+
+                    <div id="uppercaseRequirement"
+                         class="requirement">
+                        ✗ At least 1 uppercase letter
+                    </div>
+
+                    <div id="numberRequirement"
+                         class="requirement">
+                        ✗ At least 1 number
+                    </div>
+
+                    <div id="symbolRequirement"
+                         class="requirement">
+                        ✗ At least 1 symbol
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="confirmPassword">
+                    Confirm Password
+                </label>
+
+                <input
+                        type="password"
+                        id="confirmPassword"
+                        name="confirmPassword"
+                        placeholder="Re-enter your password"
+                        required>
+
+                <div id="passwordMatch"
+                     class="password-match">
+                </div>
+
+            </div>
+
+
+            <!-- UPSC JOURNEY -->
+
+            <div class="section-title">
+                Your UPSC Journey
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="whyUpsc">
+
+                    Why do you want to prepare for UPSC?
+
+                    <span class="optional">
+                        (Optional)
+                    </span>
+
+                </label>
+
+                <textarea
+                        id="whyUpsc"
+                        name="whyUpsc"
+                        placeholder="Tell us what motivates you to prepare for UPSC..."
+                        maxlength="2000"></textarea>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="attemptYear">
+                    What is your UPSC Attempt Year?
+                </label>
+
+                <input
+                        type="number"
+                        id="attemptYear"
+                        name="attemptYear"
+                        placeholder="Enter your attempt year"
+                        min="2026"
+                        max="2050"
+                        required>
+
+                <div class="hint">
+                    Enter a year between 2026 and 2050.
+                </div>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="dreamPost">
+
+                    What is your Dream Post?
+
+                    <span class="optional">
+                        (Optional)
+                    </span>
+
+                </label>
+
+                <input
+                        type="text"
+                        id="dreamPost"
+                        name="dreamPost"
+                        placeholder="Example: IAS, IPS, IFS..."
+                        maxlength="100">
+
+            </div>
+
+
+            <button
+                    type="submit"
+                    class="signup-button">
+
+                Create Account
+
+            </button>
+
+        </form>
+
+
+        <div class="login-link">
+
+            Already have an account?
+
+            <a href="/login">
+                Login
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    const password =
+        document.getElementById("password");
+
+    const confirmPassword =
+        document.getElementById("confirmPassword");
+
+    const lengthRequirement =
+        document.getElementById("lengthRequirement");
+
+    const uppercaseRequirement =
+        document.getElementById("uppercaseRequirement");
+
+    const numberRequirement =
+        document.getElementById("numberRequirement");
+
+    const symbolRequirement =
+        document.getElementById("symbolRequirement");
+
+    const passwordMatch =
+        document.getElementById("passwordMatch");
+
+
+    function updatePasswordRequirements() {
+
+        const value =
+            password.value;
+
+        const hasLength =
+            value.length >= 6;
+
+        const hasUppercase =
+            /[A-Z]/.test(value);
+
+        const hasNumber =
+            /\d/.test(value);
+
+        const hasSymbol =
+            /[^a-zA-Z0-9]/.test(value);
+
+
+        updateRequirement(
+            lengthRequirement,
+            hasLength,
+            "At least 6 characters"
+        );
+
+
+        updateRequirement(
+            uppercaseRequirement,
+            hasUppercase,
+            "At least 1 uppercase letter"
+        );
+
+
+        updateRequirement(
+            numberRequirement,
+            hasNumber,
+            "At least 1 number"
+        );
+
+
+        updateRequirement(
+            symbolRequirement,
+            hasSymbol,
+            "At least 1 symbol"
+        );
+
+    }
+
+
+    function updateRequirement(
+        element,
+        valid,
+        text
+    ) {
+
+        if (valid) {
+
+            element.classList.remove(
+                "invalid"
+            );
+
+            element.classList.add(
+                "valid"
+            );
+
+            element.textContent =
+                "✓ " + text;
+
+        } else {
+
+            element.classList.remove(
+                "valid"
+            );
+
+            element.classList.add(
+                "invalid"
+            );
+
+            element.textContent =
+                "✗ " + text;
+
+        }
+
+    }
+
+
+    function checkPasswordMatch() {
+
+        if (
+            confirmPassword.value === ""
+        ) {
+
+            passwordMatch.textContent =
+                "";
+
+            passwordMatch.className =
+                "password-match";
+
+            return;
+        }
+
+
+        if (
+            password.value ===
+            confirmPassword.value
+        ) {
+
+            passwordMatch.textContent =
+                "✓ Passwords match";
+
+            passwordMatch.className =
+                "password-match valid";
+
+        } else {
+
+            passwordMatch.textContent =
+                "✗ Passwords do not match";
+
+            passwordMatch.className =
+                "password-match invalid";
+
+        }
+
+    }
+
+
+    password.addEventListener(
+        "input",
+        function () {
+
+            updatePasswordRequirements();
+
+            checkPasswordMatch();
+
+        }
+    );
+
+
+    confirmPassword.addEventListener(
+        "input",
+        checkPasswordMatch
+    );
+
+
+    document
+        .getElementById("signupForm")
+        .addEventListener(
+            "submit",
+            function (event) {
+
+                const value =
+                    password.value;
+
+
+                const strongPassword =
+                    value.length >= 6
+                    &&
+                    /[A-Z]/.test(value)
+                    &&
+                    /\d/.test(value)
+                    &&
+                    /[^a-zA-Z0-9]/.test(value);
+
+
+                if (!strongPassword) {
+
+                    event.preventDefault();
+
+                    alert(
+                        "Please create a strong password with at least 6 characters, 1 uppercase letter, 1 number, and 1 symbol."
+                    );
+
+                    return;
+                }
+
+
+                if (
+                    password.value !==
+                    confirmPassword.value
+                ) {
+
+                    event.preventDefault();
+
+                    alert(
+                        "Passwords do not match."
+                    );
+
+                    return;
+                }
+
+
+                const attemptYear =
+                    document
+                        .getElementById("attemptYear")
+                        .value;
+
+
+                const numericAttemptYear =
+                    Number(attemptYear);
+
+
+                if (
+                    attemptYear === ""
+                    ||
+                    numericAttemptYear < 2026
+                    ||
+                    numericAttemptYear > 2050
+                ) {
+
+                    event.preventDefault();
+
+                    alert(
+                        "Please enter a valid UPSC attempt year between 2026 and 2050."
+                    );
+
+                    return;
+                }
+
+            }
+        );
+
+
+    updatePasswordRequirements();
+
+</script>
+
+</body>
+
+</html>

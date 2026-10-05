@@ -1,42 +1,807 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
 
 <head>
-  <title>Edit Topic</title>
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+  <title>Edit Topic | UPSC Tracker</title>
+
+  <style>
+
+    /* =====================================================
+       GLOBAL
+    ===================================================== */
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+
+    body {
+
+      font-family: "Inter", "Segoe UI", Arial, sans-serif;
+
+      background:
+              radial-gradient(
+                      circle at 75% 10%,
+                      rgba(124, 58, 237, 0.10),
+                      transparent 28%
+              ),
+              radial-gradient(
+                      circle at 20% 80%,
+                      rgba(236, 72, 153, 0.06),
+                      transparent 25%
+              ),
+              #080814;
+
+      color: #ffffff;
+
+      min-height: 100vh;
+
+    }
+
+
+    /* =====================================================
+       MAIN
+    ===================================================== */
+
+    .main {
+
+      margin-left: 250px !important;
+
+      width: calc(100% - 250px) !important;
+
+      min-height: 100vh;
+
+      padding: 40px 45px;
+
+    }
+
+
+    /* =====================================================
+       PAGE HEADER
+    ===================================================== */
+
+    .page-header {
+
+      margin-bottom: 28px;
+
+    }
+
+
+    .page-header h1 {
+
+      font-size: 30px;
+
+      font-weight: 700;
+
+      margin-bottom: 8px;
+
+      background:
+              linear-gradient(
+                      90deg,
+                      #b58aff,
+                      #ff63b5
+              );
+
+      -webkit-background-clip: text;
+
+      background-clip: text;
+
+      color: transparent;
+
+    }
+
+
+    .page-header p {
+
+      color: #85829d;
+
+      font-size: 14px;
+
+      line-height: 1.6;
+
+    }
+
+
+    /* =====================================================
+       FORM CARD
+    ===================================================== */
+
+    .form-card {
+
+      position: relative;
+
+      overflow: hidden;
+
+      max-width: 650px;
+
+      background:
+              linear-gradient(
+                      145deg,
+                      rgba(20, 20, 43, 0.98),
+                      rgba(14, 14, 31, 0.98)
+              );
+
+      border:
+              1px solid
+              rgba(
+                      255,
+                      255,
+                      255,
+                      0.06
+              );
+
+      border-radius: 20px;
+
+      padding: 30px;
+
+      box-shadow:
+              0 20px 50px
+              rgba(
+                      0,
+                      0,
+                      0,
+                      0.25
+              );
+
+    }
+
+
+    .form-card::before {
+
+      content: "";
+
+      position: absolute;
+
+      width: 220px;
+
+      height: 220px;
+
+      right: -100px;
+
+      top: -120px;
+
+      border-radius: 50%;
+
+      background:
+              rgba(
+                      139,
+                      92,
+                      246,
+                      0.08
+              );
+
+      filter: blur(55px);
+
+      pointer-events: none;
+
+    }
+
+
+    .form-card::after {
+
+      content: "";
+
+      position: absolute;
+
+      width: 180px;
+
+      height: 180px;
+
+      left: -100px;
+
+      bottom: -100px;
+
+      border-radius: 50%;
+
+      background:
+              rgba(
+                      236,
+                      72,
+                      153,
+                      0.06
+              );
+
+      filter: blur(50px);
+
+      pointer-events: none;
+
+    }
+
+
+    /* =====================================================
+       NAVIGATION
+    ===================================================== */
+
+    .navigation {
+
+      display: flex;
+
+      gap: 10px;
+
+      flex-wrap: wrap;
+
+      margin-bottom: 28px;
+
+      position: relative;
+
+      z-index: 2;
+
+    }
+
+
+    .back-button {
+
+      display: inline-block;
+
+      padding: 9px 14px;
+
+      background:
+              rgba(
+                      139,
+                      92,
+                      246,
+                      0.08
+              );
+
+      border:
+              1px solid
+              rgba(
+                      155,
+                      92,
+                      255,
+                      0.20
+              );
+
+      border-radius: 9px;
+
+      color: #c1a7ff;
+
+      text-decoration: none;
+
+      font-size: 13px;
+
+      font-weight: 600;
+
+      transition: 0.25s ease;
+
+    }
+
+
+    .back-button:hover {
+
+      background:
+              rgba(
+                      139,
+                      92,
+                      246,
+                      0.16
+              );
+
+      border-color:
+              rgba(
+                      155,
+                      92,
+                      255,
+                      0.40
+              );
+
+      color: #ffffff;
+
+      box-shadow:
+              0 0 18px
+              rgba(
+                      139,
+                      92,
+                      246,
+                      0.10
+              );
+
+      transform:
+              translateY(-1px);
+
+    }
+
+
+    /* =====================================================
+       FORM
+    ===================================================== */
+
+    form {
+
+      position: relative;
+
+      z-index: 2;
+
+    }
+
+
+    .form-group {
+
+      margin-bottom: 22px;
+
+    }
+
+
+    label {
+
+      display: block;
+
+      margin-bottom: 9px;
+
+      color: #d9d5e8;
+
+      font-size: 14px;
+
+      font-weight: 600;
+
+    }
+
+
+    input,
+    select {
+
+      width: 100%;
+
+      padding: 13px 14px;
+
+      border:
+              1px solid
+              rgba(
+                      255,
+                      255,
+                      255,
+                      0.09
+              );
+
+      border-radius: 10px;
+
+      background:
+              rgba(
+                      10,
+                      10,
+                      25,
+                      0.85
+              );
+
+      color: #ffffff;
+
+      outline: none;
+
+      font-size: 14px;
+
+      transition: 0.25s ease;
+
+    }
+
+
+    input::placeholder {
+
+      color: #625f77;
+
+    }
+
+
+    select option {
+
+      background: #111126;
+
+      color: #ffffff;
+
+    }
+
+
+    input:focus,
+    select:focus {
+
+      border-color:
+              rgba(
+                      155,
+                      92,
+                      255,
+                      0.60
+              );
+
+      box-shadow:
+              0 0 0 3px
+              rgba(
+                      139,
+                      92,
+                      246,
+                      0.10
+              ),
+              0 0 20px
+              rgba(
+                      139,
+                      92,
+                      246,
+                      0.06
+              );
+
+    }
+
+
+    /* =====================================================
+       CHECKBOX
+    ===================================================== */
+
+    .checkbox-row {
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 10px;
+
+      margin-bottom: 23px;
+
+    }
+
+
+    .checkbox-row input {
+
+      width: 17px;
+
+      height: 17px;
+
+      accent-color: #a855f7;
+
+      cursor: pointer;
+
+    }
+
+
+    .checkbox-row label {
+
+      margin: 0;
+
+      cursor: pointer;
+
+      color: #d9d5e8;
+
+      font-weight: 600;
+
+    }
+
+
+    /* =====================================================
+       SAVE BUTTON
+    ===================================================== */
+
+    .save-button {
+
+      width: 100%;
+
+      border: none;
+
+      padding: 14px;
+
+      border-radius: 10px;
+
+      background:
+              linear-gradient(
+                      90deg,
+                      #8b5cf6,
+                      #ec4899,
+                      #22d3ee
+              );
+
+      color: #ffffff;
+
+      font-size: 14px;
+
+      font-weight: 700;
+
+      cursor: pointer;
+
+      transition: 0.25s ease;
+
+      box-shadow:
+              0 8px 25px
+              rgba(
+                      139,
+                      92,
+                      246,
+                      0.14
+              );
+
+    }
+
+
+    .save-button:hover {
+
+      transform:
+              translateY(-2px);
+
+      box-shadow:
+              0 12px 30px
+              rgba(
+                      139,
+                      92,
+                      246,
+                      0.22
+              ),
+              0 0 20px
+              rgba(
+                      236,
+                      72,
+                      153,
+                      0.10
+              );
+
+    }
+
+
+    /* =====================================================
+       RESPONSIVE
+       Sidebar remains 250px
+    ===================================================== */
+
+    @media (max-width: 700px) {
+
+      .main {
+
+        padding:
+                30px 25px;
+
+      }
+
+      .form-card {
+
+        max-width: 100%;
+
+      }
+
+    }
+
+
+    @media (max-width: 500px) {
+
+      .main {
+
+        padding:
+                25px 18px 35px;
+
+      }
+
+      .page-header h1 {
+
+        font-size: 25px;
+
+      }
+
+      .form-card {
+
+        padding: 22px 18px;
+
+      }
+
+      .navigation {
+
+        flex-direction: column;
+
+      }
+
+      .back-button {
+
+        text-align: center;
+
+      }
+
+    }
+
+  </style>
+
 </head>
+
 
 <body>
 
-<h1>Edit UPSC Topic</h1>
 
-<form th:action="@{/update-topic}" method="post">
+<!-- =========================================================
+     COMMON SIDEBAR
+========================================================= -->
 
-  <input type="hidden" name="id" th:value="${topic.id}">
+<div th:replace="~{fragments/sidebar :: sidebar}"></div>
 
-  <label>Subject:</label>
-  <select name="subject.id">
-    <option th:each="subject : ${subjects}"
-            th:value="${subject.id}"
-            th:text="${subject.name}"
-            th:selected="${topic.subject != null && topic.subject.id == subject.id}">
-    </option>
-  </select>
 
-  <br><br>
+<!-- =========================================================
+     MAIN
+========================================================= -->
 
-  <label>Topic Name:</label>
-  <input type="text" name="topicName" th:value="${topic.topicName}">
+<main class="main">
 
-  <br><br>
 
-  <label>Completed:</label>
-  <input type="checkbox" name="completed" th:checked="${topic.completed}">
+  <!-- =====================================================
+       HEADER
+  ====================================================== -->
 
-  <br><br>
+  <div class="page-header">
 
-  <button type="submit">Save</button>
+    <h1>
 
-</form>
+      Edit UPSC Topic
+
+    </h1>
+
+    <p>
+
+      Update the topic details below.
+
+    </p>
+
+  </div>
+
+
+  <!-- =====================================================
+       FORM CARD
+  ====================================================== -->
+
+  <div class="form-card">
+
+
+    <!-- =================================================
+         NAVIGATION
+    ================================================== -->
+
+    <div class="navigation">
+
+
+      <!-- BACK TO SUBJECTS -->
+
+      <a
+              href="/subjects"
+              class="back-button">
+
+        ← Back to Subjects
+
+      </a>
+
+
+      <!-- BACK TO DASHBOARD -->
+
+      <a
+              href="/dashboard"
+              class="back-button">
+
+        ⌂ Back to Dashboard
+
+      </a>
+
+
+    </div>
+
+
+    <!-- =================================================
+         FORM
+    ================================================== -->
+
+    <form
+            th:action="@{/update-topic}"
+            method="post">
+
+
+      <!-- =================================================
+           TOPIC ID
+      ================================================== -->
+
+      <input
+              type="hidden"
+              name="id"
+              th:value="${topic.id}">
+
+
+      <!-- =================================================
+           SUBJECT
+      ================================================== -->
+
+      <div class="form-group">
+
+        <label for="subject">
+
+          Subject
+
+        </label>
+
+
+        <select
+                id="subject"
+                name="subject.id"
+                required>
+
+
+          <option
+                  th:each="subject : ${subjects}"
+                  th:value="${subject.id}"
+                  th:text="${subject.name}"
+                  th:selected="${topic.subject != null && topic.subject.id == subject.id}">
+
+            Subject Name
+
+          </option>
+
+
+        </select>
+
+      </div>
+
+
+      <!-- =================================================
+           TOPIC NAME
+      ================================================== -->
+
+      <div class="form-group">
+
+        <label for="topicName">
+
+          Topic Name
+
+        </label>
+
+
+        <input
+                type="text"
+                id="topicName"
+                name="topicName"
+                th:value="${topic.topicName}"
+                placeholder="Enter Topic Name"
+                required>
+
+      </div>
+
+
+      <!-- =================================================
+           COMPLETED
+      ================================================== -->
+
+      <div class="checkbox-row">
+
+        <input
+                type="checkbox"
+                id="completed"
+                name="completed"
+                th:checked="${topic.completed}">
+
+
+        <label for="completed">
+
+          Completed
+
+        </label>
+
+      </div>
+
+
+      <!-- =================================================
+           SAVE
+      ================================================== -->
+
+      <button
+              type="submit"
+              class="save-button">
+
+        Save Topic
+
+      </button>
+
+
+    </form>
+
+
+  </div>
+
+
+</main>
+
 
 </body>
+
 </html>

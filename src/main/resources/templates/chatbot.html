@@ -1,0 +1,97 @@
+/* =====================================================
+RESPONSIVE
+SIDEBAR ALWAYS 250px
+===================================================== */
+
+@media (max-width: 1000px) {
+
+.main {
+margin-left: 250px !important;
+width: calc(100% - 250px) !important;
+padding: 25px;
+}
+
+.chat-layout {
+grid-template-columns: 1fr;
+}
+
+.conversations {
+display: none;
+}
+
+}
+
+
+@media (max-width: 800px) {
+
+.main {
+margin-left: 250px !important;
+width: calc(100% - 250px) !important;
+padding: 25px 20px;
+}
+
+.chat-layout {
+height: calc(100vh - 155px);
+min-height: 500px;
+}
+
+}
+
+
+@media (max-width: 600px) {
+
+.main {
+margin-left: 250px !important;
+width: calc(100% - 250px) !important;
+padding: 18px 15px;
+}
+
+.header {
+align-items: flex-start;
+flex-direction: column;
+gap: 10px;
+}
+
+.header h1 {
+font-size: 23px;
+}
+
+.header p {
+font-size: 12px;
+}
+
+.chat-top {
+padding: 14px;
+align-items: flex-start;
+flex-direction: column;
+}
+
+.mode-select {
+width: 100%;
+max-width: none;
+}
+
+.messages {
+padding: 18px 13px;
+}
+
+.bubble {
+max-width: 90%;
+font-size: 13px;
+}
+
+.input-area {
+padding: 12px;
+}
+
+.input-box {
+gap: 6px;
+}
+
+.attach-button,
+.send-button {
+width: 40px;
+height: 40px;
+}
+
+}

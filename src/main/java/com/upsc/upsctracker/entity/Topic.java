@@ -3,14 +3,17 @@ package com.upsc.upsctracker.entity;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "topic")
 public class Topic {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "topic_name")
     private String topicName;
 
+    @Column(name = "completed")
     private boolean completed = false;
 
     @ManyToOne
@@ -23,6 +26,10 @@ public class Topic {
 
     public Topic() {
     }
+
+    // =========================
+    // GETTERS
+    // =========================
 
     public Long getId() {
         return id;
@@ -43,6 +50,10 @@ public class Topic {
     public Section getSection() {
         return section;
     }
+
+    // =========================
+    // SETTERS
+    // =========================
 
     public void setId(Long id) {
         this.id = id;

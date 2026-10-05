@@ -1,106 +1,1852 @@
-
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <title>Current Affairs</title>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Current Affairs | UPSC Tracker</title>
+
+
+    <style>
+
+        /* =====================================================
+           GLOBAL
+        ===================================================== */
+
+        * {
+
+            margin: 0;
+
+            padding: 0;
+
+            box-sizing: border-box;
+
+        }
+
+
+        body {
+
+            font-family:
+                    "Inter",
+                    "Segoe UI",
+                    Arial,
+                    sans-serif;
+
+            background:
+
+                    radial-gradient(
+                            circle at 75% 5%,
+                            rgba(
+                                    124,
+                                    58,
+                                    237,
+                                    0.12
+                            ),
+                            transparent 28%
+                    ),
+
+                    radial-gradient(
+                            circle at 15% 85%,
+                            rgba(
+                                    236,
+                                    72,
+                                    153,
+                                    0.07
+                            ),
+                            transparent 25%
+                    ),
+
+                    #080814;
+
+            color: #ffffff;
+
+            min-height: 100vh;
+
+        }
+
+
+        /* =====================================================
+           MAIN CONTENT
+        ===================================================== */
+
+        .main {
+
+            margin-left: 250px !important;
+
+            width: calc(100% - 250px) !important;
+
+            padding: 38px 45px;
+
+            min-height: 100vh;
+
+        }
+
+
+        /* =====================================================
+           HEADER
+        ===================================================== */
+
+        .header {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: flex-start;
+
+            gap: 20px;
+
+            margin-bottom: 35px;
+
+        }
+
+
+        .header-left h1 {
+
+            font-size: 30px;
+
+            font-weight: 700;
+
+            margin-bottom: 8px;
+
+        }
+
+
+        .header-left h1 span {
+
+            background:
+
+                    linear-gradient(
+                            90deg,
+                            #b58aff,
+                            #ff63b5,
+                            #55e7ff
+                    );
+
+            -webkit-background-clip: text;
+
+            background-clip: text;
+
+            color: transparent;
+
+        }
+
+
+        .header-left p {
+
+            color: #85829d;
+
+            font-size: 14px;
+
+            line-height: 1.6;
+
+        }
+
+
+        .attempt {
+
+            background:
+
+                    linear-gradient(
+                            135deg,
+                            rgba(
+                                    139,
+                                    92,
+                                    246,
+                                    0.12
+                            ),
+                            rgba(
+                                    37,
+                                    223,
+                                    255,
+                                    0.06
+                            )
+                    );
+
+            border:
+                    1px solid
+                    rgba(
+                            155,
+                            92,
+                            255,
+                            0.25
+                    );
+
+            color: #c1a7ff;
+
+            padding: 10px 16px;
+
+            border-radius: 10px;
+
+            font-size: 13px;
+
+            font-weight: 600;
+
+            white-space: nowrap;
+
+        }
+
+
+        /* =====================================================
+           INTRO CARD
+        ===================================================== */
+
+        .intro-card {
+
+            position: relative;
+
+            overflow: hidden;
+
+            background:
+
+                    linear-gradient(
+                            135deg,
+                            rgba(
+                                    102,
+                                    58,
+                                    190,
+                                    0.18
+                            ),
+                            rgba(
+                                    17,
+                                    18,
+                                    39,
+                                    0.97
+                            ) 60%,
+                            rgba(
+                                    24,
+                                    14,
+                                    38,
+                                    0.97
+                            )
+                    );
+
+            border:
+                    1px solid
+                    rgba(
+                            155,
+                            92,
+                            255,
+                            0.15
+                    );
+
+            border-radius: 20px;
+
+            padding: 28px 30px;
+
+            margin-bottom: 32px;
+
+            box-shadow:
+                    0 20px 50px
+                    rgba(
+                            0,
+                            0,
+                            0,
+                            0.22
+                    );
+
+        }
+
+
+        .intro-card::after {
+
+            content: "";
+
+            position: absolute;
+
+            width: 260px;
+
+            height: 260px;
+
+            right: -100px;
+
+            top: -150px;
+
+            border-radius: 50%;
+
+            background:
+                    rgba(
+                            37,
+                            223,
+                            255,
+                            0.07
+                    );
+
+            filter: blur(65px);
+
+            pointer-events: none;
+
+        }
+
+
+        .intro-content {
+
+            position: relative;
+
+            z-index: 2;
+
+        }
+
+
+        .intro-content h2 {
+
+            font-size: 21px;
+
+            margin-bottom: 9px;
+
+        }
+
+
+        .intro-content p {
+
+            color: #85829d;
+
+            font-size: 14px;
+
+            line-height: 1.7;
+
+            max-width: 850px;
+
+        }
+
+
+        /* =====================================================
+           SECTION TITLE
+        ===================================================== */
+
+        .section-title {
+
+            font-size: 19px;
+
+            font-weight: 700;
+
+            margin:
+                    30px 0 18px;
+
+        }
+
+
+        /* =====================================================
+           CURRENT AFFAIRS CARDS
+        ===================================================== */
+
+        .cards {
+
+            display: grid;
+
+            grid-template-columns:
+                    repeat(
+                            3,
+                            minmax(
+                                    0,
+                                    1fr
+                            )
+                    );
+
+            gap: 20px;
+
+        }
+
+
+        .card {
+
+            position: relative;
+
+            overflow: hidden;
+
+            background:
+
+                    linear-gradient(
+                            145deg,
+                            rgba(
+                                    20,
+                                    20,
+                                    43,
+                                    0.98
+                            ),
+                            rgba(
+                                    14,
+                                    14,
+                                    31,
+                                    0.98
+                            )
+                    );
+
+            border:
+                    1px solid
+                    rgba(
+                            255,
+                            255,
+                            255,
+                            0.06
+                    );
+
+            border-radius: 18px;
+
+            padding: 24px;
+
+            color: white;
+
+            text-decoration: none;
+
+            display: block;
+
+            transition:
+                    all 0.25s ease;
+
+        }
+
+
+        .card::before {
+
+            content: "";
+
+            position: absolute;
+
+            width: 140px;
+
+            height: 140px;
+
+            right: -70px;
+
+            top: -70px;
+
+            border-radius: 50%;
+
+            background:
+                    rgba(
+                            139,
+                            92,
+                            246,
+                            0.07
+                    );
+
+            filter: blur(25px);
+
+            transition:
+                    0.3s ease;
+
+        }
+
+
+        .card:hover {
+
+            transform:
+                    translateY(-5px);
+
+            border-color:
+                    rgba(
+                            155,
+                            92,
+                            255,
+                            0.28
+                    );
+
+            box-shadow:
+
+                    0 15px 35px
+                    rgba(
+                            0,
+                            0,
+                            0,
+                            0.28
+                    ),
+
+                    0 0 25px
+                    rgba(
+                            139,
+                            92,
+                            246,
+                            0.07
+                    );
+
+        }
+
+
+        .card:hover::before {
+
+            background:
+                    rgba(
+                            236,
+                            72,
+                            153,
+                            0.12
+                    );
+
+        }
+
+
+        /* =====================================================
+           CARD TOP
+        ===================================================== */
+
+        .card-top {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 20px;
+
+            position: relative;
+
+            z-index: 2;
+
+        }
+
+
+        .card-icon {
+
+            width: 48px;
+
+            height: 48px;
+
+            border-radius: 13px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            background:
+
+                    linear-gradient(
+                            135deg,
+                            rgba(
+                                    139,
+                                    92,
+                                    246,
+                                    0.17
+                            ),
+                            rgba(
+                                    236,
+                                    72,
+                                    153,
+                                    0.08
+                            )
+                    );
+
+            border:
+                    1px solid
+                    rgba(
+                            155,
+                            92,
+                            255,
+                            0.12
+                    );
+
+            font-size: 23px;
+
+        }
+
+
+        .card-number {
+
+            font-size: 12px;
+
+            color: #77748d;
+
+            font-weight: 600;
+
+        }
+
+
+        /* =====================================================
+           CARD CONTENT
+        ===================================================== */
+
+        .card h3 {
+
+            font-size: 18px;
+
+            margin-bottom: 10px;
+
+            position: relative;
+
+            z-index: 2;
+
+        }
+
+
+        .card p {
+
+            color: #77748d;
+
+            font-size: 13px;
+
+            line-height: 1.6;
+
+            min-height: 63px;
+
+            position: relative;
+
+            z-index: 2;
+
+        }
+
+
+        /* =====================================================
+           FEATURE LIST
+        ===================================================== */
+
+        .features {
+
+            margin-top: 18px;
+
+            padding-top: 16px;
+
+            border-top:
+                    1px solid
+                    rgba(
+                            255,
+                            255,
+                            255,
+                            0.05
+                    );
+
+            position: relative;
+
+            z-index: 2;
+
+        }
+
+
+        .feature {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 9px;
+
+            margin-bottom: 9px;
+
+            color: #a5a1b8;
+
+            font-size: 12px;
+
+        }
+
+
+        .feature:last-child {
+
+            margin-bottom: 0;
+
+        }
+
+
+        .feature-dot {
+
+            width: 6px;
+
+            height: 6px;
+
+            border-radius: 50%;
+
+            background:
+                    #a875ff;
+
+            box-shadow:
+                    0 0 8px
+                    rgba(
+                            168,
+                            117,
+                            255,
+                            0.55
+                    );
+
+            flex-shrink: 0;
+
+        }
+
+
+        /* =====================================================
+           CARD BUTTON
+        ===================================================== */
+
+        .open-card {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            margin-top: 20px;
+
+            padding-top: 15px;
+
+            border-top:
+                    1px solid
+                    rgba(
+                            255,
+                            255,
+                            255,
+                            0.05
+                    );
+
+            color: #b18aff;
+
+            font-size: 13px;
+
+            font-weight: 600;
+
+            position: relative;
+
+            z-index: 2;
+
+        }
+
+
+        .open-card span:last-child {
+
+            transition:
+                    transform 0.2s ease;
+
+        }
+
+
+        .card:hover .open-card span:last-child {
+
+            transform:
+                    translateX(5px);
+
+        }
+
+
+        /* =====================================================
+           365 DAYS SPECIAL CARD
+        ===================================================== */
+
+        .special-card {
+
+            grid-column:
+                    span 3;
+
+            background:
+
+                    linear-gradient(
+                            135deg,
+                            rgba(
+                                    102,
+                                    58,
+                                    190,
+                                    0.20
+                            ),
+                            rgba(
+                                    20,
+                                    20,
+                                    43,
+                                    0.98
+                            ) 55%,
+                            rgba(
+                                    10,
+                                    30,
+                                    43,
+                                    0.98
+                            )
+                    );
+
+            border-color:
+                    rgba(
+                            37,
+                            223,
+                            255,
+                            0.12
+                    );
+
+        }
+
+
+        .special-card:hover {
+
+            border-color:
+                    rgba(
+                            37,
+                            223,
+                            255,
+                            0.30
+                    );
+
+        }
+
+
+        .special-layout {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            gap: 30px;
+
+            position: relative;
+
+            z-index: 2;
+
+        }
+
+
+        .special-left {
+
+            flex: 1;
+
+        }
+
+
+        .special-left .card-top {
+
+            margin-bottom: 16px;
+
+        }
+
+
+        .special-left h3 {
+
+            font-size: 20px;
+
+        }
+
+
+        .special-left p {
+
+            max-width: 750px;
+
+            min-height: auto;
+
+        }
+
+
+        .special-points {
+
+            display: flex;
+
+            gap: 22px;
+
+            flex-wrap: wrap;
+
+            margin-top: 18px;
+
+        }
+
+
+        .special-point {
+
+            color: #a5a1b8;
+
+            font-size: 12px;
+
+        }
+
+
+        .special-point strong {
+
+            color: #d8d4e7;
+
+            display: block;
+
+            margin-bottom: 3px;
+
+        }
+
+
+        .special-action {
+
+            min-width: 145px;
+
+            padding: 13px 18px;
+
+            border-radius: 11px;
+
+            background:
+
+                    linear-gradient(
+                            135deg,
+                            rgba(
+                                    139,
+                                    92,
+                                    246,
+                                    0.18
+                            ),
+                            rgba(
+                                    236,
+                                    72,
+                                    153,
+                                    0.12
+                            )
+                    );
+
+            border:
+                    1px solid
+                    rgba(
+                            155,
+                            92,
+                            255,
+                            0.20
+                    );
+
+            color: #c5a8ff;
+
+            text-align: center;
+
+            font-size: 13px;
+
+            font-weight: 600;
+
+            transition:
+                    0.25s ease;
+
+        }
+
+
+        .card:hover .special-action {
+
+            border-color:
+                    rgba(
+                            37,
+                            223,
+                            255,
+                            0.30
+                    );
+
+            box-shadow:
+                    0 0 20px
+                    rgba(
+                            37,
+                            223,
+                            255,
+                            0.07
+                    );
+
+        }
+
+
+        /* =====================================================
+           INFORMATION SECTION
+        ===================================================== */
+
+        .info-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                    repeat(
+                            3,
+                            minmax(
+                                    0,
+                                    1fr
+                            )
+                    );
+
+            gap: 18px;
+
+            margin-top: 5px;
+
+        }
+
+
+        .info-card {
+
+            background:
+
+                    linear-gradient(
+                            145deg,
+                            rgba(
+                                    20,
+                                    20,
+                                    43,
+                                    0.98
+                            ),
+                            rgba(
+                                    14,
+                                    14,
+                                    31,
+                                    0.98
+                            )
+                    );
+
+            border:
+                    1px solid
+                    rgba(
+                            255,
+                            255,
+                            255,
+                            0.05
+                    );
+
+            border-radius: 16px;
+
+            padding: 20px;
+
+        }
+
+
+        .info-icon {
+
+            font-size: 20px;
+
+            margin-bottom: 12px;
+
+        }
+
+
+        .info-card h3 {
+
+            font-size: 15px;
+
+            margin-bottom: 7px;
+
+        }
+
+
+        .info-card p {
+
+            color: #77748d;
+
+            font-size: 12px;
+
+            line-height: 1.6;
+
+        }
+
+
+        /* =====================================================
+           BACK BUTTON
+        ===================================================== */
+
+        .bottom-navigation {
+
+            margin-top: 30px;
+
+        }
+
+
+        .back-button {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            padding: 10px 15px;
+
+            border-radius: 9px;
+
+            background:
+                    rgba(
+                            255,
+                            255,
+                            255,
+                            0.035
+                    );
+
+            border:
+                    1px solid
+                    rgba(
+                            255,
+                            255,
+                            255,
+                            0.08
+                    );
+
+            color: #a9a5b8;
+
+            text-decoration: none;
+
+            font-size: 13px;
+
+            font-weight: 600;
+
+            transition:
+                    0.2s ease;
+
+        }
+
+
+        .back-button:hover {
+
+            color: #d0b8ff;
+
+            border-color:
+                    rgba(
+                            155,
+                            92,
+                            255,
+                            0.25
+                    );
+
+            background:
+                    rgba(
+                            139,
+                            92,
+                            246,
+                            0.06
+                    );
+
+        }
+
+
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+        @media (max-width: 1100px) {
+
+            .cards {
+
+                grid-template-columns:
+                        repeat(
+                                2,
+                                minmax(
+                                        0,
+                                        1fr
+                                )
+                        );
+
+            }
+
+
+            .special-card {
+
+                grid-column:
+                        span 2;
+
+            }
+
+
+            .info-grid {
+
+                grid-template-columns:
+                        repeat(
+                                2,
+                                minmax(
+                                        0,
+                                        1fr
+                                )
+                        );
+
+            }
+
+        }
+
+
+        @media (max-width: 900px) {
+
+            .main {
+
+                padding:
+                        30px;
+
+            }
+
+
+            .header {
+
+                flex-direction:
+                        column;
+
+            }
+
+
+            .special-layout {
+
+                flex-direction:
+                        column;
+
+                align-items:
+                        flex-start;
+
+            }
+
+
+            .special-action {
+
+                width: 100%;
+
+            }
+
+        }
+
+
+        /*
+         IMPORTANT:
+         Sidebar stays fixed at 250px.
+         It does NOT collapse to 78px.
+        */
+
+        @media (max-width: 800px) {
+
+            .main {
+
+                margin-left: 250px !important;
+
+                width: calc(100% - 250px) !important;
+
+                padding:
+                        25px 20px 40px;
+
+            }
+
+
+            .cards {
+
+                grid-template-columns:
+                        1fr;
+
+            }
+
+
+            .special-card {
+
+                grid-column:
+                        span 1;
+
+            }
+
+
+            .info-grid {
+
+                grid-template-columns:
+                        1fr;
+
+            }
+
+        }
+
+
+        @media (max-width: 550px) {
+
+            .main {
+
+                padding:
+                        22px 15px 35px;
+
+            }
+
+
+            .header-left h1 {
+
+                font-size: 25px;
+
+            }
+
+
+            .attempt {
+
+                width: 100%;
+
+            }
+
+
+            .intro-card {
+
+                padding:
+                        22px;
+
+            }
+
+
+            .card {
+
+                padding:
+                        21px;
+
+            }
+
+
+            .special-points {
+
+                flex-direction:
+                        column;
+
+                gap: 12px;
+
+            }
+
+        }
+
+    </style>
+
 </head>
+
 
 <body>
 
-<h1>Current Affairs</h1>
 
-<hr>
+<!-- =========================================================
+     COMMON SIDEBAR
+========================================================= -->
 
-<!-- ================================================== -->
-<!-- SELECT UPSC ATTEMPT YEAR -->
-<!-- ================================================== -->
+<div th:replace="~{fragments/sidebar :: sidebar}"></div>
 
-<h2>Select UPSC Attempt Year</h2>
 
-<form action="/current-affairs" method="post">
+<!-- =========================================================
+     MAIN CONTENT
+========================================================= -->
 
-    <label for="attemptYear">
-        Attempt Year:
-    </label>
+<main class="main">
 
-    <input
-            type="number"
-            id="attemptYear"
-            name="attemptYear"
-            min="2027"
-            max="2100"
-            placeholder="Example: 2027"
-            required>
 
-    <button type="submit">
-        Continue
-    </button>
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
 
-</form>
+    <header class="header">
 
-<br>
 
-<!-- ================================================== -->
-<!-- SHOW CURRENT AFFAIRS OPTIONS -->
-<!-- ================================================== -->
+        <div class="header-left">
 
-<div th:if="${attemptYear != null}">
+            <h1>
 
-    <h2>
-        Current Affairs -
-        <span th:text="${attemptYear}"></span>
+                Current
+
+                <span>
+
+                    Affairs
+
+                </span>
+
+                📰
+
+            </h1>
+
+
+            <p>
+
+                Stay updated with important events,
+                issues and developments relevant to UPSC.
+
+            </p>
+
+        </div>
+
+
+        <div class="attempt">
+
+            UPSC Attempt:
+
+            <span th:text="${attemptYear}">
+
+                2027
+
+            </span>
+
+        </div>
+
+
+    </header>
+
+
+    <!-- =====================================================
+         INTRODUCTION
+    ====================================================== -->
+
+    <section class="intro-card">
+
+
+        <div class="intro-content">
+
+            <h2>
+
+                Your Current Affairs Hub
+
+            </h2>
+
+
+            <p>
+
+                Organise your current affairs preparation
+                for Prelims, Mains and long-term revision.
+                Choose a section below to continue your preparation.
+
+            </p>
+
+        </div>
+
+
+    </section>
+
+
+    <!-- =====================================================
+         CURRENT AFFAIRS TRACKERS
+    ====================================================== -->
+
+    <h2 class="section-title">
+
+        Current Affairs Trackers
+
     </h2>
 
-    <hr>
 
-    <!-- ================================================== -->
-    <!-- PRELIMS -->
-    <!-- ================================================== -->
+    <div class="cards">
 
-    <h3>Prelims Current Affairs</h3>
 
-    <a th:href="@{/current-affairs/prelims(attemptYear=${attemptYear})}">
-        <button type="button">
-            Open Prelims
-        </button>
-    </a>
+        <!-- =================================================
+             PRELIMS CURRENT AFFAIRS
+        ================================================== -->
 
-    <br><br>
+        <a
+                th:href="@{/current-affairs-prelims}"
+                href="/current-affairs-prelims"
+                class="card">
 
-    <!-- ================================================== -->
-    <!-- MAINS -->
-    <!-- ================================================== -->
 
-    <h3>Mains Current Affairs</h3>
+            <div class="card-top">
 
-    <a th:href="@{/current-affairs/mains(attemptYear=${attemptYear})}">
-        <button type="button">
-            Open Mains
-        </button>
-    </a>
 
-    <br><br>
+                <div class="card-icon">
 
-    <!-- ================================================== -->
-    <!-- 365 DAYS -->
-    <!-- ================================================== -->
+                    📘
 
-    <h3>365 Days Revision</h3>
+                </div>
 
-    <a th:href="@{/current-affairs/365(attemptYear=${attemptYear})}">
-        <button type="button">
-            Open 365 Days
-        </button>
-    </a>
 
-</div>
+                <div class="card-number">
 
-<br><br>
+                    PRELIMS
 
-<a href="/subjects">
-    Back to Subjects
-</a>
+                </div>
+
+
+            </div>
+
+
+            <h3>
+
+                Prelims Current Affairs
+
+            </h3>
+
+
+            <p>
+
+                Track important current affairs
+                specifically relevant for UPSC Prelims
+                and objective-type questions.
+
+            </p>
+
+
+            <div class="features">
+
+
+                <div class="feature">
+
+                    <span class="feature-dot"></span>
+
+                    Monthly current affairs
+
+                </div>
+
+
+                <div class="feature">
+
+                    <span class="feature-dot"></span>
+
+                    Prelims-focused topics
+
+                </div>
+
+
+                <div class="feature">
+
+                    <span class="feature-dot"></span>
+
+                    Revision-oriented tracking
+
+                </div>
+
+
+            </div>
+
+
+            <div class="open-card">
+
+                <span>
+
+                    Open Prelims Current Affairs
+
+                </span>
+
+
+                <span>
+
+                    →
+
+                </span>
+
+            </div>
+
+
+        </a>
+
+
+        <!-- =================================================
+             MAINS CURRENT AFFAIRS
+        ================================================== -->
+
+        <a
+                th:href="@{/current-affairs-mains}"
+                href="/current-affairs-mains"
+                class="card">
+
+
+            <div class="card-top">
+
+
+                <div class="card-icon">
+
+                    📝
+
+                </div>
+
+
+                <div class="card-number">
+
+                    MAINS
+
+                </div>
+
+
+            </div>
+
+
+            <h3>
+
+                Mains Current Affairs
+
+            </h3>
+
+
+            <p>
+
+                Organise current issues for Mains answer
+                writing, analytical understanding,
+                examples and value addition.
+
+            </p>
+
+
+            <div class="features">
+
+
+                <div class="feature">
+
+                    <span class="feature-dot"></span>
+
+                    GS-wise current issues
+
+                </div>
+
+
+                <div class="feature">
+
+                    <span class="feature-dot"></span>
+
+                    Mains answer enrichment
+
+                </div>
+
+
+                <div class="feature">
+
+                    <span class="feature-dot"></span>
+
+                    Examples and analysis
+
+                </div>
+
+
+            </div>
+
+
+            <div class="open-card">
+
+                <span>
+
+                    Open Mains Current Affairs
+
+                </span>
+
+
+                <span>
+
+                    →
+
+                </span>
+
+            </div>
+
+
+        </a>
+
+
+        <!-- =================================================
+             365 DAYS
+        ================================================== -->
+
+        <a
+                th:href="@{/current-affairs/365}"
+                href="/current-affairs/365"
+                class="card special-card">
+
+
+            <div class="special-layout">
+
+
+                <div class="special-left">
+
+
+                    <div class="card-top">
+
+
+                        <div class="card-icon">
+
+                            📅
+
+                        </div>
+
+
+                        <div class="card-number">
+
+                            365 DAYS
+
+                        </div>
+
+
+                    </div>
+
+
+                    <h3>
+
+                        Current Affairs — 365 Days
+
+                    </h3>
+
+
+                    <p>
+
+                        A long-term current affairs revision
+                        tracker covering the major UPSC areas
+                        you need to repeatedly revise throughout
+                        your preparation.
+
+                    </p>
+
+
+                    <div class="special-points">
+
+
+                        <div class="special-point">
+
+                            <strong>
+
+                                10 Categories
+
+                            </strong>
+
+                            Complete UPSC-focused coverage
+
+                        </div>
+
+
+                        <div class="special-point">
+
+                            <strong>
+
+                                Independent Tracking
+
+                            </strong>
+
+                            Mark each category completed
+
+                        </div>
+
+
+                        <div class="special-point">
+
+                            <strong>
+
+                                Revision Focus
+
+                            </strong>
+
+                            Build a yearly revision habit
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="special-action">
+
+                    Open 365 Days →
+
+                </div>
+
+
+            </div>
+
+
+        </a>
+
+
+    </div>
+
+
+    <!-- =====================================================
+         HOW TO USE
+    ====================================================== -->
+
+    <h2 class="section-title">
+
+        How to Use Current Affairs
+
+    </h2>
+
+
+    <div class="info-grid">
+
+
+        <!-- =================================================
+             PRELIMS
+        ================================================== -->
+
+        <div class="info-card">
+
+
+            <div class="info-icon">
+
+                🎯
+
+            </div>
+
+
+            <h3>
+
+                Prelims Focus
+
+            </h3>
+
+
+            <p>
+
+                Track factual information, important
+                organisations, schemes, reports, places,
+                species, science and other objective areas.
+
+            </p>
+
+
+        </div>
+
+
+        <!-- =================================================
+             MAINS
+        ================================================== -->
+
+        <div class="info-card">
+
+
+            <div class="info-icon">
+
+                ✍️
+
+            </div>
+
+
+            <h3>
+
+                Mains Focus
+
+            </h3>
+
+
+            <p>
+
+                Use current affairs to enrich answers
+                with examples, data, government initiatives,
+                challenges and possible solutions.
+
+            </p>
+
+
+        </div>
+
+
+        <!-- =================================================
+             REVISION
+        ================================================== -->
+
+        <div class="info-card">
+
+
+            <div class="info-icon">
+
+                🔄
+
+            </div>
+
+
+            <h3>
+
+                Regular Revision
+
+            </h3>
+
+
+            <p>
+
+                Revisit important issues regularly instead
+                of depending only on one-time reading of
+                newspapers or monthly compilations.
+
+            </p>
+
+
+        </div>
+
+
+    </div>
+
+
+    <!-- =====================================================
+         NAVIGATION
+    ====================================================== -->
+
+    <div class="bottom-navigation">
+
+
+        <a
+                th:href="@{/dashboard}"
+                href="/dashboard"
+                class="back-button">
+
+            ← Back to Dashboard
+
+        </a>
+
+
+    </div>
+
+
+</main>
+
 
 </body>
 

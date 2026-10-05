@@ -3,15 +3,18 @@ package com.upsc.upsctracker.entity;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "subject")
 public class Subject {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "name")
     private String name;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "exam_type")
     private ExamType examType;
 
     public Subject() {

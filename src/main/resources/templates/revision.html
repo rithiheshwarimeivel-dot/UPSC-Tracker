@@ -1,0 +1,1241 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Revision | UPSC Tracker</title>
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "Inter", sans-serif;
+            color: #f5f3ff;
+            background:
+                    radial-gradient(
+                            circle at 85% 10%,
+                            rgba(168, 85, 247, 0.18),
+                            transparent 28%
+                    ),
+                    radial-gradient(
+                            circle at 20% 80%,
+                            rgba(236, 72, 153, 0.12),
+                            transparent 30%
+                    ),
+                    #080712;
+            overflow-x: hidden;
+        }
+
+        /* ==================================================
+           MAIN CONTENT
+           ================================================== */
+
+        .main {
+            margin-left: 250px !important;
+            width: calc(100% - 250px) !important;
+            min-height: 100vh;
+            padding: 42px 48px 70px;
+        }
+
+        /* ==================================================
+           TOP HEADER
+           ================================================== */
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .header-left {
+            max-width: 760px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #c4b5fd;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1.8px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .eyebrow::before {
+            content: "";
+            width: 26px;
+            height: 2px;
+            border-radius: 10px;
+            background: linear-gradient(
+                    90deg,
+                    #a855f7,
+                    #ec4899
+            );
+            box-shadow:
+                    0 0 10px rgba(168, 85, 247, 0.8);
+        }
+
+        .page-title {
+            margin: 0;
+            font-size: clamp(30px, 4vw, 46px);
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -1.5px;
+            background: linear-gradient(
+                    90deg,
+                    #ffffff,
+                    #d8b4fe,
+                    #f9a8d4
+            );
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .page-description {
+            margin: 12px 0 0;
+            color: #a8a3b8;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .today-badge {
+            flex-shrink: 0;
+            padding: 11px 16px;
+            border: 1px solid rgba(34, 211, 238, 0.25);
+            border-radius: 14px;
+            background: rgba(34, 211, 238, 0.07);
+            color: #67e8f9;
+            font-size: 12px;
+            font-weight: 700;
+            box-shadow:
+                    0 0 20px rgba(34, 211, 238, 0.08);
+        }
+
+        /* ==================================================
+           STAT CARDS
+           ================================================== */
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns:
+                    repeat(4, minmax(0, 1fr));
+            gap: 16px;
+            margin-bottom: 34px;
+        }
+
+        .stat-card {
+            position: relative;
+            padding: 20px;
+            border-radius: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background:
+                    linear-gradient(
+                            145deg,
+                            rgba(255, 255, 255, 0.055),
+                            rgba(255, 255, 255, 0.018)
+                    );
+            backdrop-filter: blur(14px);
+            overflow: hidden;
+        }
+
+        .stat-card::after {
+            content: "";
+            position: absolute;
+            width: 90px;
+            height: 90px;
+            right: -35px;
+            top: -35px;
+            border-radius: 50%;
+            background: rgba(168, 85, 247, 0.13);
+            filter: blur(12px);
+        }
+
+        .stat-icon {
+            width: 38px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 11px;
+            margin-bottom: 14px;
+            font-size: 17px;
+            background: rgba(168, 85, 247, 0.12);
+            border: 1px solid rgba(168, 85, 247, 0.2);
+        }
+
+        .stat-label {
+            color: #9f9aae;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+        }
+
+        .stat-value {
+            margin-top: 5px;
+            font-size: 28px;
+            font-weight: 800;
+        }
+
+        .stat-card.overdue .stat-icon {
+            background: rgba(244, 63, 94, 0.12);
+            border-color: rgba(244, 63, 94, 0.25);
+        }
+
+        .stat-card.overdue .stat-value {
+            color: #fb7185;
+        }
+
+        .stat-card.today .stat-icon {
+            background: rgba(250, 204, 21, 0.11);
+            border-color: rgba(250, 204, 21, 0.24);
+        }
+
+        .stat-card.today .stat-value {
+            color: #fde047;
+        }
+
+        .stat-card.upcoming .stat-icon {
+            background: rgba(34, 211, 238, 0.11);
+            border-color: rgba(34, 211, 238, 0.23);
+        }
+
+        .stat-card.upcoming .stat-value {
+            color: #67e8f9;
+        }
+
+        .stat-card.completed .stat-icon {
+            background: rgba(74, 222, 128, 0.11);
+            border-color: rgba(74, 222, 128, 0.23);
+        }
+
+        .stat-card.completed .stat-value {
+            color: #86efac;
+        }
+
+        /* ==================================================
+           FILTER BAR
+           ================================================== */
+
+        .filter-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 7px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            background: rgba(255, 255, 255, 0.025);
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 7px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            border: 1px solid transparent;
+            outline: none;
+            cursor: pointer;
+            padding: 9px 14px;
+            border-radius: 10px;
+            background: transparent;
+            color: #aaa5b7;
+            font-family: inherit;
+            font-size: 12px;
+            font-weight: 700;
+            transition: 0.2s ease;
+        }
+
+        .filter-btn:hover {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .filter-btn.active {
+            color: #ffffff;
+            background:
+                    linear-gradient(
+                            135deg,
+                            rgba(168, 85, 247, 0.25),
+                            rgba(236, 72, 153, 0.14)
+                    );
+            border-color: rgba(168, 85, 247, 0.3);
+            box-shadow:
+                    0 0 16px rgba(168, 85, 247, 0.1);
+        }
+
+        .revision-count-text {
+            color: #858091;
+            font-size: 12px;
+            padding-right: 10px;
+        }
+
+        /* ==================================================
+           SECTION TITLE
+           ================================================== */
+
+        .section-heading {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 28px 0 14px;
+        }
+
+        .section-heading h2 {
+            margin: 0;
+            font-size: 15px;
+            font-weight: 800;
+            color: #e9e5f3;
+        }
+
+        .section-heading span {
+            color: #746e81;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* ==================================================
+           REVISION GRID
+           ================================================== */
+
+        .revision-grid {
+            display: grid;
+            grid-template-columns:
+                    repeat(2, minmax(0, 1fr));
+            gap: 17px;
+        }
+
+        /* ==================================================
+           REVISION CARD
+           ================================================== */
+
+        .revision-card {
+            position: relative;
+            display: block;
+            text-decoration: none;
+            color: inherit;
+            padding: 22px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background:
+                    linear-gradient(
+                            145deg,
+                            rgba(255, 255, 255, 0.055),
+                            rgba(255, 255, 255, 0.018)
+                    );
+            backdrop-filter: blur(15px);
+            overflow: hidden;
+            transition:
+                    transform 0.22s ease,
+                    border-color 0.22s ease,
+                    box-shadow 0.22s ease;
+        }
+
+        .revision-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(168, 85, 247, 0.4);
+            box-shadow:
+                    0 12px 38px rgba(0, 0, 0, 0.3),
+                    0 0 28px rgba(168, 85, 247, 0.08);
+        }
+
+        .revision-card::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 20px;
+            bottom: 20px;
+            width: 3px;
+            border-radius: 0 5px 5px 0;
+            background: #a855f7;
+            box-shadow:
+                    0 0 14px rgba(168, 85, 247, 0.6);
+        }
+
+        .revision-card.status-overdue::before {
+            background: #fb7185;
+            box-shadow:
+                    0 0 14px rgba(251, 113, 133, 0.65);
+        }
+
+        .revision-card.status-today::before {
+            background: #fde047;
+            box-shadow:
+                    0 0 14px rgba(253, 224, 71, 0.6);
+        }
+
+        .revision-card.status-upcoming::before {
+            background: #22d3ee;
+            box-shadow:
+                    0 0 14px rgba(34, 211, 238, 0.6);
+        }
+
+        .revision-card.status-completed::before {
+            background: #4ade80;
+            box-shadow:
+                    0 0 14px rgba(74, 222, 128, 0.6);
+        }
+
+        .card-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 16px;
+        }
+
+        .topic-name {
+            margin: 0;
+            font-size: 18px;
+            line-height: 1.35;
+            font-weight: 800;
+            color: #f8f7fb;
+        }
+
+        .status-badge {
+            flex-shrink: 0;
+            padding: 6px 9px;
+            border-radius: 8px;
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: 0.7px;
+            text-transform: uppercase;
+        }
+
+        .status-badge.overdue {
+            color: #fda4af;
+            background: rgba(244, 63, 94, 0.1);
+            border: 1px solid rgba(244, 63, 94, 0.22);
+        }
+
+        .status-badge.today {
+            color: #fde68a;
+            background: rgba(250, 204, 21, 0.1);
+            border: 1px solid rgba(250, 204, 21, 0.22);
+        }
+
+        .status-badge.upcoming {
+            color: #67e8f9;
+            background: rgba(34, 211, 238, 0.09);
+            border: 1px solid rgba(34, 211, 238, 0.22);
+        }
+
+        .status-badge.completed {
+            color: #86efac;
+            background: rgba(74, 222, 128, 0.09);
+            border: 1px solid rgba(74, 222, 128, 0.22);
+        }
+
+        .topic-path {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 6px;
+            color: #918b9f;
+            font-size: 11px;
+            margin-bottom: 20px;
+        }
+
+        .path-dot {
+            color: #4b4656;
+        }
+
+        .exam-badge {
+            padding: 4px 7px;
+            border-radius: 6px;
+            color: #d8b4fe;
+            background: rgba(168, 85, 247, 0.09);
+            border: 1px solid rgba(168, 85, 247, 0.17);
+            font-weight: 700;
+        }
+
+        /* ==================================================
+           PROGRESS
+           ================================================== */
+
+        .progress-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .progress-label {
+            color: #aaa5b4;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .progress-number {
+            color: #e8e3f1;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .progress-track {
+            width: 100%;
+            height: 6px;
+            border-radius: 20px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.07);
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: inherit;
+            background:
+                    linear-gradient(
+                            90deg,
+                            #8b5cf6,
+                            #ec4899,
+                            #22d3ee
+                    );
+            box-shadow:
+                    0 0 10px rgba(168, 85, 247, 0.4);
+        }
+
+        /* ==================================================
+           CARD FOOTER
+           ================================================== */
+
+        .card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            margin-top: 19px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .next-date {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .date-label {
+            color: #706a7b;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+        }
+
+        .date-value {
+            color: #ddd8e8;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .view-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            color: #c4b5fd;
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .view-link span {
+            transition: transform 0.2s ease;
+        }
+
+        .revision-card:hover .view-link span {
+            transform: translateX(3px);
+        }
+
+        /* ==================================================
+           EMPTY STATE
+           ================================================== */
+
+        .empty-state {
+            display: none;
+            padding: 60px 25px;
+            text-align: center;
+            border-radius: 20px;
+            border: 1px dashed rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.018);
+        }
+
+        .empty-state.show {
+            display: block;
+        }
+
+        .empty-icon {
+            width: 58px;
+            height: 58px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            border-radius: 18px;
+            font-size: 25px;
+            background: rgba(168, 85, 247, 0.09);
+            border: 1px solid rgba(168, 85, 247, 0.18);
+        }
+
+        .empty-state h3 {
+            margin: 0 0 7px;
+            font-size: 16px;
+        }
+
+        .empty-state p {
+            margin: 0;
+            color: #817b8c;
+            font-size: 12px;
+        }
+
+        /* ==================================================
+           RESPONSIVE
+           SIDEBAR REMAINS 250PX
+           ================================================== */
+
+        @media (max-width: 1100px) {
+
+            .main {
+                padding: 35px 30px 60px;
+            }
+
+            .stats-grid {
+                grid-template-columns:
+                        repeat(2, minmax(0, 1fr));
+            }
+
+            .revision-grid {
+                grid-template-columns:
+                        1fr;
+            }
+        }
+
+        @media (max-width: 700px) {
+
+            .main {
+                padding: 28px 18px 50px;
+            }
+
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .today-badge {
+                width: fit-content;
+            }
+
+            .stats-grid {
+                grid-template-columns:
+                        repeat(2, minmax(0, 1fr));
+                gap: 10px;
+            }
+
+            .stat-card {
+                padding: 15px;
+            }
+
+            .stat-value {
+                font-size: 23px;
+            }
+
+            .filter-bar {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .revision-count-text {
+                padding: 4px 8px;
+            }
+        }
+
+        @media (max-width: 480px) {
+
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .topic-name {
+                font-size: 16px;
+            }
+
+            .revision-card {
+                padding: 18px;
+            }
+
+            .card-top {
+                flex-direction: column;
+            }
+
+            .status-badge {
+                align-self: flex-start;
+            }
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<!-- ==================================================
+     COMMON SIDEBAR
+     ================================================== -->
+
+<div th:replace="~{fragments/sidebar :: sidebar}"></div>
+
+
+<!-- ==================================================
+     MAIN
+     ================================================== -->
+
+<main class="main">
+
+    <!-- HEADER -->
+
+    <header class="page-header">
+
+        <div class="header-left">
+
+            <div class="eyebrow">
+                Memory System
+            </div>
+
+            <h1 class="page-title">
+                Revision Center
+            </h1>
+
+            <p class="page-description">
+                Revisit every completed Prelims and Mains topic
+                at the right time and keep your preparation active.
+            </p>
+
+        </div>
+
+        <div class="today-badge">
+
+            📅 Today:
+            <span th:text="${today}">
+                2026-09-28
+            </span>
+
+        </div>
+
+    </header>
+
+
+    <!-- ==================================================
+         STAT CARDS
+         ================================================== -->
+
+    <section class="stats-grid">
+
+        <div class="stat-card overdue">
+
+            <div class="stat-icon">
+                🔴
+            </div>
+
+            <div class="stat-label">
+                Overdue
+            </div>
+
+            <div class="stat-value"
+                 id="overdueCount">
+                0
+            </div>
+
+        </div>
+
+
+        <div class="stat-card today">
+
+            <div class="stat-icon">
+                🟡
+            </div>
+
+            <div class="stat-label">
+                Due Today
+            </div>
+
+            <div class="stat-value"
+                 id="todayCount">
+                0
+            </div>
+
+        </div>
+
+
+        <div class="stat-card upcoming">
+
+            <div class="stat-icon">
+                🔵
+            </div>
+
+            <div class="stat-label">
+                Upcoming
+            </div>
+
+            <div class="stat-value"
+                 id="upcomingCount">
+                0
+            </div>
+
+        </div>
+
+
+        <div class="stat-card completed">
+
+            <div class="stat-icon">
+                🟢
+            </div>
+
+            <div class="stat-label">
+                Completed
+            </div>
+
+            <div class="stat-value"
+                 id="completedCount">
+                0
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ==================================================
+         FILTER BAR
+         ================================================== -->
+
+    <div class="filter-bar">
+
+        <div class="filter-buttons">
+
+            <button type="button"
+                    class="filter-btn active"
+                    data-filter="ALL">
+
+                All
+
+            </button>
+
+            <button type="button"
+                    class="filter-btn"
+                    data-filter="OVERDUE">
+
+                Overdue
+
+            </button>
+
+            <button type="button"
+                    class="filter-btn"
+                    data-filter="DUE_TODAY">
+
+                Today
+
+            </button>
+
+            <button type="button"
+                    class="filter-btn"
+                    data-filter="UPCOMING">
+
+                Upcoming
+
+            </button>
+
+            <button type="button"
+                    class="filter-btn"
+                    data-filter="COMPLETED">
+
+                Completed
+
+            </button>
+
+        </div>
+
+
+        <div class="revision-count-text">
+
+            <span id="visibleCount">
+                0
+            </span>
+
+            revisions shown
+
+        </div>
+
+    </div>
+
+
+    <!-- ==================================================
+         REVISION CARDS
+         ================================================== -->
+
+    <div id="revisionContainer"
+         class="revision-grid">
+
+
+        <a th:each="revision : ${revisions}"
+
+           th:href="@{/revision/{id}(id=${revision.id})}"
+
+           th:classappend="${revision.currentStatus == 'OVERDUE'
+                    ? ' status-overdue'
+                    : revision.currentStatus == 'DUE_TODAY'
+                    ? ' status-today'
+                    : revision.currentStatus == 'UPCOMING'
+                    ? ' status-upcoming'
+                    : ' status-completed'}"
+
+           class="revision-card"
+
+           th:attr="data-status=${revision.currentStatus}">
+
+
+            <!-- CARD TOP -->
+
+            <div class="card-top">
+
+                <h2 class="topic-name"
+                    th:text="${revision.topic.topicName}">
+                    Fundamental Rights
+                </h2>
+
+
+                <!-- OVERDUE -->
+
+                <span th:if="${revision.currentStatus == 'OVERDUE'}"
+                      class="status-badge overdue">
+
+                    Overdue
+
+                </span>
+
+
+                <!-- DUE TODAY -->
+
+                <span th:if="${revision.currentStatus == 'DUE_TODAY'}"
+                      class="status-badge today">
+
+                    Due Today
+
+                </span>
+
+
+                <!-- UPCOMING -->
+
+                <span th:if="${revision.currentStatus == 'UPCOMING'}"
+                      class="status-badge upcoming">
+
+                    Upcoming
+
+                </span>
+
+
+                <!-- COMPLETED -->
+
+                <span th:if="${revision.currentStatus == 'COMPLETED'}"
+                      class="status-badge completed">
+
+                    Completed
+
+                </span>
+
+            </div>
+
+
+            <!-- TOPIC PATH -->
+
+            <div class="topic-path">
+
+                <span class="exam-badge"
+                      th:text="${revision.topic.subject.examType}">
+                    PRELIMS
+                </span>
+
+                <span class="path-dot">
+                    •
+                </span>
+
+                <span th:text="${revision.topic.subject.subjectName}">
+                    Polity
+                </span>
+
+                <span class="path-dot">
+                    •
+                </span>
+
+                <span th:text="${revision.topic.section.sectionName}">
+                    Indian Constitution
+                </span>
+
+            </div>
+
+
+            <!-- PROGRESS -->
+
+            <div class="progress-row">
+
+                <span class="progress-label">
+                    Revision Progress
+                </span>
+
+                <span class="progress-number">
+
+                    <span th:text="${revision.revisionCount}">
+                        2
+                    </span>
+
+                    / 6
+
+                </span>
+
+            </div>
+
+
+            <div class="progress-track">
+
+                <div class="progress-fill"
+                     th:style="'width:' + (${revision.revisionCount} * 100 / 6) + '%'">
+
+                </div>
+
+            </div>
+
+
+            <!-- FOOTER -->
+
+            <div class="card-footer">
+
+                <div class="next-date">
+
+                    <span class="date-label">
+                        Next Revision
+                    </span>
+
+                    <span class="date-value"
+                          th:if="${revision.nextRevisionDate != null}"
+                          th:text="${revision.nextRevisionDate}">
+                        2026-09-30
+                    </span>
+
+                    <span class="date-value"
+                          th:if="${revision.nextRevisionDate == null}">
+                        All revisions completed
+                    </span>
+
+                </div>
+
+
+                <div class="view-link">
+
+                    View Details
+
+                    <span>
+                        →
+                    </span>
+
+                </div>
+
+            </div>
+
+        </a>
+
+    </div>
+
+
+    <!-- ==================================================
+         EMPTY STATE
+         ================================================== -->
+
+    <div id="emptyState"
+         class="empty-state">
+
+        <div class="empty-icon">
+            ✨
+        </div>
+
+        <h3>
+            No revisions here
+        </h3>
+
+        <p>
+            Complete a topic and its revision schedule
+            will appear here automatically.
+        </p>
+
+    </div>
+
+</main>
+
+
+<script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const cards =
+            Array.from(
+                document.querySelectorAll(".revision-card")
+            );
+
+        const buttons =
+            document.querySelectorAll(".filter-btn");
+
+        const emptyState =
+            document.getElementById("emptyState");
+
+        const visibleCount =
+            document.getElementById("visibleCount");
+
+        const overdueCount =
+            document.getElementById("overdueCount");
+
+        const todayCount =
+            document.getElementById("todayCount");
+
+        const upcomingCount =
+            document.getElementById("upcomingCount");
+
+        const completedCount =
+            document.getElementById("completedCount");
+
+
+        /* ==================================================
+           COUNT STATUS
+           ================================================== */
+
+        function countStatus(status) {
+
+            return cards.filter(function (card) {
+
+                return card.dataset.status === status;
+
+            }).length;
+        }
+
+
+        overdueCount.textContent =
+            countStatus("OVERDUE");
+
+        todayCount.textContent =
+            countStatus("DUE_TODAY");
+
+        upcomingCount.textContent =
+            countStatus("UPCOMING");
+
+        completedCount.textContent =
+            countStatus("COMPLETED");
+
+
+        /* ==================================================
+           FILTER
+           ================================================== */
+
+        function applyFilter(filter) {
+
+            let shown = 0;
+
+            cards.forEach(function (card) {
+
+                const status =
+                    card.dataset.status;
+
+                const show =
+                    filter === "ALL"
+                    || status === filter;
+
+                card.style.display =
+                    show ? "block" : "none";
+
+                if (show) {
+                    shown++;
+                }
+
+            });
+
+
+            visibleCount.textContent =
+                shown;
+
+            emptyState.classList.toggle(
+                "show",
+                shown === 0
+            );
+        }
+
+
+        buttons.forEach(function (button) {
+
+            button.addEventListener(
+                "click",
+                function () {
+
+                    buttons.forEach(function (btn) {
+
+                        btn.classList.remove(
+                            "active"
+                        );
+
+                    });
+
+
+                    this.classList.add(
+                        "active"
+                    );
+
+
+                    applyFilter(
+                        this.dataset.filter
+                    );
+
+                }
+            );
+
+        });
+
+
+        /* ==================================================
+           INITIAL FILTER
+           ================================================== */
+
+        applyFilter("ALL");
+
+    });
+
+</script>
+
+</body>
+
+</html>

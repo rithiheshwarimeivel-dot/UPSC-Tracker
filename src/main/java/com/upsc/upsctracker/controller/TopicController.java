@@ -1,197 +1,344 @@
+package com.upsc.upsctracker.controller;
 
-        package com.upsc.upsctracker.controller;
-
-import com.upsc.upsctracker.entity.ExamType;
 import com.upsc.upsctracker.entity.Section;
-import com.upsc.upsctracker.entity.Subject;
+import com.upsc.upsctracker.entity.Subtopic;
 import com.upsc.upsctracker.entity.Topic;
 import com.upsc.upsctracker.repository.SectionRepository;
-import com.upsc.upsctracker.repository.SubjectRepository;
+import com.upsc.upsctracker.repository.SubtopicRepository;
 import com.upsc.upsctracker.repository.TopicRepository;
+import com.upsc.upsctracker.service.RevisionService;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
 public class TopicController {
 
     private final TopicRepository topicRepository;
-    private final SubjectRepository subjectRepository;
+    private final SubtopicRepository subtopicRepository;
     private final SectionRepository sectionRepository;
+    private final RevisionService revisionService;
 
     public TopicController(
             TopicRepository topicRepository,
-            SubjectRepository subjectRepository,
-            SectionRepository sectionRepository) {
+            SubtopicRepository subtopicRepository,
+            SectionRepository sectionRepository,
+            RevisionService revisionService) {
 
         this.topicRepository = topicRepository;
-        this.subjectRepository = subjectRepository;
+        this.subtopicRepository = subtopicRepository;
         this.sectionRepository = sectionRepository;
-    }
-
-    // --------------------------------------------------
-    // SHOW ALL TOPICS
-    // --------------------------------------------------
-
-    @GetMapping("/topics")
-    public String showTopics(Model model) {
-
-        List<Topic> topics = topicRepository.findAll();
-
-        List<Subject> subjects = new ArrayList<>();
-
-        subjects.addAll(
-                subjectRepository.findByExamType(ExamType.PRELIMS)
-        );
-
-        subjects.addAll(
-                subjectRepository.findByExamType(ExamType.MAINS)
-        );
-
-        model.addAttribute("topics", topics);
-        model.addAttribute("subjects", subjects);
-        model.addAttribute("sections", sectionRepository.findAll());
-
-        return "topics";
+        this.revisionService = revisionService;
     }
 
 
-    // --------------------------------------------------
-    // SHOW TOPICS OF A PARTICULAR SECTION
-    // --------------------------------------------------
+    // ==================================================
+    // SHOW TOPICS FOR A SECTION
+    // URL: /topics/{sectionId}
+    // ==================================================
 
     @GetMapping("/topics/{sectionId}")
-    public String sectionTopics(
+    public String showTopics(
             @PathVariable Long sectionId,
             Model model) {
 
-        Section section = sectionRepository
-                .findById(sectionId)
-                .orElseThrow();
+        Section section =
+                sectionRepository
+                        .findById(sectionId)
+                        .orElseThrow();
 
-        List<Topic> topics = topicRepository.findAll()
-                .stream()
-                .filter(topic ->
-                        topic.getSection() != null
-                                && topic.getSection().getId() != null
-                                && topic.getSection().getId().equals(sectionId)
-                )
-                .toList();
+        List<Topic> topics =
+                topicRepository
+                        .findBySectionId(sectionId);
 
-        List<Subject> subjects = new ArrayList<>();
+        long completedCount =
+                topics.stream()
+                        .filter(Topic::isCompleted)
+                        .count();
 
-        subjects.addAll(
-                subjectRepository.findByExamType(ExamType.PRELIMS)
+        int totalTopics =
+                topics.size();
+
+        int progress =
+                totalTopics == 0
+                        ? 0
+                        : (int) (
+                        (completedCount * 100)
+                        / totalTopics
+                );
+
+        model.addAttribute(
+                "section",
+                section
         );
 
-        subjects.addAll(
-                subjectRepository.findByExamType(ExamType.MAINS)
+        model.addAttribute(
+                "topics",
+                topics
         );
 
-        model.addAttribute("section", section);
-        model.addAttribute("topics", topics);
-        model.addAttribute("subjects", subjects);
-        model.addAttribute("sections", sectionRepository.findAll());
+        model.addAttribute(
+                "completedCount",
+                completedCount
+        );
+
+        model.addAttribute(
+                "totalTopics",
+                totalTopics
+        );
+
+        model.addAttribute(
+                "progress",
+                progress
+        );
 
         return "topics";
     }
 
 
-    // --------------------------------------------------
-    // ADD TOPIC
-    // --------------------------------------------------
+    // ==================================================
+    // OPEN PARTICULAR TOPIC
+    // SHOW ITS SUBTOPICS
+    // URL: /topic/{topicId}
+    // ==================================================
 
-    @PostMapping("/add-topic")
-    public String addTopic(@ModelAttribute Topic topic) {
-
-        if (topic.getSection() != null
-                && topic.getSection().getId() != null) {
-
-            Section section = sectionRepository
-                    .findById(topic.getSection().getId())
-                    .orElseThrow();
-
-            topic.setSection(section);
-
-            // Automatically assign subject from section
-            topic.setSubject(section.getSubject());
-        }
-
-        topicRepository.save(topic);
-
-        return "redirect:/topics";
-    }
-
-
-    // --------------------------------------------------
-    // DELETE TOPIC
-    // --------------------------------------------------
-
-    @PostMapping("/delete-topic/{id}")
-    public String deleteTopic(@PathVariable Long id) {
-
-        topicRepository.deleteById(id);
-
-        return "redirect:/topics";
-    }
-
-
-    // --------------------------------------------------
-    // SHOW EDIT TOPIC PAGE
-    // --------------------------------------------------
-
-    @GetMapping("/edit-topic/{id}")
-    public String editTopic(
-            @PathVariable Long id,
+    @GetMapping("/topic/{topicId}")
+    public String openTopic(
+            @PathVariable Long topicId,
             Model model) {
 
-        Topic topic = topicRepository
-                .findById(id)
-                .orElseThrow();
+        Topic topic =
+                topicRepository
+                        .findById(topicId)
+                        .orElseThrow();
 
-        List<Subject> subjects = new ArrayList<>();
+        List<Subtopic> subtopics =
+                subtopicRepository
+                        .findByTopicId(topicId);
 
-        subjects.addAll(
-                subjectRepository.findByExamType(ExamType.PRELIMS)
+        // ==================================================
+        // GET PARENT SECTION
+        // ==================================================
+
+        Section section =
+                topic.getSection();
+
+        // ==================================================
+        // SEND DATA TO HTML
+        // ==================================================
+
+        model.addAttribute(
+                "topic",
+                topic
         );
 
-        subjects.addAll(
-                subjectRepository.findByExamType(ExamType.MAINS)
+        model.addAttribute(
+                "subtopics",
+                subtopics
         );
 
-        model.addAttribute("topic", topic);
-        model.addAttribute("subjects", subjects);
-        model.addAttribute("sections", sectionRepository.findAll());
+        model.addAttribute(
+                "section",
+                section
+        );
 
-        return "edit-topic";
+        return "topic-subtopics";
     }
 
 
-    // --------------------------------------------------
-    // UPDATE TOPIC
-    // --------------------------------------------------
+    // ==================================================
+    // TOGGLE SUBTOPIC COMPLETION
+    // ==================================================
 
-    @PostMapping("/update-topic")
-    public String updateTopic(@ModelAttribute Topic topic) {
+    @PostMapping("/toggle-subtopic/{id}")
+    public String toggleSubtopic(
+            @PathVariable Long id) {
 
-        if (topic.getSection() != null
-                && topic.getSection().getId() != null) {
+        Subtopic subtopic =
+                subtopicRepository
+                        .findById(id)
+                        .orElseThrow();
 
-            Section section = sectionRepository
-                    .findById(topic.getSection().getId())
-                    .orElseThrow();
+        // ==================================================
+        // TOGGLE SUBTOPIC
+        // ==================================================
 
-            topic.setSection(section);
+        subtopic.setCompleted(
+                !subtopic.isCompleted()
+        );
 
-            // Automatically assign subject from section
-            topic.setSubject(section.getSubject());
+        subtopicRepository.save(
+                subtopic
+        );
+
+        // ==================================================
+        // GET PARENT TOPIC
+        // ==================================================
+
+        Topic topic =
+                subtopic.getTopic();
+
+        // ==================================================
+        // GET ALL SUBTOPICS
+        // ==================================================
+
+        List<Subtopic> subtopics =
+                subtopicRepository
+                        .findByTopicId(
+                                topic.getId()
+                        );
+
+        // ==================================================
+        // AUTOMATIC TOPIC COMPLETION
+        // ==================================================
+
+        boolean allCompleted =
+                !subtopics.isEmpty()
+                        &&
+                        subtopics.stream()
+                                .allMatch(
+                                        Subtopic::isCompleted
+                                );
+
+        boolean wasCompleted =
+                topic.isCompleted();
+
+        topic.setCompleted(
+                allCompleted
+        );
+
+        topicRepository.save(
+                topic
+        );
+
+
+        // ==================================================
+        // AUTOMATIC REVISION CREATION
+        //
+        // Topic becomes completed:
+        // Create Revision 1 automatically
+        // ==================================================
+
+        if (!wasCompleted && allCompleted) {
+
+            revisionService.createRevisionForTopic(
+                    topic
+            );
         }
 
-        topicRepository.save(topic);
 
-        return "redirect:/topics";
+        // ==================================================
+        // TOPIC BECOMES INCOMPLETE
+        //
+        // Remove revision because topic is no longer completed
+        // ==================================================
+
+        if (wasCompleted && !allCompleted) {
+
+            revisionService.removeRevisionForTopic(
+                    topic.getId()
+            );
+        }
+
+
+        return "redirect:/topic/"
+                + topic.getId();
     }
+
+
+    // ==================================================
+    // DIRECTLY COMPLETE TOPIC
+    // ONLY FOR TOPICS WITH NO SUBTOPICS
+    // ==================================================
+
+    @PostMapping("/complete-topic/{id}")
+    public String completeTopic(
+            @PathVariable Long id) {
+
+        Topic topic =
+                topicRepository
+                        .findById(id)
+                        .orElseThrow();
+
+        List<Subtopic> subtopics =
+                subtopicRepository
+                        .findByTopicId(id);
+
+        if (subtopics.isEmpty()) {
+
+            boolean wasCompleted =
+                    topic.isCompleted();
+
+            topic.setCompleted(true);
+
+            topicRepository.save(
+                    topic
+            );
+
+
+            // ==================================================
+            // AUTOMATIC REVISION CREATION
+            // ==================================================
+
+            if (!wasCompleted) {
+
+                revisionService.createRevisionForTopic(
+                        topic
+                );
+            }
+        }
+
+        return "redirect:/topic/" + id;
+    }
+
+
+    // ==================================================
+    // MARK TOPIC INCOMPLETE
+    // ONLY FOR TOPICS WITH NO SUBTOPICS
+    // ==================================================
+
+    @PostMapping("/incomplete-topic/{id}")
+    public String incompleteTopic(
+            @PathVariable Long id) {
+
+        Topic topic =
+                topicRepository
+                        .findById(id)
+                        .orElseThrow();
+
+        List<Subtopic> subtopics =
+                subtopicRepository
+                        .findByTopicId(id);
+
+        if (subtopics.isEmpty()) {
+
+            boolean wasCompleted =
+                    topic.isCompleted();
+
+            topic.setCompleted(false);
+
+            topicRepository.save(
+                    topic
+            );
+
+
+            // ==================================================
+            // REMOVE REVISION
+            // TOPIC IS NO LONGER COMPLETED
+            // ==================================================
+
+            if (wasCompleted) {
+
+                revisionService.removeRevisionForTopic(
+                        topic.getId()
+                );
+            }
+        }
+
+        return "redirect:/topic/" + id;
+    }
+
 }

@@ -2,54 +2,260 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <title>UPSC Subtopics</title>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title th:text="${topic.topicName} + ' - Subtopics'">
+        UPSC Subtopics
+    </title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+            background: #f7f9fc;
+            color: #222;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid #ddd;
+            margin: 15px 0 20px;
+        }
+
+        .topic-status {
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            max-width: 600px;
+            border: 2px solid #ccc;
+            background: white;
+        }
+
+        .topic-status h3 {
+            margin-bottom: 10px;
+        }
+
+        .completed {
+            color: green;
+            font-weight: bold;
+        }
+
+        .pending {
+            color: #777;
+            font-weight: bold;
+        }
+
+        .subtopic {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 10px;
+            max-width: 600px;
+            background: white;
+        }
+
+        button {
+            padding: 8px 15px;
+            cursor: pointer;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            background: white;
+        }
+
+        button:hover {
+            background: #f0f0f0;
+        }
+
+        .add-button {
+            margin-top: 10px;
+        }
+
+        .back-group {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .back-button {
+            text-decoration: none;
+        }
+
+    </style>
+
 </head>
 
 <body>
 
-<h2>UPSC Subtopics</h2>
 
-<a href="/add-subtopic">Add Subtopic</a>
+<!-- =========================
+     TOPIC NAME
+     ========================= -->
 
-<br><br>
+<h1 th:text="${topic.topicName}">
+    Topic Name
+</h1>
 
-<table border="1">
 
-    <tr>
-        <th>ID</th>
-        <th>Topic</th>
-        <th>Subtopic Name</th>
-        <th>Completed</th>
-        <th>Action</th>
-    </tr>
+<hr>
 
-    <tr th:each="subtopic : ${subtopics}">
 
-        <td th:text="${subtopic.id}"></td>
+<!-- =========================
+     TOPIC COMPLETION STATUS
+     ========================= -->
 
-        <td th:text="${subtopic.topic != null ? subtopic.topic.topicName : 'No Topic'}"></td>
+<div class="topic-status">
 
-        <td th:text="${subtopic.name}"></td>
+    <h3>
+        Topic Status:
+    </h3>
 
-        <td th:text="${subtopic.completed}"></td>
 
-        <td>
+    <!-- COMPLETED -->
 
-            <form th:action="@{/edit-subtopic/{id}(id=${subtopic.id})}" method="get">
-                <button type="submit">Edit</button>
-            </form>
+    <div th:if="${topic.completed}">
 
-            <br>
+        <p class="completed">
+            ✅ TOPIC COMPLETED
+        </p>
 
-            <form th:action="@{/delete-subtopic/{id}(id=${subtopic.id})}" method="post">
-                <button type="submit">Delete</button>
-            </form>
+    </div>
 
-        </td>
 
-    </tr>
+    <!-- PENDING -->
 
-</table>
+    <div th:unless="${topic.completed}">
+
+        <p class="pending">
+            ⏳ TOPIC IN PROGRESS
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     SUBTOPICS
+     ========================= -->
+
+<h2>
+    Subtopics
+</h2>
+
+
+<!-- NO SUBTOPICS -->
+
+<div th:if="${#lists.isEmpty(subtopics)}">
+
+    <p>
+        No subtopics available for this topic.
+    </p>
+
+</div>
+
+
+<!-- SUBTOPIC LIST -->
+
+<div th:each="subtopic : ${subtopics}"
+     class="subtopic">
+
+    <strong th:text="${subtopic.name}">
+        Subtopic Name
+    </strong>
+
+
+    <!-- COMPLETED -->
+
+    <span th:if="${subtopic.completed}"
+          class="completed">
+
+        — ✅ Completed
+
+    </span>
+
+
+    <!-- PENDING -->
+
+    <span th:unless="${subtopic.completed}"
+          class="pending">
+
+        — ⬜ Pending
+
+    </span>
+
+</div>
+
+
+<br>
+
+
+<!-- =========================
+     ADD SUBTOPIC
+     ========================= -->
+
+<a href="/add-subtopic">
+
+    <button type="button"
+            class="add-button">
+
+        Add Subtopic
+
+    </button>
+
+</a>
+
+
+<!-- =========================
+     NAVIGATION
+     ========================= -->
+
+<div class="back-group">
+
+
+    <!-- BACK TO CURRENT TOPIC -->
+
+    <a th:href="@{/topics/{id}(id=${topic.id})}"
+       class="back-button">
+
+        <button type="button">
+            ← Back to Topic
+        </button>
+
+    </a>
+
+
+    <!-- BACK TO DASHBOARD -->
+
+    <a href="/dashboard"
+       class="back-button">
+
+        <button type="button">
+            ⌂ Back to Dashboard
+        </button>
+
+    </a>
+
+</div>
+
 
 </body>
 

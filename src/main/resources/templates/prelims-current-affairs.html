@@ -1,95 +1,1087 @@
-
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <title>Prelims Current Affairs</title>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Prelims Current Affairs | UPSC Tracker</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            min-height: 100%;
+        }
+
+        body {
+            min-height: 100vh;
+
+            font-family:
+                    "Segoe UI",
+                    Arial,
+                    sans-serif;
+
+            background: #080814;
+
+            color: #ffffff;
+
+            overflow-x: hidden;
+        }
+
+        /* =====================================================
+           PAGE
+        ===================================================== */
+
+        .page {
+
+            min-height: 100vh;
+
+            position: relative;
+
+            margin-left: 250px !important;
+
+            width:
+                    calc(100% - 250px) !important;
+
+            padding:
+                    35px 0 70px;
+
+            background:
+                    radial-gradient(
+                            circle at 50% 5%,
+                            rgba(168, 85, 247, 0.14),
+                            transparent 35%
+                    ),
+                    radial-gradient(
+                            circle at 10% 80%,
+                            rgba(34, 211, 238, 0.07),
+                            transparent 30%
+                    ),
+                    radial-gradient(
+                            circle at 90% 70%,
+                            rgba(217, 70, 239, 0.07),
+                            transparent 30%
+                    ),
+                    #080814;
+
+            overflow: hidden;
+        }
+
+        .page::before {
+
+            content: "";
+
+            position: absolute;
+
+            width: 500px;
+            height: 500px;
+
+            top: -200px;
+            left: -180px;
+
+            border-radius: 50%;
+
+            background:
+                    rgba(
+                            168,
+                            85,
+                            247,
+                            0.08
+                    );
+
+            filter: blur(100px);
+
+            pointer-events: none;
+        }
+
+        .page::after {
+
+            content: "";
+
+            position: absolute;
+
+            width: 450px;
+            height: 450px;
+
+            right: -180px;
+            bottom: -180px;
+
+            border-radius: 50%;
+
+            background:
+                    rgba(
+                            34,
+                            211,
+                            238,
+                            0.06
+                    );
+
+            filter: blur(100px);
+
+            pointer-events: none;
+        }
+
+        /* =====================================================
+           CONTENT
+        ===================================================== */
+
+        .content {
+
+            position: relative;
+
+            z-index: 2;
+
+            width:
+                    min(
+                            1150px,
+                            92%
+                    );
+
+            margin:
+                    0 auto;
+        }
+
+        /* =====================================================
+           TOP BAR
+        ===================================================== */
+
+        .top-bar {
+
+            display: flex;
+
+            justify-content:
+                    space-between;
+
+            align-items: center;
+
+            gap: 15px;
+
+            margin-bottom: 28px;
+
+            flex-wrap: wrap;
+        }
+
+        .brand {
+
+            font-size: 18px;
+
+            font-weight: 800;
+
+            letter-spacing: 1px;
+
+            color: #ffffff;
+        }
+
+        .brand span {
+
+            background:
+                    linear-gradient(
+                            90deg,
+                            #d946ef,
+                            #a855f7,
+                            #22d3ee
+                    );
+
+            -webkit-background-clip: text;
+
+            -webkit-text-fill-color: transparent;
+
+            background-clip: text;
+        }
+
+        .navigation {
+
+            display: flex;
+
+            gap: 10px;
+
+            flex-wrap: wrap;
+        }
+
+        .back-button {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            text-decoration: none;
+
+            padding:
+                    10px 16px;
+
+            border-radius: 11px;
+
+            background:
+                    rgba(
+                            255,
+                            255,
+                            255,
+                            0.025
+                    );
+
+            border:
+                    1px solid
+                    rgba(
+                            168,
+                            85,
+                            247,
+                            0.18
+                    );
+
+            color: #c6c9d5;
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+            transition:
+                    0.25s ease;
+        }
+
+        .back-button:hover {
+
+            color: #ffffff;
+
+            border-color:
+                    rgba(
+                            168,
+                            85,
+                            247,
+                            0.55
+                    );
+
+            transform:
+                    translateY(-2px);
+
+            box-shadow:
+                    0 0 20px
+                    rgba(
+                            168,
+                            85,
+                            247,
+                            0.12
+                    );
+        }
+
+        .dashboard-button {
+
+            border-color:
+                    rgba(
+                            34,
+                            211,
+                            238,
+                            0.18
+                    );
+        }
+
+        .dashboard-button:hover {
+
+            border-color:
+                    rgba(
+                            34,
+                            211,
+                            238,
+                            0.55
+                    );
+
+            box-shadow:
+                    0 0 20px
+                    rgba(
+                            34,
+                            211,
+                            238,
+                            0.12
+                    );
+        }
+
+        /* =====================================================
+           HEADER
+        ===================================================== */
+
+        .header-card {
+
+            position: relative;
+
+            padding: 32px;
+
+            margin-bottom: 25px;
+
+            border-radius: 24px;
+
+            background:
+                    linear-gradient(
+                            145deg,
+                            rgba(
+                                    25,
+                                    18,
+                                    43,
+                                    0.97
+                            ),
+                            rgba(
+                                    10,
+                                    11,
+                                    23,
+                                    0.98
+                            )
+                    );
+
+            border:
+                    1px solid
+                    rgba(
+                            168,
+                            85,
+                            247,
+                            0.16
+                    );
+
+            box-shadow:
+                    14px 14px 35px
+                    rgba(
+                            0,
+                            0,
+                            0,
+                            0.55
+                    );
+
+            overflow: hidden;
+        }
+
+        .header-card::before {
+
+            content: "";
+
+            position: absolute;
+
+            top: 0;
+            left: 8%;
+
+            width: 84%;
+            height: 2px;
+
+            background:
+                    linear-gradient(
+                            90deg,
+                            transparent,
+                            #d946ef,
+                            #a855f7,
+                            #22d3ee,
+                            transparent
+                    );
+        }
+
+        .eyebrow {
+
+            color: #d946ef;
+
+            font-size: 11px;
+
+            font-weight: 800;
+
+            letter-spacing: 2px;
+
+            margin-bottom: 10px;
+        }
+
+        .header-card h1 {
+
+            font-size:
+                    clamp(
+                            30px,
+                            5vw,
+                            40px
+                    );
+
+            margin-bottom: 10px;
+
+            background:
+                    linear-gradient(
+                            90deg,
+                            #ffffff,
+                            #e9d5ff,
+                            #c4f7ff
+                    );
+
+            -webkit-background-clip: text;
+
+            -webkit-text-fill-color: transparent;
+
+            background-clip: text;
+        }
+
+        .header-card p {
+
+            color: #858094;
+
+            font-size: 14px;
+
+            line-height: 1.7;
+        }
+
+        /* =====================================================
+           YEAR SECTION
+        ===================================================== */
+
+        .year-section {
+
+            margin-bottom: 38px;
+        }
+
+        .year-header {
+
+            display: flex;
+
+            justify-content:
+                    space-between;
+
+            align-items: center;
+
+            gap: 15px;
+
+            margin-bottom: 17px;
+
+            flex-wrap: wrap;
+        }
+
+        .year-title {
+
+            color: #f4edff;
+
+            font-size: 23px;
+
+            font-weight: 800;
+        }
+
+        .year-progress {
+
+            color: #22d3ee;
+
+            font-size: 13px;
+
+            font-weight: 800;
+
+            text-shadow:
+                    0 0 8px
+                    rgba(
+                            34,
+                            211,
+                            238,
+                            0.30
+                    );
+        }
+
+        /* =====================================================
+           MONTH GRID
+        ===================================================== */
+
+        .months-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(
+                    auto-fit,
+                    minmax(
+                            250px,
+                            1fr
+                    )
+                );
+
+            gap: 17px;
+        }
+
+        /* =====================================================
+           MONTH CARD
+        ===================================================== */
+
+        .month-card {
+
+            position: relative;
+
+            display: block;
+
+            min-height: 165px;
+
+            padding: 23px;
+
+            text-decoration: none;
+
+            border-radius: 19px;
+
+            background:
+                    linear-gradient(
+                            145deg,
+                            rgba(
+                                    25,
+                                    18,
+                                    43,
+                                    0.98
+                            ),
+                            rgba(
+                                    10,
+                                    11,
+                                    23,
+                                    0.98
+                            )
+                    );
+
+            border:
+                    1px solid
+                    rgba(
+                            168,
+                            85,
+                            247,
+                            0.13
+                    );
+
+            box-shadow:
+                    10px 10px 25px
+                    rgba(
+                            0,
+                            0,
+                            0,
+                            0.45
+                    );
+
+            overflow: hidden;
+
+            transition:
+                    0.25s ease;
+        }
+
+        .month-card::before {
+
+            content: "";
+
+            position: absolute;
+
+            top: 0;
+            left: 0;
+
+            width: 100%;
+            height: 2px;
+
+            background:
+                    linear-gradient(
+                            90deg,
+                            transparent,
+                            #d946ef,
+                            #a855f7,
+                            #22d3ee,
+                            transparent
+                    );
+
+            opacity: 0.55;
+        }
+
+        .month-card::after {
+
+            content: "";
+
+            position: absolute;
+
+            width: 120px;
+            height: 120px;
+
+            right: -50px;
+            bottom: -55px;
+
+            border-radius: 50%;
+
+            background:
+                    rgba(
+                            168,
+                            85,
+                            247,
+                            0.07
+                    );
+
+            filter: blur(25px);
+
+            transition:
+                    0.25s ease;
+        }
+
+        .month-card:hover {
+
+            transform:
+                    translateY(-5px);
+
+            border-color:
+                    rgba(
+                            168,
+                            85,
+                            247,
+                            0.42
+                    );
+
+            box-shadow:
+                    0 0 25px
+                    rgba(
+                            168,
+                            85,
+                            247,
+                            0.10
+                    ),
+                    10px 15px 30px
+                    rgba(
+                            0,
+                            0,
+                            0,
+                            0.50
+                    );
+        }
+
+        .month-card:hover::after {
+
+            background:
+                    rgba(
+                            34,
+                            211,
+                            238,
+                            0.10
+                    );
+        }
+
+        /* =====================================================
+           MONTH CARD CONTENT
+        ===================================================== */
+
+        .month-number {
+
+            color: #737c8e;
+
+            font-size: 10px;
+
+            font-weight: 800;
+
+            letter-spacing: 1px;
+
+            margin-bottom: 10px;
+        }
+
+        .month-name {
+
+            color: #ffffff;
+
+            font-size: 20px;
+
+            font-weight: 800;
+
+            margin-bottom: 18px;
+
+            line-height: 1.35;
+        }
+
+        .month-progress-top {
+
+            display: flex;
+
+            justify-content:
+                    space-between;
+
+            align-items: center;
+
+            margin-bottom: 8px;
+        }
+
+        .month-progress-label {
+
+            color: #737c8e;
+
+            font-size: 10px;
+
+            font-weight: 700;
+        }
+
+        .month-progress-value {
+
+            color: #22d3ee;
+
+            font-size: 11px;
+
+            font-weight: 800;
+        }
+
+        .progress-bar {
+
+            width: 100%;
+
+            height: 6px;
+
+            border-radius: 20px;
+
+            background:
+                    rgba(
+                            255,
+                            255,
+                            255,
+                            0.06
+                    );
+
+            overflow: hidden;
+        }
+
+        .progress-fill {
+
+            height: 100%;
+
+            border-radius: 20px;
+
+            background:
+                    linear-gradient(
+                            90deg,
+                            #d946ef,
+                            #a855f7,
+                            #22d3ee
+                    );
+
+            box-shadow:
+                    0 0 10px
+                    rgba(
+                            168,
+                            85,
+                            247,
+                            0.30
+                    );
+        }
+
+        /* =====================================================
+           FOOTER
+        ===================================================== */
+
+        .footer {
+
+            text-align: center;
+
+            margin-top: 45px;
+
+            padding-top: 25px;
+
+            border-top:
+                    1px solid
+                    rgba(
+                            255,
+                            255,
+                            255,
+                            0.05
+                    );
+
+            color: #565d6d;
+
+            font-size: 11px;
+
+            letter-spacing: 0.5px;
+        }
+
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+        @media (max-width: 800px) {
+
+            .page {
+
+                margin-left:
+                        250px !important;
+
+                width:
+                        calc(100% - 250px) !important;
+            }
+
+            .content {
+                width: 92%;
+            }
+
+            .header-card {
+                padding: 26px;
+            }
+
+            .months-grid {
+
+                grid-template-columns:
+                    repeat(
+                        auto-fit,
+                        minmax(
+                                220px,
+                                1fr
+                        )
+                    );
+            }
+        }
+
+        @media (max-width: 550px) {
+
+            .page {
+
+                margin-left:
+                        250px !important;
+
+                width:
+                        calc(100% - 250px) !important;
+            }
+
+            .content {
+                width: 94%;
+            }
+
+            .navigation {
+                width: 100%;
+            }
+
+            .back-button {
+                flex: 1;
+                justify-content: center;
+            }
+
+            .header-card {
+                padding: 22px;
+            }
+
+            .year-header {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .months-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+    </style>
+
 </head>
 
 <body>
 
-<h1>Prelims Current Affairs</h1>
+<!-- =========================================================
+     COMMON SIDEBAR
+========================================================= -->
 
-<hr>
-
-<h2>
-    Prelims Current Affairs -
-    <span th:text="${attemptYear}"></span>
-</h2>
-
-<p>
-    Current Affairs Coverage:
-    January
-    <span th:text="${attemptYear - 1}"></span>
-    -
-    May
-    <span th:text="${attemptYear}"></span>
-</p>
-
-<hr>
-
-<h2>Monthly Current Affairs</h2>
-
-<table border="1">
-
-    <tr>
-        <th>Month</th>
-        <th>Year</th>
-        <th>Progress</th>
-        <th>Action</th>
-    </tr>
-
-    <tr th:each="section, stat : ${sections}">
-
-        <!-- MONTH -->
-
-        <td th:text="${section.name}">
-        </td>
+<div th:replace="~{fragments/sidebar :: sidebar}"></div>
 
 
-        <!-- YEAR -->
+<!-- =========================================================
+     PAGE
+========================================================= -->
 
-        <td th:text="${section.year}">
-        </td>
+<div class="page">
+
+    <div class="content">
+
+        <!-- =================================================
+             TOP BAR
+        ================================================== -->
+
+        <div class="top-bar">
+
+            <div class="brand">
+                <span>UPSC</span> TRACKER
+            </div>
+
+            <div class="navigation">
+
+                <a th:href="@{/current-affairs}"
+                   class="back-button">
+
+                    ← Back to Current Affairs
+
+                </a>
+
+                <a th:href="@{/dashboard}"
+                   class="back-button dashboard-button">
+
+                    ⌂ Dashboard
+
+                </a>
+
+            </div>
+
+        </div>
 
 
-        <!-- COMPLETED COUNT -->
+        <!-- =================================================
+             HEADER
+        ================================================== -->
 
-        <td>
+        <div class="header-card">
 
-            <span th:text="${completedCounts[stat.index]}">
-            </span>
+            <div class="eyebrow">
+                UPSC PRELIMS
+            </div>
 
-            / 14 Completed
+            <h1>
+                Prelims Current Affairs
+            </h1>
 
-        </td>
+            <p>
+                Track your monthly current-affairs preparation
+                for UPSC Prelims. Select a month to view and
+                complete its topics.
+            </p>
+
+        </div>
 
 
-        <!-- OPEN MONTH -->
+        <!-- =================================================
+             PREVIOUS YEAR
+        ================================================== -->
 
-        <td>
+        <div class="year-section"
+             th:if="${previousYearSections != null and !previousYearSections.isEmpty()}">
 
-            <a
-                    th:href="@{/current-affairs/prelims/month/{id}(id=${section.id})}">
+            <div class="year-header">
 
-                <button type="button">
-                    Open
-                </button>
+                <h2 class="year-title"
+                    th:text="${previousYear}">
+                    Previous Year
+                </h2>
 
-            </a>
+                <div class="year-progress"
+                     th:text="${previousYearProgress + '%'}">
+                    0%
+                </div>
 
-        </td>
+            </div>
 
-    </tr>
 
-</table>
+            <div class="months-grid">
 
-<br>
+                <a th:each="section, stat : ${previousYearSections}"
 
-<a th:href="@{/current-affairs}">
-    Back to Current Affairs
-</a>
+                   th:href="@{/current-affairs/prelims/month/{id}(id=${section.id})}"
+
+                   class="month-card">
+
+                    <div class="month-number"
+                         th:text="'MONTH ' + ${stat.count}">
+                        MONTH 1
+                    </div>
+
+                    <div class="month-name"
+                         th:text="${section.name}">
+                        January
+                    </div>
+
+                    <div class="month-progress-top">
+
+                        <span class="month-progress-label">
+                            PROGRESS
+                        </span>
+
+                        <span class="month-progress-value"
+                              th:text="${completedCounts[section.id] + '%'}">
+                            0%
+                        </span>
+
+                    </div>
+
+                    <div class="progress-bar">
+
+                        <div class="progress-fill"
+                             th:style="'width:' + ${completedCounts[section.id]} + '%'">
+                        </div>
+
+                    </div>
+
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             ATTEMPT YEAR
+        ================================================== -->
+
+        <div class="year-section"
+             th:if="${attemptYearSections != null and !attemptYearSections.isEmpty()}">
+
+            <div class="year-header">
+
+                <h2 class="year-title"
+                    th:text="${attemptYear}">
+                    Attempt Year
+                </h2>
+
+                <div class="year-progress"
+                     th:text="${attemptYearProgress + '%'}">
+                    0%
+                </div>
+
+            </div>
+
+
+            <div class="months-grid">
+
+                <a th:each="section, stat : ${attemptYearSections}"
+
+                   th:href="@{/current-affairs/prelims/month/{id}(id=${section.id})}"
+
+                   class="month-card">
+
+                    <div class="month-number"
+                         th:text="'MONTH ' + ${stat.count}">
+                        MONTH 1
+                    </div>
+
+                    <div class="month-name"
+                         th:text="${section.name}">
+                        January
+                    </div>
+
+                    <div class="month-progress-top">
+
+                        <span class="month-progress-label">
+                            PROGRESS
+                        </span>
+
+                        <span class="month-progress-value"
+                              th:text="${completedCounts[section.id] + '%'}">
+                            0%
+                        </span>
+
+                    </div>
+
+                    <div class="progress-bar">
+
+                        <div class="progress-fill"
+                             th:style="'width:' + ${completedCounts[section.id]} + '%'">
+                        </div>
+
+                    </div>
+
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             FOOTER
+        ================================================== -->
+
+        <div class="footer">
+
+            UPSC Tracker • Prelims Current Affairs
+
+        </div>
+
+    </div>
+
+</div>
 
 </body>
-
 </html>

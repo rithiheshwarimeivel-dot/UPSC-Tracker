@@ -1,4 +1,5 @@
-package com.upsc.upsctracker;
+
+        package com.upsc.upsctracker;
 
 import com.upsc.upsctracker.entity.Subject;
 import com.upsc.upsctracker.entity.Topic;
@@ -28,12 +29,11 @@ public class DataLoader implements CommandLineRunner {
         polity.setName("Polity");
         subjectRepository.save(polity);
 
-
         Topic topic1 = new Topic();
         topic1.setSubject(polity);
         topic1.setTopicName("Fundamental Rights");
-        topic1.setCompleted(false);
 
         topicRepository.save(topic1);
     }
 }
+

@@ -1,70 +1,799 @@
-
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <title>Prelims Current Affairs Topics</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Current Affairs Topics | UPSC Tracker</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            min-height: 100%;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: #080814;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        .page {
+            min-height: 100vh;
+            position: relative;
+
+            margin-left: 250px !important;
+            width: calc(100% - 250px) !important;
+
+            padding: 35px 0 70px;
+
+            background:
+                    radial-gradient(
+                            circle at 50% 5%,
+                            rgba(168, 85, 247, 0.14),
+                            transparent 35%
+                    ),
+                    radial-gradient(
+                            circle at 10% 80%,
+                            rgba(34, 211, 238, 0.07),
+                            transparent 30%
+                    ),
+                    radial-gradient(
+                            circle at 90% 70%,
+                            rgba(217, 70, 239, 0.07),
+                            transparent 30%
+                    ),
+                    #080814;
+
+            overflow: hidden;
+        }
+
+        .page::before {
+            content: "";
+            position: absolute;
+
+            width: 500px;
+            height: 500px;
+
+            top: -200px;
+            left: -180px;
+
+            border-radius: 50%;
+
+            background: rgba(168, 85, 247, 0.08);
+
+            filter: blur(100px);
+
+            pointer-events: none;
+        }
+
+        .page::after {
+            content: "";
+            position: absolute;
+
+            width: 450px;
+            height: 450px;
+
+            right: -180px;
+            bottom: -180px;
+
+            border-radius: 50%;
+
+            background: rgba(34, 211, 238, 0.06);
+
+            filter: blur(100px);
+
+            pointer-events: none;
+        }
+
+        .content {
+            position: relative;
+            z-index: 2;
+
+            width: min(1100px, 92%);
+
+            margin: 0 auto;
+        }
+
+        .top-bar {
+            display: flex;
+
+            justify-content: space-between;
+            align-items: center;
+
+            gap: 15px;
+
+            margin-bottom: 28px;
+
+            flex-wrap: wrap;
+        }
+
+        .brand {
+            font-size: 18px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            color: #ffffff;
+        }
+
+        .brand span {
+            background:
+                    linear-gradient(
+                            90deg,
+                            #d946ef,
+                            #a855f7,
+                            #22d3ee
+                    );
+
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .navigation {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+
+            text-decoration: none;
+
+            padding: 10px 16px;
+
+            border-radius: 11px;
+
+            background: rgba(255, 255, 255, 0.025);
+
+            border: 1px solid rgba(168, 85, 247, 0.18);
+
+            color: #c6c9d5;
+
+            font-size: 12px;
+            font-weight: 700;
+
+            transition: 0.25s ease;
+        }
+
+        .back-button:hover {
+            color: #ffffff;
+
+            border-color: rgba(168, 85, 247, 0.55);
+
+            transform: translateY(-2px);
+
+            box-shadow:
+                    0 0 20px
+                    rgba(168, 85, 247, 0.12);
+        }
+
+        .dashboard-button {
+            border-color: rgba(34, 211, 238, 0.18);
+        }
+
+        .dashboard-button:hover {
+            border-color: rgba(34, 211, 238, 0.55);
+
+            box-shadow:
+                    0 0 20px
+                    rgba(34, 211, 238, 0.12);
+        }
+
+        .header-card {
+            position: relative;
+
+            padding: 32px;
+
+            margin-bottom: 22px;
+
+            border-radius: 24px;
+
+            background:
+                    linear-gradient(
+                            145deg,
+                            rgba(25, 18, 43, 0.97),
+                            rgba(10, 11, 23, 0.98)
+                    );
+
+            border:
+                    1px solid
+                    rgba(168, 85, 247, 0.16);
+
+            box-shadow:
+                    14px 14px 35px
+                    rgba(0, 0, 0, 0.55);
+
+            overflow: hidden;
+        }
+
+        .header-card::before {
+            content: "";
+
+            position: absolute;
+
+            top: 0;
+            left: 8%;
+
+            width: 84%;
+            height: 2px;
+
+            background:
+                    linear-gradient(
+                            90deg,
+                            transparent,
+                            #d946ef,
+                            #a855f7,
+                            #22d3ee,
+                            transparent
+                    );
+        }
+
+        .eyebrow {
+            color: #d946ef;
+
+            font-size: 11px;
+            font-weight: 800;
+
+            letter-spacing: 2px;
+
+            margin-bottom: 10px;
+        }
+
+        .header-card h1 {
+            font-size: clamp(28px, 5vw, 38px);
+
+            margin-bottom: 8px;
+
+            background:
+                    linear-gradient(
+                            90deg,
+                            #ffffff,
+                            #e9d5ff,
+                            #c4f7ff
+                    );
+
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .month-name {
+            color: #22d3ee;
+
+            font-size: 17px;
+            font-weight: 700;
+
+            margin-bottom: 12px;
+
+            text-shadow:
+                    0 0 10px
+                    rgba(34, 211, 238, 0.30);
+        }
+
+        .header-card p {
+            color: #858094;
+
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .progress-card {
+            padding: 22px;
+
+            margin-bottom: 26px;
+
+            border-radius: 18px;
+
+            background:
+                    linear-gradient(
+                            145deg,
+                            rgba(25, 18, 43, 0.94),
+                            rgba(10, 11, 23, 0.96)
+                    );
+
+            border:
+                    1px solid
+                    rgba(168, 85, 247, 0.12);
+
+            box-shadow:
+                    10px 10px 25px
+                    rgba(0, 0, 0, 0.40);
+        }
+
+        .progress-top {
+            display: flex;
+
+            justify-content: space-between;
+            align-items: center;
+
+            margin-bottom: 11px;
+        }
+
+        .progress-label {
+            color: #858094;
+
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .progress-count {
+            color: #22d3ee;
+
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+
+            border-radius: 20px;
+
+            background: rgba(255, 255, 255, 0.06);
+
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+
+            border-radius: 20px;
+
+            background:
+                    linear-gradient(
+                            90deg,
+                            #d946ef,
+                            #a855f7,
+                            #22d3ee
+                    );
+
+            box-shadow:
+                    0 0 12px
+                    rgba(168, 85, 247, 0.35);
+        }
+
+        .topics-heading {
+            margin-bottom: 18px;
+
+            color: #f4edff;
+
+            font-size: 22px;
+            font-weight: 800;
+        }
+
+        .topics-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(
+                    auto-fit,
+                    minmax(250px, 1fr)
+                );
+
+            gap: 17px;
+        }
+
+        .topic-card {
+            position: relative;
+
+            min-height: 160px;
+
+            padding: 22px;
+
+            border-radius: 18px;
+
+            background:
+                    linear-gradient(
+                            145deg,
+                            rgba(25, 18, 43, 0.98),
+                            rgba(10, 11, 23, 0.98)
+                    );
+
+            border:
+                    1px solid
+                    rgba(168, 85, 247, 0.13);
+
+            box-shadow:
+                    10px 10px 25px
+                    rgba(0, 0, 0, 0.45);
+
+            transition: 0.25s ease;
+
+            overflow: hidden;
+        }
+
+        .topic-card::before {
+            content: "";
+
+            position: absolute;
+
+            top: 0;
+            left: 0;
+
+            width: 100%;
+            height: 2px;
+
+            background:
+                    linear-gradient(
+                            90deg,
+                            transparent,
+                            #d946ef,
+                            #a855f7,
+                            #22d3ee,
+                            transparent
+                    );
+
+            opacity: 0.55;
+        }
+
+        .topic-card:hover {
+            transform: translateY(-4px);
+
+            border-color:
+                    rgba(168, 85, 247, 0.40);
+
+            box-shadow:
+                    0 0 22px
+                    rgba(168, 85, 247, 0.10),
+                    10px 14px 28px
+                    rgba(0, 0, 0, 0.50);
+        }
+
+        .topic-card.completed {
+            border-color:
+                    rgba(34, 211, 238, 0.35);
+
+            background:
+                    linear-gradient(
+                            145deg,
+                            rgba(20, 45, 50, 0.95),
+                            rgba(10, 20, 25, 0.98)
+                    );
+        }
+
+        .topic-card.completed::before {
+            background:
+                    linear-gradient(
+                            90deg,
+                            transparent,
+                            #22d3ee,
+                            #a855f7,
+                            #22d3ee,
+                            transparent
+                    );
+        }
+
+        .topic-number {
+            color: #737c8e;
+
+            font-size: 11px;
+            font-weight: 800;
+
+            margin-bottom: 9px;
+        }
+
+        .topic-name {
+            color: #ffffff;
+
+            font-size: 17px;
+            font-weight: 700;
+
+            line-height: 1.45;
+
+            margin-bottom: 18px;
+        }
+
+        .topic-status {
+            color: #7e8798;
+
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .completed .topic-status {
+            color: #22d3ee;
+        }
+
+        .toggle-form {
+            margin-top: 14px;
+        }
+
+        .toggle-button {
+            width: 100%;
+
+            border: none;
+
+            padding: 10px 13px;
+
+            border-radius: 10px;
+
+            cursor: pointer;
+
+            font-size: 11px;
+            font-weight: 800;
+
+            color: #ffffff;
+
+            background:
+                    rgba(168, 85, 247, 0.12);
+
+            border:
+                    1px solid
+                    rgba(168, 85, 247, 0.22);
+
+            transition: 0.25s ease;
+        }
+
+        .toggle-button:hover {
+            background:
+                    rgba(168, 85, 247, 0.20);
+
+            border-color:
+                    rgba(168, 85, 247, 0.48);
+
+            box-shadow:
+                    0 0 15px
+                    rgba(168, 85, 247, 0.10);
+        }
+
+        .completed .toggle-button {
+            background:
+                    rgba(34, 211, 238, 0.09);
+
+            border-color:
+                    rgba(34, 211, 238, 0.25);
+
+            color: #67e8f9;
+        }
+
+        .completed .toggle-button:hover {
+            background:
+                    rgba(34, 211, 238, 0.16);
+
+            border-color:
+                    rgba(34, 211, 238, 0.48);
+        }
+
+        .empty-state {
+            padding: 45px 25px;
+
+            text-align: center;
+
+            border-radius: 18px;
+
+            background:
+                    rgba(255, 255, 255, 0.02);
+
+            border:
+                    1px dashed
+                    rgba(168, 85, 247, 0.22);
+
+            color: #858094;
+
+            font-size: 14px;
+        }
+
+        @media (max-width: 800px) {
+            .page {
+                margin-left: 250px !important;
+                width: calc(100% - 250px) !important;
+            }
+
+            .content {
+                width: 92%;
+            }
+        }
+
+        @media (max-width: 550px) {
+            .page {
+                margin-left: 250px !important;
+                width: calc(100% - 250px) !important;
+            }
+
+            .content {
+                width: 94%;
+            }
+
+            .navigation {
+                width: 100%;
+            }
+
+            .back-button {
+                flex: 1;
+                justify-content: center;
+            }
+
+            .header-card {
+                padding: 22px;
+            }
+
+            .topics-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+    </style>
 </head>
 
 <body>
 
-<h1>
-    <span th:text="${section.name}"></span>
-    <span th:text="${section.year}"></span>
-</h1>
+<!-- COMMON SIDEBAR -->
+<div th:replace="~{fragments/sidebar :: sidebar}"></div>
 
-<hr>
+<div class="page">
 
-<h2>Sections</h2>
+    <div class="content">
 
-<table border="1">
+        <!-- TOP BAR -->
+        <div class="top-bar">
 
-    <tr>
-        <th>Section</th>
-    </tr>
+            <div class="brand">
+                <span>UPSC</span> TRACKER
+            </div>
 
-    <tr th:each="topic : ${topics}">
+            <div class="navigation">
 
-        <td>
+                <a th:href="@{/current-affairs/prelims}"
+                   class="back-button">
+                    ← Back to Current Affairs
+                </a>
 
-            <form
-                    th:action="@{/current-affairs/toggle/{id}(id=${topic.id})}"
-                    method="post">
+                <a th:href="@{/dashboard}"
+                   class="back-button dashboard-button">
+                    ⌂ Dashboard
+                </a>
 
-                <input
-                        type="hidden"
-                        name="type"
-                        value="prelims">
+            </div>
 
-                <button type="submit">
+        </div>
 
-                    <span th:if="${!topic.completed}">
-                        <span th:text="${topic.topicName}"></span>
-                        - Not Completed
+        <!-- HEADER -->
+        <div class="header-card">
+
+            <div class="eyebrow">
+                PRELIMS • CURRENT AFFAIRS
+            </div>
+
+            <h1>
+                Current Affairs Topics
+            </h1>
+
+            <div class="month-name"
+                 th:text="${section.name + ' ' + section.year}">
+                Month Year
+            </div>
+
+            <p>
+                Track every important current-affairs topic
+                for this month and mark each topic as completed
+                after revision.
+            </p>
+
+        </div>
+
+        <!-- PROGRESS -->
+        <div class="progress-card">
+
+            <div class="progress-top">
+
+                <span class="progress-label">
+                    Monthly Progress
+                </span>
+
+                <span class="progress-count">
+
+                    <span th:text="${completedCount}">
+                        0
                     </span>
+
+                    /
+
+                    <span th:text="${topics.size()}">
+                        0
+                    </span>
+
+                    Topics
+
+                    •
+
+                    <span th:text="${progress + '%'}">
+                        0%
+                    </span>
+
+                </span>
+
+            </div>
+
+            <div class="progress-bar">
+
+                <div class="progress-fill"
+                     th:style="'width:' + ${progress} + '%'">
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- TOPICS -->
+        <h2 class="topics-heading">
+            Topics
+        </h2>
+
+        <div class="topics-grid"
+             th:if="${topics != null and !topics.isEmpty()}">
+
+            <div class="topic-card"
+                 th:each="topic, stat : ${topics}"
+                 th:classappend="${topic.completed} ? ' completed' : ''">
+
+                <div class="topic-number"
+                     th:text="'TOPIC ' + ${stat.count}">
+                    TOPIC 1
+                </div>
+
+                <div class="topic-name"
+                     th:text="${topic.topicName}">
+                    Topic Name
+                </div>
+
+                <div class="topic-status">
 
                     <span th:if="${topic.completed}">
-                        <span th:text="${topic.topicName}"></span>
-                        - ✓ Completed
+                        ✓ Completed
                     </span>
 
-                </button>
+                    <span th:unless="${topic.completed}">
+                        ○ Pending
+                    </span>
 
-            </form>
+                </div>
 
-        </td>
+                <form class="toggle-form"
+                      th:action="@{/current-affairs/toggle/{id}(id=${topic.id})}"
+                      method="post">
 
-    </tr>
+                    <button type="submit"
+                            class="toggle-button">
 
-</table>
+                        <span th:if="${topic.completed}">
+                            Mark as Pending
+                        </span>
 
-<br>
+                        <span th:unless="${topic.completed}">
+                            Mark as Completed
+                        </span>
 
-<a href="/current-affairs/prelims">
-    Back to Prelims Current Affairs
-</a>
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+        <!-- EMPTY -->
+        <div class="empty-state"
+             th:if="${topics == null or topics.isEmpty()}">
+
+            No topics available for this month yet.
+
+        </div>
+
+    </div>
+
+</div>
 
 </body>
-
 </html>
-
